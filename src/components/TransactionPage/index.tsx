@@ -51,8 +51,8 @@ import {
   TransactionUserName,
   UserProfileDetails,
   TitleUserParagraph,
-  Div,
-  Div2,
+  AdminContainer,
+  UserContainer,
   EditDeleteContainer,
   TransactionParagraphMobile,
   TextContainer,
@@ -302,7 +302,7 @@ const TransactionPage = () => {
                   key={eachTransaction.id}
                 >
                   {jwtToken === "3" ? (
-                    <Div2 isAdmin={jwtToken === "3"}>
+                    <AdminContainer isAdmin={jwtToken === "3"}>
                       {eachTransaction.type === "credit" ? (
                         <CreditDebitImage
                           isAdmin={jwtToken === "3"}
@@ -323,12 +323,12 @@ const TransactionPage = () => {
                         </AdminProfileContainer>
                         <TitleUserParagraph>{user.name}</TitleUserParagraph>
                       </UserProfileDetails>
-                    </Div2>
+                    </AdminContainer>
                   ) : (
                     ""
                   )}
 
-                  <Div isAdmin={jwtToken === "3"}>
+                  <UserContainer isAdmin={jwtToken === "3"}>
                     {jwtToken !== "3" ? (
                       <>
                         {" "}
@@ -358,7 +358,7 @@ const TransactionPage = () => {
                         {DateFormate(eachTransaction.date)}
                       </TransactionParagraphMobile>
                     </TextContainer>
-                  </Div>
+                  </UserContainer>
                   <CategoryParagraph isAdmin={jwtToken === "3"}>
                     {eachTransaction.category}
                   </CategoryParagraph>

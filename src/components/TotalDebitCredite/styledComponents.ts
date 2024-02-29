@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const CreditContainer = styled.div`
   display: flex;
-  width: 38%;
+  width: 39.5%;
   // height: 145px;
   padding: 9px 36px;
   flex-direction: row;
@@ -25,7 +25,7 @@ export const CreditContainer = styled.div`
     margin-left: 10px;
     margin-right: 10px;
     // margin-bottom: 10px;
-    width: 78%;
+    width: 90%;
     // height: 90px;
     padding: 25px 30px;
     // min-height: 100px;
@@ -112,7 +112,7 @@ export const AmountDetailsContainer = styled.div`
 
 export const DebitContainer = styled.div`
   display: flex;
-  width: 38%;
+  width: 39.5%;
   // height: 145px;
   padding: 9px 40px;
   // flex-direction: column;
@@ -133,7 +133,7 @@ export const DebitContainer = styled.div`
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
-    width: 78%;
+    width: 90%;
     // height: 90px;
     padding: 25px 30px;
   }

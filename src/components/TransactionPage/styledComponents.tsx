@@ -66,7 +66,7 @@ export const TransactionsContainer = styled.table`
     width: 98%;
   }
 `;
-export const Div = styled.div<TextParagraphProps>`
+export const UserContainer = styled.div<TextParagraphProps>`
   display: flex;
   align-items: center;
   width: 20vw; // ${(props: any) => (props.isAdmin ? "15vw" : "15vw")};
@@ -75,7 +75,7 @@ export const Div = styled.div<TextParagraphProps>`
   }
 `;
 
-export const Div2 = styled.div<TextParagraphProps>`
+export const AdminContainer = styled.div<TextParagraphProps>`
   display: flex;
   align-items: center;
   width: 20vw; // ${(props: any) => (props.isAdmin ? "15vw" : "15vw")};

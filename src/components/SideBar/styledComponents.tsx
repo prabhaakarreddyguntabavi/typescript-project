@@ -197,8 +197,8 @@ export const LogoutContainer = styled.div`
 `;
 
 export const LogoutConformationContainer = styled.div`
-  width: 591px;
-  height: 188px;
+  min-width: 591px;
+  // height: 188px;
   flex-shrink: 0;
   border-radius: 16px;
   background: #fff;

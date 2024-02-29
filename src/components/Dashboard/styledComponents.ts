@@ -64,5 +64,5 @@ export const BodyMainContainer = styled.div`
   background: #f5f7fa;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 85%;
 `;

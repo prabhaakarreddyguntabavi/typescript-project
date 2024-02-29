@@ -31,7 +31,7 @@ export const TransactionsContainer = styled.div`
     padding: 0px;
   }
 `;
-export const Div = styled.div<ParagraphProps>`
+export const UserContainer = styled.div<ParagraphProps>`
   display: flex;
   align-items: center;
   width: 20vw; // ${(props) => (props.isAdmin ? "15vw" : "15vw")};
@@ -41,7 +41,7 @@ export const Div = styled.div<ParagraphProps>`
   }
 `;
 
-export const Div2 = styled.div<ParagraphProps>`
+export const AdminContainer = styled.div<ParagraphProps>`
   display: flex;
   align-items: center;
   width: 20vw; // ${(props) => (props.isAdmin ? "15vw" : "15vw")};

@@ -32,13 +32,13 @@ import {
   AdminProfileContainer,
   UserProfileDetails,
   TitleUserParagraph,
-  Div,
-  Div2,
+  AdminContainer,
+  UserContainer,
   EditDeleteContainer,
   TransactionParagraphMobile,
 } from "./styledComponents";
 
-interface apiStatusValues {
+interface ApiStatusValues {
   initial: string;
   inProgress: string;
   success: string;
@@ -56,7 +56,7 @@ interface ApiOutputStatus {
   errorMsg?: string;
 }
 
-interface short {
+interface Short {
   id: number;
 }
 
@@ -86,7 +86,7 @@ interface TransctionProps {
   user_id: number;
 }
 
-const apiStatusConstants: apiStatusValues = {
+const apiStatusConstants: ApiStatusValues = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
@@ -204,7 +204,7 @@ const TransactionPage = (props: PropsValue) => {
 
         if (response.ok) {
           const ListOfTransactions = responseData.transactions.sort(
-            (a: short, b: short) => b.id - a.id
+            (a: Short, b: Short) => b.id - a.id
           );
 
           setApiResponse({
@@ -234,7 +234,7 @@ const TransactionPage = (props: PropsValue) => {
           {transactionsData.map(
             (eachTransaction: TransctionProps, index: number) => {
               const user: any = allProfileDetails.find(
-                (findUser: short) => findUser.id === eachTransaction.user_id
+                (findUser: Short) => findUser.id === eachTransaction.user_id
               );
               return (
                 <DachTransactionContainer
@@ -242,7 +242,7 @@ const TransactionPage = (props: PropsValue) => {
                   key={eachTransaction.id}
                 >
                   {jwtToken === "3" ? (
-                    <Div2
+                    <AdminContainer
                       // className={jwtToken === "3" ? "true" : "false"}
                       isAdmin={jwtToken === "3"}
                     >
@@ -265,12 +265,12 @@ const TransactionPage = (props: PropsValue) => {
                         </AdminProfileContainer>
                         <TitleUserParagraph>{user.name}</TitleUserParagraph>
                       </UserProfileDetails>
-                    </Div2>
+                    </AdminContainer>
                   ) : (
                     ""
                   )}
 
-                  <Div isAdmin={jwtToken === "3"}>
+                  <UserContainer isAdmin={jwtToken === "3"}>
                     {jwtToken !== "3" ? (
                       <>
                         {" "}
@@ -300,7 +300,7 @@ const TransactionPage = (props: PropsValue) => {
                         {DateFormate(eachTransaction.date)}
                       </TransactionParagraphMobile>
                     </div>
-                  </Div>
+                  </UserContainer>
                   <CategaryParagraph>
                     {eachTransaction.category}
                   </CategaryParagraph>

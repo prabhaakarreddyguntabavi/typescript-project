@@ -8,13 +8,14 @@ export const HeaderMainContainer = styled.div`
   align-items: center;
   background: #fff;
   height: 5vh;
+  // width:90%;
 
   @media screen and (max-width: 1024px) {
-    // width: 92%;
+    width: 99%;
   }
 
   @media screen and (max-width: 768px) {
-    // width: 100vw;
+    width: 100vw;
     padding: 0px;
     height: 8vh;
     justify-content: space-between;

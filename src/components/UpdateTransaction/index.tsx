@@ -20,7 +20,7 @@ import {
 //   failure: "FAILURE",
 // };
 
-const setTimeFormate = (date: any) => {
+const setTimeFormate = (date: string) => {
   const inputDateString = date;
   const inputDate = new Date(inputDateString);
 
@@ -37,12 +37,42 @@ const setTimeFormate = (date: any) => {
   return formattedDateTime;
 };
 
-const UpdateTransaction = (props: any) => {
+interface EachTransction {
+  transaction_name: string;
+  type: string;
+  category: string;
+  amount: number;
+  date: string;
+  id: string;
+}
+
+interface PropsValues {
+  eachTransaction: EachTransction;
+  close: () => void;
+  callTransactionsUpdate: (id: string) => void;
+}
+
+interface DataValues {
+  id: string;
+  transaction_name: string;
+  type: string;
+  category: string;
+  amount: number;
+  date: string;
+  user_id: string;
+}
+interface ApiOutputStatus {
+  status: string;
+  data: DataValues[];
+  errorMsg?: string;
+}
+
+const UpdateTransaction = (props: PropsValues) => {
   const { eachTransaction, close, callTransactionsUpdate } = props;
 
-  const [apiResponse, setApiResponse] = useState<any>({
+  const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: "",
-    data: null,
+    data: [],
   });
 
   const [addTransactionStatus, updateTransaction] = useState<string>("");
@@ -96,7 +126,7 @@ const UpdateTransaction = (props: any) => {
 
     setApiResponse({
       status: "",
-      data: null,
+      data: [],
     });
 
     let headers = {};
@@ -130,17 +160,17 @@ const UpdateTransaction = (props: any) => {
 
     if (response.ok) {
       callTransactionsUpdate(uuidv4());
-      close(false);
+      close();
       setApiResponse({
         status: "",
         data: responseData.transactions,
-        errorMsg: null,
+        errorMsg: "",
       });
     } else {
       handleShowError();
       setApiResponse({
         status: "",
-        data: null,
+        data: [],
         errorMsg: responseData.error,
       });
     }
