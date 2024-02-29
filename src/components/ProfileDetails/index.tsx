@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-// import ReactLoading from "react-loading";
+import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 
 import SideBar from "../SideBar";
 import Header from "../Header";
-// import TransactionContext from "../../context/TransactionContext";
+import TransactionContext from "../../context/TransactionContext";
 
 import {
   ProfileHomePage,
@@ -21,7 +21,31 @@ import {
   DetailsContainer,
 } from "./styledComponents";
 
-const apiStatusConstants = {
+interface apiStatusValues {
+  initial: string;
+  inProgress: string;
+  success: string;
+  failure: string;
+}
+
+interface ProfileDetails {
+  name?: string;
+  email?: string;
+  date_of_birth?: string;
+  present_address?: string;
+  permanent_address?: string;
+  city?: string;
+  postal_code?: string;
+  country?: string;
+}
+
+interface ApiOutputStatus {
+  status: string;
+  data: ProfileDetails;
+  errorMsg?: string;
+}
+
+const apiStatusConstants: apiStatusValues = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
@@ -32,9 +56,9 @@ const ProfileDetails = () => {
   const navigate = useNavigate();
   const jwtToken = Cookies.get("jwt_token");
 
-  const [apiResponse, setApiResponse] = useState<any>({
+  const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: apiStatusConstants.initial,
-    data: null,
+    data: {},
   });
 
   useEffect(() => {
@@ -44,7 +68,7 @@ const ProfileDetails = () => {
       const getLeaderboardData = async () => {
         setApiResponse({
           status: apiStatusConstants.inProgress,
-          data: null,
+          data: {},
         });
 
         let headers = {};
@@ -66,6 +90,9 @@ const ProfileDetails = () => {
         const response = await fetch(url, options);
         const responseData = await response.json();
 
+        console.log("Profile");
+        console.log(responseData.users[0]);
+
         if (response.ok) {
           setApiResponse({
             status: apiStatusConstants.success,
@@ -74,8 +101,8 @@ const ProfileDetails = () => {
         } else {
           setApiResponse({
             status: apiStatusConstants.failure,
-            data: null,
-            errorMsg: null,
+            data: {},
+            errorMsg: "",
           });
         }
       };
@@ -85,12 +112,14 @@ const ProfileDetails = () => {
   }, [jwtToken, navigate]);
 
   const renderSuccessView = () => {
-    const { data }: any = apiResponse;
+    const { data } = apiResponse;
 
     return (
       <>
         <ProfileImageContainer>
-          <ProfileImage>{data.name[0].toUpperCase()}</ProfileImage>
+          <ProfileImage>
+            {data?.name ? data.name[0].toUpperCase() : ""}
+          </ProfileImage>
         </ProfileImageContainer>
         <DetailsContainer>
           <AddTransactionInputContainer>
@@ -242,8 +271,7 @@ const ProfileDetails = () => {
       className="products-loader-container"
       data-testid="loader"
     >
-      <h1>Loading...</h1>
-      {/* <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} /> */}
+      <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
 
@@ -267,29 +295,29 @@ const ProfileDetails = () => {
     }
   };
   if (jwtToken !== undefined) {
-    // return (
-    //   <TransactionContext.Consumer>
-    //     {(value) => {
-    //       const { selectOption, onChangeSelectOption } = value;
-
-    //       if (selectOption !== "PROFILE") {
-    //         onChangeSelectOption("PROFILE");
-    //       }
-
     return (
-      <ProfileHomePage>
-        <SideBar />
-        <ProfileTotalBodyContainer>
-          <Header />
-          <ProfileDetailsContainer>
-            <ProfileContainer>{renderLeaderboard()}</ProfileContainer>
-          </ProfileDetailsContainer>
-        </ProfileTotalBodyContainer>
-      </ProfileHomePage>
+      <TransactionContext.Consumer>
+        {(value) => {
+          const { selectOption, onChangeSelectOption } = value;
+
+          if (selectOption !== "PROFILE") {
+            onChangeSelectOption("PROFILE");
+          }
+
+          return (
+            <ProfileHomePage>
+              <SideBar />
+              <ProfileTotalBodyContainer>
+                <Header updateApi={() => {}} />
+                <ProfileDetailsContainer>
+                  <ProfileContainer>{renderLeaderboard()}</ProfileContainer>
+                </ProfileDetailsContainer>
+              </ProfileTotalBodyContainer>
+            </ProfileHomePage>
+          );
+        }}
+      </TransactionContext.Consumer>
     );
-    //     }}
-    //   </TransactionContext.Consumer>
-    // );
   } else {
     return null;
   }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// import ReactLoading from "react-loading";
+import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 
 // import FailureCase from "../FailureCase";
@@ -29,14 +29,29 @@ const apiStatusConstants = {
   failure: "FAILURE",
 };
 
-const TotalDebitCredit = (props: any) => {
+interface PropsValue {
+  isUserAdmin: boolean;
+  callApi: string;
+}
+
+interface DataOutPut {
+  sum?: number;
+  type?: string;
+}
+interface ApiOutputStatus {
+  status: string;
+  data: DataOutPut[];
+  errorMsg?: string;
+}
+
+const TotalDebitCredit = (props: PropsValue) => {
   const { isUserAdmin, callApi } = props;
 
   const [callBack, updateApi] = useState<string>("");
 
-  const [apiResponse, setApiResponse] = useState<any>({
+  const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: apiStatusConstants.initial,
-    data: null,
+    data: [],
   });
 
   useEffect(() => {
@@ -44,7 +59,7 @@ const TotalDebitCredit = (props: any) => {
     const getLeaderboardData = async () => {
       setApiResponse({
         status: apiStatusConstants.inProgress,
-        data: null,
+        data: [],
       });
 
       let headers = {};
@@ -110,8 +125,8 @@ const TotalDebitCredit = (props: any) => {
       } else {
         setApiResponse({
           status: apiStatusConstants.failure,
-          data: null,
-          errorMsg: null,
+          data: [],
+          errorMsg: "",
         });
       }
     };
@@ -160,14 +175,13 @@ const TotalDebitCredit = (props: any) => {
       className="products-loader-container"
       data-testid="loader"
     >
-      <h1>Loading...</h1>
-      {/* <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} /> */}
+      <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
 
   const renderFailureView = () => <h1>Failed</h1>; // <FailureCase updateApi={updateApi} />;
 
-  const renderLeaderboard = (): any => {
+  const renderLeaderboard = () => {
     const { status } = apiResponse;
     switch (status) {
       case apiStatusConstants.inProgress:

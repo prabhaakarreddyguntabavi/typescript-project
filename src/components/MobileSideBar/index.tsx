@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-// import TransactionContext from "../../context/TransactionContext";
+import TransactionContext from "../../context/TransactionContext";
 
 import {
   SideBarMainContainer,
@@ -43,7 +43,11 @@ const userDetails = [
   { email: "admin@gmail.com", password: "Admin@123", userId: 3 },
 ];
 
-const MobileSideBar = (props: any) => {
+interface PropsValue {
+  close: () => void;
+}
+
+const MobileSideBar = (props: PropsValue) => {
   const { close } = props;
   const jwtToken: any = Cookies.get("jwt_token");
   const navigate = useNavigate();
@@ -53,26 +57,6 @@ const MobileSideBar = (props: any) => {
     ...userDetails.find((eachUser) => eachUser.userId === parseInt(jwtToken)),
     name: "",
   };
-
-  const [selectOption, setSelectionOption] = useState<any>("DASHBOARD");
-
-  const x: any = localStorage.getItem("selectOption");
-
-  console.log(x);
-
-  if (x !== "" && selectOption !== x) {
-    setSelectionOption(x);
-  }
-
-  function onChangeSelectOption(id: string) {
-    console.log(id);
-    localStorage.setItem("selectOption", id);
-    setSelectionOption("DASHBOARD");
-  }
-
-  function onChangeTransactionOption(arg0: string) {
-    throw new Error("Function not implemented.");
-  }
 
   useEffect(() => {
     if (!jwtToken) {
@@ -114,137 +98,140 @@ const MobileSideBar = (props: any) => {
   const onClickLogout = () => {
     navigate("/login");
     Cookies.remove("jwt_token");
-    localStorage.setItem("selectOption", "DASHBOARD");
   };
 
-  // return (
-  //   <TransactionContext.Consumer>
-  //     {(value) => {
-  //       const {
-  //         selectOption,
-  //         onChangeSelectOption,
-  //         onChangeTransactionOption,
-  //       } = value;
-
   return (
-    <SideBarMainContainer>
-      <PopupClosingContainer>
-        <LogoImage
-          src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
-          alt="website logo"
-        />
-        <MobileSideBarClosing
-          onClick={() => close(false)}
-          src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
-          alt="close"
-        />
-      </PopupClosingContainer>
+    <TransactionContext.Consumer>
+      {(value) => {
+        const {
+          selectOption,
+          onChangeSelectOption,
+          onChangeTransactionOption,
+        } = value;
 
-      <TextContainer>
-        <Link
-          className="sidbar-content"
-          to="/"
-          onClick={() => {
-            onChangeSelectOption("DASHBOARD");
-            onChangeTransactionOption("ALLTRANSACTION");
-          }}
-        >
-          <EachTextContainer>
-            <SelectedContainer
-              className={selectOption === "DASHBOARD" ? "true" : "false"}
-            >
-              {}
-            </SelectedContainer>
-            <IconsImage
-              src={
-                selectOption === "DASHBOARD"
-                  ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/home_2_1_xkaadl.png"
-                  : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705730106/home_2_m9drn7.png"
-              }
-              alt="dashboard"
-            />
-            <TextParagraph
-              className={selectOption === "DASHBOARD" ? "true" : "false"}
-              //  selectOption={selectOption === "DASHBOARD"}
-            >
-              Dashboard
-            </TextParagraph>
-          </EachTextContainer>
-        </Link>
-        <Link
-          className="sidbar-content"
-          to="/transaction"
-          onClick={() => onChangeSelectOption("TRANSACTIONS")}
-        >
-          <EachTextContainer>
-            <SelectedContainer
-              className={selectOption === "TRANSACTIONS" ? "true" : "false"}
-              // selectOption={selectOption === "TRANSACTIONS"}
-            ></SelectedContainer>
-            <TransactionIconsImage
-              src={
-                selectOption === "TRANSACTIONS"
-                  ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/transfer_1_1_hqx4fr.png"
-                  : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912310/transfer_1_e0it36.png"
-              }
-              alt="transactions"
-            />
+        return (
+          <SideBarMainContainer>
+            <PopupClosingContainer>
+              <LogoImage
+                src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
+                alt="website logo"
+              />
+              <MobileSideBarClosing
+                onClick={() => close()}
+                src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
+                alt="close"
+              />
+            </PopupClosingContainer>
 
-            <TextParagraph
-              className={selectOption === "TRANSACTIONS" ? "true" : "false"}
-              //  selectOption={selectOption === "TRANSACTIONS"}
-            >
-              {jwtToken === "3" ? "All Transactions" : "Transactions"}
-            </TextParagraph>
-          </EachTextContainer>
-        </Link>
-        <Link
-          className="sidbar-content"
-          to="/profile"
-          onClick={() => {
-            onChangeSelectOption("PROFILE");
-            onChangeTransactionOption("ALLTRANSACTION");
-          }}
-        >
-          <EachTextContainer>
-            <SelectedContainer
-              className={selectOption === "PROFILE" ? "true" : "false"}
-              // selectOption={selectOption === "PROFILE"}
-            ></SelectedContainer>
-            <IconsImage
-              src={
-                selectOption === "PROFILE"
-                  ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/user_3_1_1_h8fxdm.png"
-                  : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912309/user_3_1_ikruwf.png"
-              }
-              alt="profile"
-            />
-            <TextParagraph
-              className={selectOption === "PROFILE" ? "true" : "false"}
-              //  selectOption={selectOption === "PROFILE"}
-            >
-              Profile
-            </TextParagraph>
-          </EachTextContainer>
-        </Link>
-      </TextContainer>
-      <ProfileContainer>
-        <ProfileImageContainer>
-          {loginUser.email[0].toUpperCase()}
-        </ProfileImageContainer>
-        <ProfileTextContainer>
-          <ProfileName>{apiResponse.name}</ProfileName>
-          <ProfileEmail>{apiResponse.email}</ProfileEmail>
-        </ProfileTextContainer>
-        <YesLogoutButton type="button" onClick={onClickLogout}>
-          Yes, Logout
-        </YesLogoutButton>
-      </ProfileContainer>
-    </SideBarMainContainer>
+            <TextContainer>
+              <Link
+                className="sidbar-content"
+                to="/"
+                onClick={() => {
+                  onChangeSelectOption("DASHBOARD");
+                  onChangeTransactionOption("ALLTRANSACTION");
+                }}
+              >
+                <EachTextContainer>
+                  <SelectedContainer
+                    className={selectOption === "DASHBOARD" ? "true" : "false"}
+                  >
+                    {}
+                  </SelectedContainer>
+                  <IconsImage
+                    src={
+                      selectOption === "DASHBOARD"
+                        ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/home_2_1_xkaadl.png"
+                        : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705730106/home_2_m9drn7.png"
+                    }
+                    alt="dashboard"
+                  />
+                  <TextParagraph
+                    className={selectOption === "DASHBOARD" ? "true" : "false"}
+                    //  selectOption={selectOption === "DASHBOARD"}
+                  >
+                    Dashboard
+                  </TextParagraph>
+                </EachTextContainer>
+              </Link>
+              <Link
+                className="sidbar-content"
+                to="/transaction"
+                onClick={() => onChangeSelectOption("TRANSACTIONS")}
+              >
+                <EachTextContainer>
+                  <SelectedContainer
+                    className={
+                      selectOption === "TRANSACTIONS" ? "true" : "false"
+                    }
+                    // selectOption={selectOption === "TRANSACTIONS"}
+                  ></SelectedContainer>
+                  <TransactionIconsImage
+                    src={
+                      selectOption === "TRANSACTIONS"
+                        ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/transfer_1_1_hqx4fr.png"
+                        : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912310/transfer_1_e0it36.png"
+                    }
+                    alt="transactions"
+                  />
+
+                  <TextParagraph
+                    className={
+                      selectOption === "TRANSACTIONS" ? "true" : "false"
+                    }
+                    //  selectOption={selectOption === "TRANSACTIONS"}
+                  >
+                    {jwtToken === "3" ? "All Transactions" : "Transactions"}
+                  </TextParagraph>
+                </EachTextContainer>
+              </Link>
+              <Link
+                className="sidbar-content"
+                to="/profile"
+                onClick={() => {
+                  onChangeSelectOption("PROFILE");
+                  onChangeTransactionOption("ALLTRANSACTION");
+                }}
+              >
+                <EachTextContainer>
+                  <SelectedContainer
+                    className={selectOption === "PROFILE" ? "true" : "false"}
+                    // selectOption={selectOption === "PROFILE"}
+                  ></SelectedContainer>
+                  <IconsImage
+                    src={
+                      selectOption === "PROFILE"
+                        ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/user_3_1_1_h8fxdm.png"
+                        : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912309/user_3_1_ikruwf.png"
+                    }
+                    alt="profile"
+                  />
+                  <TextParagraph
+                    className={selectOption === "PROFILE" ? "true" : "false"}
+                    //  selectOption={selectOption === "PROFILE"}
+                  >
+                    Profile
+                  </TextParagraph>
+                </EachTextContainer>
+              </Link>
+            </TextContainer>
+            <ProfileContainer>
+              <ProfileImageContainer>
+                {loginUser.email[0].toUpperCase()}
+              </ProfileImageContainer>
+              <ProfileTextContainer>
+                <ProfileName>{apiResponse.name}</ProfileName>
+                <ProfileEmail>{apiResponse.email}</ProfileEmail>
+              </ProfileTextContainer>
+              <YesLogoutButton type="button" onClick={onClickLogout}>
+                Yes, Logout
+              </YesLogoutButton>
+            </ProfileContainer>
+          </SideBarMainContainer>
+        );
+      }}
+    </TransactionContext.Consumer>
   );
-  //     }}
-  //   </TransactionContext.Consumer>
-  // );
 };
 
 export default MobileSideBar;

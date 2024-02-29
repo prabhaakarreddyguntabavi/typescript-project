@@ -1,20 +1,20 @@
 import React from "react";
 
 import { useState, useEffect } from "react";
-// import ReactLoading from "react-loading";
+import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 
 // import FailureCase from "../FailureCase";
 
-// import {
-//   BarChart,
-//   Bar,
-//   XAxis,
-//   YAxis,
-//   CartesianGrid,
-//   Tooltip,
-//   // Legend,
-// } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  // Legend,
+} from "recharts";
 
 import {
   LoadingContainer,
@@ -37,14 +37,24 @@ const apiStatusConstants = {
   failure: "FAILURE",
 };
 
-const GenderChart = (props: any) => {
+interface PropsValue {
+  callApi: string;
+}
+
+interface apiStatus {
+  status: string;
+  data: [];
+  errorMsg?: string;
+}
+
+const GenderChart = (props: PropsValue) => {
   const { callApi } = props;
 
   const [CallGraphApi, updateApi] = useState("");
 
-  const [apiResponse, setApiResponse] = useState<any>({
+  const [apiResponse, setApiResponse] = useState<apiStatus>({
     status: apiStatusConstants.initial,
-    data: null,
+    data: [],
   });
 
   useEffect(() => {
@@ -52,7 +62,7 @@ const GenderChart = (props: any) => {
     const getLeaderboardData = async () => {
       setApiResponse({
         status: apiStatusConstants.inProgress,
-        data: null,
+        data: [],
       });
 
       let headers = {};
@@ -87,8 +97,6 @@ const GenderChart = (props: any) => {
       const response = await fetch(url, options);
       const responseData = await response.json();
 
-      console.log(response);
-
       if (response.ok) {
         setApiResponse({
           status: apiStatusConstants.success,
@@ -100,8 +108,8 @@ const GenderChart = (props: any) => {
       } else {
         setApiResponse({
           status: apiStatusConstants.failure,
-          data: null,
-          errorMsg: null,
+          data: [],
+          errorMsg: "",
         });
       }
     };
@@ -110,9 +118,7 @@ const GenderChart = (props: any) => {
   }, [callApi, CallGraphApi]);
 
   const renderSuccessView = () => {
-    const { data }: any = apiResponse;
-
-    // console.log(data);
+    const { data } = apiResponse;
 
     if (data.length !== 0) {
       function calculateDailySums(transactions: any) {
@@ -153,7 +159,6 @@ const GenderChart = (props: any) => {
 
       // Get the last 7 transactions
       const last7Transactions = totalDailySums.slice(0, 7);
-      // console.log(last7Transactions);
 
       function separateTransactions(last7Transactions: any) {
         const creditTransactions: any = [];
@@ -187,7 +192,7 @@ const GenderChart = (props: any) => {
 
       return (
         <>
-          {/* <GraphHeaderContainer>
+          <GraphHeaderContainer>
             <GraphPrargraph>
               <GraphPrargraphSpan> ${debitTransactionsSum}</GraphPrargraphSpan>{" "}
               Debited &
@@ -211,7 +216,7 @@ const GenderChart = (props: any) => {
             width={window.innerWidth * 0.8}
             height={window.innerWidth * 0.3}
             data={last7Transactions}
-            borderRadius={200}
+            // borderRadius={200}
             margin={{
               top: 5,
               right: 30,
@@ -226,7 +231,7 @@ const GenderChart = (props: any) => {
 
             <Bar dataKey="credit" fill={"#4D78FF"} shape={<CustomBar />} />
             <Bar dataKey="debit" fill={"#FCAA0B"} shape={<CustomBar />} />
-          </BarChart> */}
+          </BarChart>
         </>
       );
     }
@@ -242,8 +247,7 @@ const GenderChart = (props: any) => {
       // className="products-loader-container"
       data-testid="loader"
     >
-      <h1>Loading...</h1>
-      {/* <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} /> */}
+      <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
 

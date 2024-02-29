@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface ParagraphProps {
+  isAdmin: boolean;
+}
+
 export const TransactionsContainer = styled.div`
   display: flex;
   width: 90%;
@@ -27,37 +31,32 @@ export const TransactionsContainer = styled.div`
     padding: 0px;
   }
 `;
-export const Div = styled.div`
+export const Div = styled.div<ParagraphProps>`
   display: flex;
   align-items: center;
-  width: 20vw; // ${(props: any) =>
-    props.className === "true" ? "15vw" : "15vw"};
+  width: 20vw; // ${(props) => (props.isAdmin ? "15vw" : "15vw")};
   @media screen and (max-width: 768px) {
     // overflow: hidden;
-    width: 36vw; //${(props: any) =>
-      props.className === "true" ? "15vw" : "36vw"};
+    width: 36vw; //${(props) => (props.isAdmin ? "15vw" : "36vw")};
   }
 `;
 
-export const Div2 = styled.div`
+export const Div2 = styled.div<ParagraphProps>`
   display: flex;
   align-items: center;
-  width: 20vw; // ${(props: any) =>
-    props.className === "true" ? "15vw" : "15vw"};
+  width: 20vw; // ${(props) => (props.isAdmin ? "15vw" : "15vw")};
 
   @media screen and (max-width: 768px) {
     // overflow: hidden;
-    width: 36vw; // ${(props: any) =>
-      props.className === "true" ? "15vw" : "36vw"};
+    width: 36vw; // ${(props) => (props.isAdmin ? "15vw" : "36vw")};
   }
 `;
 
-export const DachTransactionContainer = styled.div`
+export const DachTransactionContainer = styled.div<ParagraphProps>`
   width: 75vw;
   height: 58px;
   flex-shrink: 0;
-  border-bottom: ${(props: any) =>
-    props.className === "true" ? "" : "1px solid #e2e2e2"};
+  border-bottom: ${(props) => (props.isAdmin ? "" : "1px solid #e2e2e2")};
   // margin-left: 24px;
   display: flex;
   justify-content: space-between;
@@ -75,7 +74,7 @@ export const DachTransactionContainer = styled.div`
   }
 `;
 
-export const CrediteDebitImage = styled.img`
+export const CrediteDebitImage = styled.img<ParagraphProps>`
   width: 30px;
   height: 30px;
   flex-shrink: 0;
@@ -86,8 +85,7 @@ export const CrediteDebitImage = styled.img`
     width: 25px;
     height: 25px;
     padding-left: 8px;
-    display: block; // ${(props: any) =>
-      props.className === "true" ? "none" : "block"};
+    display: block; // ${(props) => (props.isAdmin ? "none" : "block")};
   }
 `;
 
@@ -149,7 +147,7 @@ export const LoadingContainer = styled.div`
   margin: auto;
 `;
 
-export const DebitAmount = styled.p`
+export const DebitAmount = styled.p<ParagraphProps>`
   color: #fe5c73;
   font-family: Inter;
   font-size: 16px;
@@ -159,12 +157,11 @@ export const DebitAmount = styled.p`
   width: 10vw;
   overflow: hidden;
   @media screen and (max-width: 768px) {
-    width: 25vw; // ${(props: any) =>
-      props.className === "true" ? "18vw" : "25vw"};
+    width: 25vw; // ${(props) => (props.isAdmin ? "18vw" : "25vw")};
   }
 `;
 
-export const CrediteAmount = styled.p`
+export const CrediteAmount = styled.p<ParagraphProps>`
   color: #16dbaa;
   font-family: Inter;
   font-size: 16px;
@@ -175,7 +172,7 @@ export const CrediteAmount = styled.p`
   width: 10vw;
   overflow: hidden;
   @media screen and (max-width: 768px) {
-    width: ${(props: any) => (props.className === "true" ? "18vw" : "25vw")};
+    width: ${(props) => (props.isAdmin ? "18vw" : "25vw")};
   }
 `;
 
@@ -188,8 +185,8 @@ export const LogoutContainer = styled.div`
   width: 100vw;
   height: 100vh;
   flex-shrink: 0;
-  // background: rgba(52, 64, 84, 0.7);
-  // backdrop-filter: blur(8px);
+  background: rgba(52, 64, 84, 0.7);
+  backdrop-filter: blur(8px);
 `;
 
 export const AddTransactionMainContainer = styled.div`
@@ -298,12 +295,11 @@ export const TitleUserParagraph = styled.p`
   }
 `;
 
-export const EditDeleteContainer = styled.div`
+export const EditDeleteContainer = styled.div<ParagraphProps>`
   width: 61px;
   @media screen and (max-width: 1350px) {
     width: 61px;
-    display: block//
-      ${(props: any) => (props.className === "true" ? "none" : "block")};
+    display: block// ${(props) => (props.isAdmin ? "none" : "block")};
   }
 `;
 

@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-// import ReactLoading from "react-loading";
+import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
-// import Popup from "reactjs-popup";
+import Popup from "reactjs-popup";
 import { useNavigate } from "react-router-dom";
 
 import SideBar from "../SideBar";
 import Header from "../Header";
-// import TransactionContext from "../../context/TransactionContext";
+import TransactionContext from "../../context/TransactionContext";
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
 import FailureCase from "../FailureCase";
-import Popup from "../Popup";
+// import Popup from "../Popup";
 
 import {
   TransactionHomePage,
@@ -58,7 +58,41 @@ import {
   TextContainer,
 } from "./styledComponents";
 
-const apiStatusConstants = {
+interface DataValues {
+  id: string;
+  transaction_name: string;
+  type: string;
+  category: string;
+  amount: number;
+  date: string;
+  user_id: string;
+}
+interface ApiOutputStatus {
+  status: string;
+  data: DataValues[];
+  errorMsg?: string;
+}
+
+interface apiStatusValues {
+  initial: string;
+  inProgress: string;
+  success: string;
+  failure: string;
+}
+
+interface Date {
+  date: string;
+}
+
+interface Id {
+  id: string;
+}
+interface ConsumerValues {
+  selectOption: string;
+  onChangeSelectOption: (id: string) => void;
+}
+
+const apiStatusConstants: apiStatusValues = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
@@ -69,15 +103,9 @@ const TransactionPage = () => {
   const jwtToken = Cookies.get("jwt_token");
   const navigate = useNavigate();
 
-  const [showPopup, addToShowPopup] = useState<boolean>(false);
-  const [deleteTransactionPopup, addDeleteTransactionPopup] =
-    useState<boolean>(false);
-
-  const [onClickId, addOnClickId] = useState<any>();
-
-  const [apiResponse, setApiResponse] = useState<any>({
+  const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: apiStatusConstants.initial,
-    data: null,
+    data: [],
   });
 
   const [allProfileDetails, setProfileDetailsApiResponse] = useState([]);
@@ -86,7 +114,7 @@ const TransactionPage = () => {
 
   const [callApi, updateApi] = useState("");
 
-  const DateFormate = (date: any) => {
+  const DateFormate = (date: string) => {
     const inputDateString = date;
     const inputDate = new Date(inputDateString);
 
@@ -122,7 +150,7 @@ const TransactionPage = () => {
       const getLeaderboardData = async () => {
         setApiResponse({
           status: apiStatusConstants.inProgress,
-          data: null,
+          data: [],
         });
 
         let headers = {};
@@ -175,20 +203,23 @@ const TransactionPage = () => {
           method: "GET",
           headers: headers,
         };
-        const response: any = await fetch(finalUrl, options);
-        const responseData: any = await response.json();
+        const response = await fetch(finalUrl, options);
+        const responseData = await response.json();
+        console.log(responseData);
 
         if (response.ok) {
           setApiResponse({
             status: apiStatusConstants.success,
-            data: [...responseData.transactions],
-            //.sort((a: any, b: any) => new Date(b.date) - new Date(a.date)),
+            data: [...responseData.transactions].sort(
+              (a: Date, b: Date) =>
+                new Date(b.date).getTime() - new Date(a.date).getTime()
+            ),
           });
         } else {
           setApiResponse({
             status: apiStatusConstants.failure,
-            data: null,
-            errorMsg: null,
+            data: [],
+            errorMsg: "",
           });
         }
       };
@@ -197,21 +228,46 @@ const TransactionPage = () => {
     }
   }, [navigate, jwtToken, callApi]);
 
-  const callTransactionsUpdate = (id: any) => {
+  const callTransactionsUpdate = (id: string) => {
     updateApi(id);
   };
 
   const renderSuccessView = () => {
-    const { data }: any = apiResponse;
+    const { data } = apiResponse;
 
-    let transactionsData: any = data;
+    let transactionsData = data;
     if (filterOption !== "alltransactions") {
       transactionsData = data.filter(
-        (eachTransactionData: any) =>
+        (eachTransactionData) =>
           eachTransactionData.type.toUpperCase() === filterOption.toUpperCase()
       );
     }
     console.log(transactionsData.length);
+
+    const renderAbcd = (eachTransaction: DataValues, close: () => void) => (
+      <AddTransactionMainContainer>
+        <AddTransactionContainer>
+          <AddTransactionTextContainer>
+            <HeadingTextContainer>
+              <AddTransactionHeading>Update Transaction</AddTransactionHeading>
+              <AddTransactionParagraph>
+                You can update your transaction here
+              </AddTransactionParagraph>
+            </HeadingTextContainer>
+            <AddTransactionCloseImage
+              onClick={() => close()}
+              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
+              alt="close"
+            />
+          </AddTransactionTextContainer>
+          <UpdateTransaction
+            eachTransaction={eachTransaction}
+            close={close}
+            callTransactionsUpdate={callTransactionsUpdate}
+          />
+        </AddTransactionContainer>
+      </AddTransactionMainContainer>
+    );
 
     if (transactionsData.length !== 0) {
       return (
@@ -234,47 +290,19 @@ const TransactionPage = () => {
             </TransactionAmount>
           </HeadingDashTransactionContainer>
 
-          {transactionsData.map((eachTransaction: any, index: any) => {
-            const user: any = allProfileDetails.find(
-              (findUser: any) => findUser.id === eachTransaction.user_id
-            );
+          {transactionsData.map(
+            (eachTransaction: DataValues, index: number) => {
+              const user: any = allProfileDetails.find(
+                (findUser: Id) => findUser.id === eachTransaction.user_id
+              );
 
-            return (
-              <DashTransactionContainer
-                length={transactionsData.length - 1 === index}
-                key={eachTransaction.id}
-              >
-                {jwtToken === "3" ? (
-                  <Div2 isAdmin={jwtToken === "3"}>
-                    {eachTransaction.type === "credit" ? (
-                      <CreditDebitImage
-                        isAdmin={jwtToken === "3"}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_1_idrnjp.png"
-                        alt="image"
-                      />
-                    ) : (
-                      <CreditDebitImage
-                        isAdmin={jwtToken === "3"}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_oztkbu.png"
-                        alt="image"
-                      />
-                    )}
-
-                    <UserProfileDetails>
-                      <AdminProfileContainer>
-                        {user.name[0].toUpperCase()}
-                      </AdminProfileContainer>
-                      <TitleUserParagraph>{user.name}</TitleUserParagraph>
-                    </UserProfileDetails>
-                  </Div2>
-                ) : (
-                  ""
-                )}
-
-                <Div isAdmin={jwtToken === "3"}>
-                  {jwtToken !== "3" ? (
-                    <>
-                      {" "}
+              return (
+                <DashTransactionContainer
+                  length={transactionsData.length - 1 === index}
+                  key={eachTransaction.id}
+                >
+                  {jwtToken === "3" ? (
+                    <Div2 isAdmin={jwtToken === "3"}>
                       {eachTransaction.type === "credit" ? (
                         <CreditDebitImage
                           isAdmin={jwtToken === "3"}
@@ -288,101 +316,110 @@ const TransactionPage = () => {
                           alt="image"
                         />
                       )}
-                    </>
+
+                      <UserProfileDetails>
+                        <AdminProfileContainer>
+                          {user.name[0].toUpperCase()}
+                        </AdminProfileContainer>
+                        <TitleUserParagraph>{user.name}</TitleUserParagraph>
+                      </UserProfileDetails>
+                    </Div2>
                   ) : (
                     ""
                   )}
 
-                  <TextContainer>
-                    <TitleParagraph>
-                      {eachTransaction.transaction_name}
-                    </TitleParagraph>
-                    <TransactionParagraphMobile>
-                      {DateFormate(eachTransaction.date)}
-                    </TransactionParagraphMobile>
-                  </TextContainer>
-                </Div>
-                <CategoryParagraph isAdmin={jwtToken === "3"}>
-                  {eachTransaction.category}
-                </CategoryParagraph>
-                <DateOfTransactionParagraph>
-                  {DateFormate(eachTransaction.date)}
-                </DateOfTransactionParagraph>
+                  <Div isAdmin={jwtToken === "3"}>
+                    {jwtToken !== "3" ? (
+                      <>
+                        {" "}
+                        {eachTransaction.type === "credit" ? (
+                          <CreditDebitImage
+                            isAdmin={jwtToken === "3"}
+                            src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_1_idrnjp.png"
+                            alt="image"
+                          />
+                        ) : (
+                          <CreditDebitImage
+                            isAdmin={jwtToken === "3"}
+                            src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_oztkbu.png"
+                            alt="image"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      ""
+                    )}
 
-                {eachTransaction.type === "credit" ? (
-                  <CreditAmount isAdmin={jwtToken === "3"}>
-                    +${eachTransaction.amount}
-                  </CreditAmount>
-                ) : (
-                  <DebitAmount isAdmin={jwtToken === "3"}>
-                    -${eachTransaction.amount}
-                  </DebitAmount>
-                )}
-                <EditDeleteContainer isAdmin={jwtToken === "3"}>
-                  {jwtToken === "3" ? (
-                    ""
+                    <TextContainer>
+                      <TitleParagraph>
+                        {eachTransaction.transaction_name}
+                      </TitleParagraph>
+                      <TransactionParagraphMobile>
+                        {DateFormate(eachTransaction.date)}
+                      </TransactionParagraphMobile>
+                    </TextContainer>
+                  </Div>
+                  <CategoryParagraph isAdmin={jwtToken === "3"}>
+                    {eachTransaction.category}
+                  </CategoryParagraph>
+                  <DateOfTransactionParagraph>
+                    {DateFormate(eachTransaction.date)}
+                  </DateOfTransactionParagraph>
+
+                  {eachTransaction.type === "credit" ? (
+                    <CreditAmount isAdmin={jwtToken === "3"}>
+                      +${eachTransaction.amount}
+                    </CreditAmount>
                   ) : (
-                    <>
-                      <EditImage
-                        onClick={() => {
-                          addToShowPopup(true);
-                          addOnClickId(eachTransaction);
-                        }}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/pencil-02_lbbupq.png"
-                        alt="edit"
-                      />
-                      <Popup trigger={showPopup}>
-                        <AddTransactionMainContainer>
-                          <AddTransactionContainer>
-                            <AddTransactionTextContainer>
-                              <HeadingTextContainer>
-                                <AddTransactionHeading>
-                                  Update Transaction
-                                </AddTransactionHeading>
-                                <AddTransactionParagraph>
-                                  You can update your transaction here
-                                </AddTransactionParagraph>
-                              </HeadingTextContainer>
-                              <AddTransactionCloseImage
-                                onClick={() => addToShowPopup(false)}
-                                src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
-                                alt="close"
+                    <DebitAmount isAdmin={jwtToken === "3"}>
+                      -${eachTransaction.amount}
+                    </DebitAmount>
+                  )}
+                  <EditDeleteContainer isAdmin={jwtToken === "3"}>
+                    {jwtToken === "3" ? (
+                      ""
+                    ) : (
+                      <>
+                        <Popup
+                          modal
+                          trigger={
+                            <EditImage
+                              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/pencil-02_lbbupq.png"
+                              alt="edit"
+                            />
+                          }
+                        >
+                          {/* @ts-ignore */}
+                          {(close) => renderAbcd(eachTransaction, close)}
+                        </Popup>
+
+                        <Popup
+                          modal
+                          trigger={
+                            <DeleteImage
+                              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/trash-01_uaykhq.png"
+                              alt="delete"
+                            />
+                          }
+                        >
+                          {/* @ts-ignore */}
+                          {(close) => (
+                            <LogoutContainer>
+                              <DeleteTransaction
+                                id={eachTransaction.id}
+                                close={close}
+                                callTransactionsUpdate={callTransactionsUpdate}
                               />
-                            </AddTransactionTextContainer>
-                            <UpdateTransaction
-                              eachTransaction={onClickId}
-                              close={addToShowPopup}
-                              callTransactionsUpdate={callTransactionsUpdate}
-                            />
-                          </AddTransactionContainer>
-                        </AddTransactionMainContainer>
-                      </Popup>
-
-                      <DeleteImage
-                        onClick={() => {
-                          addDeleteTransactionPopup(true);
-                          addOnClickId(eachTransaction.id);
-                        }}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/trash-01_uaykhq.png"
-                        alt="delete"
-                      />
-                      <Popup trigger={deleteTransactionPopup}>
-                        <AddTransactionMainContainer>
-                          <LogoutContainer>
-                            <DeleteTransaction
-                              id={onClickId}
-                              close={addDeleteTransactionPopup}
-                              callTransactionsUpdate={callTransactionsUpdate}
-                            />
-                          </LogoutContainer>
-                        </AddTransactionMainContainer>
-                      </Popup>
-                    </>
-                  )}
-                </EditDeleteContainer>
-              </DashTransactionContainer>
-            );
-          })}
+                            </LogoutContainer>
+                          )}
+                        </Popup>
+                      </>
+                    )}
+                  </EditDeleteContainer>
+                </DashTransactionContainer>
+              );
+            }
+          )}
         </>
       );
     }
@@ -395,8 +432,7 @@ const TransactionPage = () => {
 
   const renderLoadingView = () => (
     <LoadingContainer data-testid="loader">
-      <h1>Loading...</h1>
-      {/* <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} /> */}
+      <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
 
@@ -419,89 +455,91 @@ const TransactionPage = () => {
     }
   };
   if (jwtToken !== undefined) {
-    // return (
-    // <TransactionContext.Consumer>
-    //   {(value:any) => {
-    //     const {
-    //       transactionOption,
-    //       onChangeTransactionOption,
-    //       selectOption,
-    //       onChangeSelectOption,
-    //     } = value;
-
-    //     if (selectOption !== "TRANSACTIONS") {
-    //       onChangeSelectOption("TRANSACTIONS");
-    //     }
-
     return (
-      <TransactionHomePage>
-        <SideBar />
-        <TransactionTotalBodyContainer>
-          <Header updateApi={updateApi} />
-          <SelectFilterConditions>
-            <TransactionSelectFilter
-              onClick={() => {
-                // onChangeTransactionOption("ALLTRANSACTION");
-                onChangeFilter("alltransactions");
-              }}
-            >
-              <SelectAllOption
-                transactionOption={filterOption === "alltransactions"}
-                //  transactionOption={transactionOption === "ALLTRANSACTION"}
-              >
-                All Transaction
-              </SelectAllOption>
-              <SelectedContainer
-                transactionOption={filterOption === "alltransactions"}
-                //   transactionOption={transactionOption === "ALLTRANSACTION"}
-              ></SelectedContainer>
-            </TransactionSelectFilter>
+      <TransactionContext.Consumer>
+        {(value: ConsumerValues) => {
+          const {
+            // transactionOption,
+            // onChangeTransactionOption,
+            selectOption,
+            onChangeSelectOption,
+          } = value;
 
-            <TransactionSelectFilter
-              onClick={() => {
-                // onChangeTransactionOption("CREDIT");
-                onChangeFilter("credit");
-              }}
-            >
-              <SelectOption
-                transactionOption={filterOption === "credit"}
-                //   transactionOption={transactionOption === "CREDIT"}
-              >
-                Credit
-              </SelectOption>
-              <SelectedCreditContainer
-                transactionOption={filterOption === "credit"}
-                //  transactionOption={transactionOption === "CREDIT"}
-              ></SelectedCreditContainer>
-            </TransactionSelectFilter>
+          if (selectOption !== "TRANSACTIONS") {
+            onChangeSelectOption("TRANSACTIONS");
+          }
 
-            <TransactionSelectFilter
-              onClick={() => {
-                // onChangeTransactionOption("DEBIT");
-                onChangeFilter("debit");
-              }}
-            >
-              <SelectOption
-                transactionOption={filterOption === "debit"}
-                // transactionOption={transactionOption === "DEBIT"}
-              >
-                Debit
-              </SelectOption>
-              <SelectedCreditContainer
-                transactionOption={filterOption === "debit"}
-                //  transactionOption={transactionOption === "DEBIT"}
-              ></SelectedCreditContainer>
-            </TransactionSelectFilter>
-          </SelectFilterConditions>
-          <TransactionBodyContainer>
-            <TransactionsContainer>{renderLeaderboard()}</TransactionsContainer>
-          </TransactionBodyContainer>
-        </TransactionTotalBodyContainer>
-      </TransactionHomePage>
+          return (
+            <TransactionHomePage>
+              <SideBar />
+              <TransactionTotalBodyContainer>
+                <Header updateApi={updateApi} />
+                <SelectFilterConditions>
+                  <TransactionSelectFilter
+                    onClick={() => {
+                      // onChangeTransactionOption("ALLTRANSACTION");
+                      onChangeFilter("alltransactions");
+                    }}
+                  >
+                    <SelectAllOption
+                      transactionOption={filterOption === "alltransactions"}
+                      //  transactionOption={transactionOption === "ALLTRANSACTION"}
+                    >
+                      All Transaction
+                    </SelectAllOption>
+                    <SelectedContainer
+                      transactionOption={filterOption === "alltransactions"}
+                      //   transactionOption={transactionOption === "ALLTRANSACTION"}
+                    ></SelectedContainer>
+                  </TransactionSelectFilter>
+
+                  <TransactionSelectFilter
+                    onClick={() => {
+                      // onChangeTransactionOption("CREDIT");
+                      onChangeFilter("credit");
+                    }}
+                  >
+                    <SelectOption
+                      transactionOption={filterOption === "credit"}
+                      //   transactionOption={transactionOption === "CREDIT"}
+                    >
+                      Credit
+                    </SelectOption>
+                    <SelectedCreditContainer
+                      transactionOption={filterOption === "credit"}
+                      //  transactionOption={transactionOption === "CREDIT"}
+                    ></SelectedCreditContainer>
+                  </TransactionSelectFilter>
+
+                  <TransactionSelectFilter
+                    onClick={() => {
+                      // onChangeTransactionOption("DEBIT");
+                      onChangeFilter("debit");
+                    }}
+                  >
+                    <SelectOption
+                      transactionOption={filterOption === "debit"}
+                      // transactionOption={transactionOption === "DEBIT"}
+                    >
+                      Debit
+                    </SelectOption>
+                    <SelectedCreditContainer
+                      transactionOption={filterOption === "debit"}
+                      //  transactionOption={transactionOption === "DEBIT"}
+                    ></SelectedCreditContainer>
+                  </TransactionSelectFilter>
+                </SelectFilterConditions>
+                <TransactionBodyContainer>
+                  <TransactionsContainer>
+                    {renderLeaderboard()}
+                  </TransactionsContainer>
+                </TransactionBodyContainer>
+              </TransactionTotalBodyContainer>
+            </TransactionHomePage>
+          );
+        }}
+      </TransactionContext.Consumer>
     );
-    //     }}
-    //   </TransactionContext.Consumer>
-    // );
   }
   return null;
 };

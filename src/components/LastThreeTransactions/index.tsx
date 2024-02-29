@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-// import ReactLoading from "react-loading";
+import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
-// import Popup from "reactjs-popup";
+import Popup from "reactjs-popup";
 import { useNavigate } from "react-router-dom";
 
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
-import Popup from "../Popup";
+// import Popup from "../Popup";
 
 import {
   TransactionsContainer,
@@ -38,36 +38,79 @@ import {
   TransactionParagraphMobile,
 } from "./styledComponents";
 
-const apiStatusConstants: any = {
+interface apiStatusValues {
+  initial: string;
+  inProgress: string;
+  success: string;
+  failure: string;
+}
+
+interface PropsValue {
+  callApi: string;
+  lastThreeTransactions: (id: string) => void;
+}
+
+interface ApiOutputStatus {
+  status: string;
+  data: [];
+  errorMsg?: string;
+}
+
+interface short {
+  id: number;
+}
+
+interface FindUser {
+  id: string;
+}
+
+// interface userName {
+//   name: string;
+//   id?: string;
+//   email?: string;
+//   country?: string;
+//   date_of_birth?: string;
+//   city?: string;
+//   permanent_address?: string;
+//   postal_code?: string;
+//   present_address?: string;
+// }
+
+interface TransctionProps {
+  id: string;
+  type: string;
+  transaction_name: string;
+  date: string;
+  category: string;
+  amount: number;
+  user_id: number;
+}
+
+const apiStatusConstants: apiStatusValues = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
   failure: "FAILURE",
 };
 
-const TransactionPage = (props: any) => {
+const TransactionPage = (props: PropsValue) => {
   const { callApi, lastThreeTransactions } = props;
 
   const jwtToken = Cookies.get("jwt_token");
   const navigate = useNavigate();
 
-  const [apiResponse, setApiResponse] = useState<any>({
+  const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: apiStatusConstants.initial,
-    data: null,
+    data: [],
   });
 
-  const callTransactionsUpdate = (id: any) => {
+  const callTransactionsUpdate = (id: string) => {
     lastThreeTransactions(id);
   };
 
   const [allProfileDetails, setProfileDetailsApiResponse] = useState([]);
-  const [showPopup, addToShowPopup] = useState<boolean>(false);
-  const [deleteTransactionPopup, addDeleteTransactionPopup] =
-    useState<boolean>(false);
 
-  const [onClickId, addOnClickId] = useState<any>();
-
-  const DateFormate = (date: any) => {
+  const DateFormate = (date: string) => {
     const inputDateString = date;
     const inputDate = new Date(inputDateString);
 
@@ -103,7 +146,7 @@ const TransactionPage = (props: any) => {
       const getLeaderboardData = async () => {
         setApiResponse({
           status: apiStatusConstants.inProgress,
-          data: null,
+          data: [],
         });
 
         let headers = {};
@@ -160,8 +203,8 @@ const TransactionPage = (props: any) => {
         const responseData = await response.json();
 
         if (response.ok) {
-          const ListOfTransactions: any = responseData.transactions.sort(
-            (a: any, b: any) => b.id - a.id
+          const ListOfTransactions = responseData.transactions.sort(
+            (a: short, b: short) => b.id - a.id
           );
 
           setApiResponse({
@@ -171,8 +214,8 @@ const TransactionPage = (props: any) => {
         } else {
           setApiResponse({
             status: apiStatusConstants.failure,
-            data: null,
-            errorMsg: null,
+            data: [],
+            errorMsg: "",
           });
         }
       };
@@ -188,176 +231,164 @@ const TransactionPage = (props: any) => {
     if (transactionsData.length !== 0) {
       return (
         <>
-          {transactionsData.map((eachTransaction: any, index: any) => {
-            const user: any = allProfileDetails.find(
-              (findUser: any) => findUser.id === eachTransaction.user_id
-            );
-            // console.log(transactionsData);
-
-            return (
-              <DachTransactionContainer
-                className={
-                  transactionsData.length - 1 === index ? "true" : "false"
-                }
-                key={eachTransaction.id}
-              >
-                {jwtToken === "3" ? (
-                  <Div2
-                    className={jwtToken === "3" ? "true" : "false"}
-                    // isAdmin={isAdmin}
-                  >
-                    {eachTransaction.type === "credit" ? (
-                      <CrediteDebitImage
-                        className={jwtToken === "3" ? "true" : "false"}
-                        // isAdmin={isAdmin}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706166669/Ellipse_21_bdfznp.png"
-                        alt="image"
-                      />
-                    ) : (
-                      <CrediteDebitImage
-                        className={jwtToken === "3" ? "true" : "false"}
-                        // isAdmin={isAdmin}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/Group_328_hbywun.png"
-                        alt="image"
-                      />
-                    )}
-                    <UserProfileDetails>
-                      <AdminProfileContainer>
-                        {user.name[0].toUpperCase()}
-                      </AdminProfileContainer>
-                      <TitleUserParagraph>{user.name}</TitleUserParagraph>
-                    </UserProfileDetails>
-                  </Div2>
-                ) : (
-                  ""
-                )}
-
-                <Div
-                  className={jwtToken === "3" ? "true" : "false"}
-                  // isAdmin={jwtToken === "3"}
+          {transactionsData.map(
+            (eachTransaction: TransctionProps, index: number) => {
+              const user: any = allProfileDetails.find(
+                (findUser: short) => findUser.id === eachTransaction.user_id
+              );
+              return (
+                <DachTransactionContainer
+                  isAdmin={transactionsData.length - 1 === index}
+                  key={eachTransaction.id}
                 >
-                  {jwtToken !== "3" ? (
-                    <>
-                      {" "}
+                  {jwtToken === "3" ? (
+                    <Div2
+                      // className={jwtToken === "3" ? "true" : "false"}
+                      isAdmin={jwtToken === "3"}
+                    >
                       {eachTransaction.type === "credit" ? (
                         <CrediteDebitImage
-                          className={jwtToken === "3" ? "true" : "false"}
-                          // isAdmin={jwtToken === "3"}
+                          isAdmin={jwtToken === "3"}
                           src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706166669/Ellipse_21_bdfznp.png"
                           alt="image"
                         />
                       ) : (
                         <CrediteDebitImage
-                          className={jwtToken === "3" ? "true" : "false"}
-                          // isAdmin={jwtToken === "3"}
+                          isAdmin={jwtToken === "3"}
                           src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/Group_328_hbywun.png"
                           alt="image"
                         />
                       )}
-                    </>
+                      <UserProfileDetails>
+                        <AdminProfileContainer>
+                          {user.name[0].toUpperCase()}
+                        </AdminProfileContainer>
+                        <TitleUserParagraph>{user.name}</TitleUserParagraph>
+                      </UserProfileDetails>
+                    </Div2>
                   ) : (
                     ""
                   )}
 
-                  <div>
-                    <TitleParagraph>
-                      {eachTransaction.transaction_name}
-                    </TitleParagraph>
-                    <TransactionParagraphMobile>
-                      {DateFormate(eachTransaction.date)}
-                    </TransactionParagraphMobile>
-                  </div>
-                </Div>
-                <CategaryParagraph>
-                  {eachTransaction.category}
-                </CategaryParagraph>
-                <DateOfTransactionParagraph>
-                  {DateFormate(eachTransaction.date)}
-                </DateOfTransactionParagraph>
+                  <Div isAdmin={jwtToken === "3"}>
+                    {jwtToken !== "3" ? (
+                      <>
+                        {" "}
+                        {eachTransaction.type === "credit" ? (
+                          <CrediteDebitImage
+                            isAdmin={jwtToken === "3"}
+                            src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706166669/Ellipse_21_bdfznp.png"
+                            alt="image"
+                          />
+                        ) : (
+                          <CrediteDebitImage
+                            isAdmin={jwtToken === "3"}
+                            src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/Group_328_hbywun.png"
+                            alt="image"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      ""
+                    )}
 
-                {eachTransaction.type === "credit" ? (
-                  <CrediteAmount
-                    className={jwtToken === "3" ? "true" : "false"}
-                    //  isAdmin={jwtToken === "3"}
-                  >
-                    +${eachTransaction.amount}
-                  </CrediteAmount>
-                ) : (
-                  <DebitAmount
-                    className={jwtToken === "3" ? "true" : "false"}
-                    //  isAdmin={jwtToken === "3"}
-                  >
-                    -${eachTransaction.amount}
-                  </DebitAmount>
-                )}
-                <EditDeleteContainer
-                  className={jwtToken === "3" ? "true" : "false"}
-                  //  isAdmin={jwtToken === "3"}
-                >
-                  {jwtToken === "3" ? (
-                    ""
+                    <div>
+                      <TitleParagraph>
+                        {eachTransaction.transaction_name}
+                      </TitleParagraph>
+                      <TransactionParagraphMobile>
+                        {DateFormate(eachTransaction.date)}
+                      </TransactionParagraphMobile>
+                    </div>
+                  </Div>
+                  <CategaryParagraph>
+                    {eachTransaction.category}
+                  </CategaryParagraph>
+                  <DateOfTransactionParagraph>
+                    {DateFormate(eachTransaction.date)}
+                  </DateOfTransactionParagraph>
+
+                  {eachTransaction.type === "credit" ? (
+                    <CrediteAmount isAdmin={jwtToken === "3"}>
+                      +${eachTransaction.amount}
+                    </CrediteAmount>
                   ) : (
-                    <>
-                      <EditImage
-                        onClick={() => {
-                          addToShowPopup(true);
-                          addOnClickId(eachTransaction);
-                        }}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/pencil-02_lbbupq.png"
-                        alt="edit"
-                      />
-                      <Popup trigger={showPopup}>
-                        <AddTransactionMainContainer>
-                          <AddTransactionContainer>
-                            <AddTransactionTextContainer>
-                              <HeadingTextContainer>
-                                <AddTransactionHeading>
-                                  Update Transaction
-                                </AddTransactionHeading>
-                                <AddTransactionParagraph>
-                                  You can update your transaction here
-                                </AddTransactionParagraph>
-                              </HeadingTextContainer>
-                              <AddTransactionCloseImage
-                                onClick={() => addToShowPopup(false)}
-                                src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
-                                alt="close"
+                    <DebitAmount isAdmin={jwtToken === "3"}>
+                      -${eachTransaction.amount}
+                    </DebitAmount>
+                  )}
+                  <EditDeleteContainer isAdmin={jwtToken === "3"}>
+                    {jwtToken === "3" ? (
+                      ""
+                    ) : (
+                      <>
+                        <Popup
+                          modal
+                          trigger={
+                            <EditImage
+                              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/pencil-02_lbbupq.png"
+                              alt="edit"
+                            />
+                          }
+                        >
+                          {/* @ts-ignore */}
+                          {(close) => (
+                            <AddTransactionMainContainer>
+                              <AddTransactionContainer>
+                                <AddTransactionTextContainer>
+                                  <HeadingTextContainer>
+                                    <AddTransactionHeading>
+                                      Update Transaction
+                                    </AddTransactionHeading>
+                                    <AddTransactionParagraph>
+                                      You can update your transaction here
+                                    </AddTransactionParagraph>
+                                  </HeadingTextContainer>
+                                  <AddTransactionCloseImage
+                                    onClick={() => close()}
+                                    src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
+                                    alt="close"
+                                  />
+                                </AddTransactionTextContainer>
+                                <UpdateTransaction
+                                  eachTransaction={eachTransaction}
+                                  close={close}
+                                  callTransactionsUpdate={
+                                    callTransactionsUpdate
+                                  }
+                                />
+                              </AddTransactionContainer>
+                            </AddTransactionMainContainer>
+                          )}
+                        </Popup>
+
+                        <Popup
+                          modal
+                          trigger={
+                            <DeleteImage
+                              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/trash-01_uaykhq.png"
+                              alt="delete"
+                            />
+                          }
+                        >
+                          {/* @ts-ignore */}
+                          {(close) => (
+                            <LogoutContainer>
+                              <DeleteTransaction
+                                id={eachTransaction.id}
+                                close={close}
+                                callTransactionsUpdate={callTransactionsUpdate}
                               />
-                            </AddTransactionTextContainer>
-                            <UpdateTransaction
-                              eachTransaction={onClickId}
-                              close={addToShowPopup}
-                              callTransactionsUpdate={callTransactionsUpdate}
-                            />
-                          </AddTransactionContainer>
-                        </AddTransactionMainContainer>
-                      </Popup>
-
-                      <DeleteImage
-                        onClick={() => {
-                          addDeleteTransactionPopup(true);
-                          addOnClickId(eachTransaction.id);
-                        }}
-                        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705900717/trash-01_uaykhq.png"
-                        alt="delete"
-                      />
-                      <Popup trigger={deleteTransactionPopup}>
-                        <AddTransactionMainContainer>
-                          <LogoutContainer>
-                            <DeleteTransaction
-                              id={onClickId}
-                              close={addDeleteTransactionPopup}
-                              callTransactionsUpdate={callTransactionsUpdate}
-                            />
-                          </LogoutContainer>
-                        </AddTransactionMainContainer>
-                      </Popup>
-                    </>
-                  )}
-                </EditDeleteContainer>
-              </DachTransactionContainer>
-            );
-          })}
+                            </LogoutContainer>
+                          )}
+                        </Popup>
+                      </>
+                    )}
+                  </EditDeleteContainer>
+                </DachTransactionContainer>
+              );
+            }
+          )}
         </>
       );
     }
@@ -373,8 +404,7 @@ const TransactionPage = (props: any) => {
       className="products-loader-container"
       data-testid="loader"
     >
-      <h1>Loading...</h1>
-      {/* <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} /> */}
+      <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
 

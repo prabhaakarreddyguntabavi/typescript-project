@@ -36,14 +36,20 @@ const userDetails = [
   { email: "admin@gmail.com", password: "Admin@123", userId: 3 },
 ];
 
+interface UserDetailDict {
+  email: string;
+  password: string;
+  userId: string;
+}
+
 export const LoginForm = () => {
   const [emailId, onChangeEmail] = useState<string>("");
   const [password, onChangePassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const [userDict, setEmailDict] = useState<any>({
+  const [userDict, setEmailDict] = useState<UserDetailDict>({
     email: "",
     password: "",
-    userId: 0,
+    userId: "",
   });
   const navigate = useNavigate();
 

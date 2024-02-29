@@ -18,7 +18,13 @@ import {
   YesLogoutButton,
 } from "./styledComponents";
 
-const UpdateTransaction = (props: any) => {
+interface propsValue {
+  id: string;
+  close: () => void;
+  callTransactionsUpdate: (id: string) => void;
+}
+
+const UpdateTransaction = (props: propsValue) => {
   const { id, close, callTransactionsUpdate } = props;
 
   const jwtToken = Cookies.get("jwt_token");
@@ -62,7 +68,7 @@ const UpdateTransaction = (props: any) => {
 
     if (response.ok) {
       callTransactionsUpdate(id);
-      close(false);
+      close();
     } else {
       updateErrorMessage(responseData.error);
       // handleShowError();
@@ -92,7 +98,7 @@ const UpdateTransaction = (props: any) => {
           </HeaderTextImageContainer>
         </TextImageContainer>
         <LogoutClosingImage
-          onClick={() => close(false)}
+          onClick={() => close()}
           src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
           alt="close"
         />
@@ -110,7 +116,7 @@ const UpdateTransaction = (props: any) => {
           type="button"
           className="trigger-button"
           data-testid="close"
-          onClick={() => close(false)}
+          onClick={() => close()}
         >
           Cancel
         </CancelLogoutButton>

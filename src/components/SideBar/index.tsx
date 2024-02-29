@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
-// import Popup from "reactjs-popup";
+import Popup from "reactjs-popup";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-// import { MyContext } from "../../context/TransactionContext";
-import Popup from "../Popup";
+import TransactionContext from "../../context/TransactionContext";
+// import Popup from "../Popup";
 
 import {
   SideBarMainContainer,
@@ -58,24 +58,32 @@ const userDetails = [
   { email: "admin@gmail.com", password: "Admin@123", userId: 3 },
 ];
 
+interface ProfileDetails {
+  name?: string;
+  email?: string;
+  date_of_birth?: string;
+  present_address?: string;
+  permanent_address?: string;
+  city?: string;
+  postal_code?: string;
+  country?: string;
+}
+
+interface ConsumerValues {
+  selectOption: string;
+  onChangeSelectOption: (id: string) => void;
+  onChangeTransactionOption: (id: string) => void;
+}
+
 const SideBar = () => {
   const jwtToken: any = Cookies.get("jwt_token");
   const navigate = useNavigate();
-  const [apiResponse, setApiResponse] = useState<any>({});
-  const [logoutPopup, showLogoutPopup] = useState<boolean>(false);
-
-  const [selectOption, setSelectionOption] = useState<any>("DASHBOARD");
+  const [apiResponse, setApiResponse] = useState<ProfileDetails>({});
 
   const loginUser: any = {
     ...userDetails.find((eachUser) => eachUser.userId === parseInt(jwtToken)),
     name: "",
   };
-
-  const x: any = localStorage.getItem("selectOption");
-
-  if (x !== "" && selectOption !== x) {
-    setSelectionOption(x);
-  }
 
   useEffect(() => {
     if (!jwtToken) {
@@ -117,193 +125,192 @@ const SideBar = () => {
   const onClickLogout = () => {
     navigate("/login");
     Cookies.remove("jwt_token");
-    localStorage.setItem("selectOption", "DASHBOARD");
   };
 
-  function onChangeSelectOption(id: string) {
-    localStorage.setItem("selectOption", id);
-    setSelectionOption("DASHBOARD");
-  }
+  // function onChangeSelectOption(id: string) {
+  //   localStorage.setItem("selectOption", id);
+  //   setSelectionOption("DASHBOARD");
+  // }
 
-  function onChangeTransactionOption(arg0: string) {
-    throw new Error("Function not implemented.");
-  }
+  // function onChangeTransactionOption(arg0: string) {
+  //   throw new Error("Function not implemented.");
+  // }
 
-  // return (
-  //   <MyContext.Consumer>
-  //     {(value: any) => {
-  //       const {
-  //         selectOption,
-  //         onChangeSelectOption,
-  //         onChangeTransactionOption,
-  //       } = value;
-  //       console.log(value.onChangeSelectOption);
   return (
-    <SideBarMainContainer>
-      <LogoImage
-        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
-        alt="website logo"
-      />
+    <TransactionContext.Consumer>
+      {(value: ConsumerValues) => {
+        const {
+          selectOption,
+          onChangeSelectOption,
+          onChangeTransactionOption,
+        } = value;
 
-      <TextContainer>
-        <Link
-          className="sidbar-content"
-          to="/"
-          onClick={() => {
-            onChangeSelectOption("DASHBOARD");
-            onChangeTransactionOption("ALLTRANSACTION");
-          }}
-        >
-          <EachTextContainer>
-            <SelectedContainer selectOption={selectOption === "DASHBOARD"}>
-              {}
-            </SelectedContainer>
-            <IconsImage
-              src={
-                selectOption === "DASHBOARD"
-                  ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/home_2_1_xkaadl.png"
-                  : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705730106/home_2_m9drn7.png"
-              }
-              alt="dashboard"
-            />
-            <TextParagraph selectOption={selectOption === "DASHBOARD"}>
-              Dashboard
-            </TextParagraph>
-          </EachTextContainer>
-        </Link>
-        <Link
-          className="sidbar-content"
-          to="/transaction"
-          onClick={() => onChangeSelectOption("TRANSACTIONS")}
-        >
-          <EachTextContainer>
-            <SelectedContainer
-              selectOption={selectOption === "TRANSACTIONS"}
-            ></SelectedContainer>
-            <TransactionIconsImage
-              src={
-                selectOption === "TRANSACTIONS"
-                  ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/transfer_1_1_hqx4fr.png"
-                  : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912310/transfer_1_e0it36.png"
-              }
-              alt="transactions"
+        return (
+          <SideBarMainContainer>
+            <LogoImage
+              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
+              alt="website logo"
             />
 
-            <TextParagraph
-              // className={selectOption === "TRANSACTIONS" ? "true" : "false"}
-              selectOption={selectOption === "TRANSACTIONS"}
-            >
-              {jwtToken === "3" ? "All Transactions" : "Transactions"}
-            </TextParagraph>
-          </EachTextContainer>
-        </Link>
-        <Link
-          className="sidbar-content"
-          to="/profile"
-          onClick={() => {
-            onChangeSelectOption("PROFILE");
-            onChangeTransactionOption("ALLTRANSACTION");
-          }}
-        >
-          <EachTextContainer>
-            <SelectedContainer
-              selectOption={selectOption === "PROFILE"}
-            ></SelectedContainer>
-            <IconsImage
-              src={
-                selectOption === "PROFILE"
-                  ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/user_3_1_1_h8fxdm.png"
-                  : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912309/user_3_1_ikruwf.png"
-              }
-              alt="profile"
-            />
-            <TextParagraph
-              // color={"#FF0000"}
-              // className={selectOption === "PROFILE" ? "true" : "false"}
-              selectOption={selectOption === "PROFILE"}
-            >
-              Profile
-            </TextParagraph>
-          </EachTextContainer>
-        </Link>
-      </TextContainer>
-      {/* Profile Section */}
-      <ProfileContainer>
-        <ProfileImageContainer>
-          {loginUser.email[0].toUpperCase()}
-        </ProfileImageContainer>
-        <ProfileTextContainer>
-          <ProfileName>{apiResponse.name}</ProfileName>
-          <ProfileEmail>{apiResponse.email}</ProfileEmail>
-        </ProfileTextContainer>
-
-        <LogoutButton type="button" onClick={() => showLogoutPopup(true)}>
-          <ProfileImageContainerMedium>
-            {loginUser.email[0].toUpperCase()}
-          </ProfileImageContainerMedium>
-          <ProfileLogoutImage
-            src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706074414/log-out-01_yllnww.png"
-            alt="logout"
-          />
-        </LogoutButton>
-
-        {/* Logout Popup */}
-        <Popup trigger={logoutPopup}>
-          {/* Logout Container */}
-          <LogoutContainer>
-            {/* Logout Confirmation Container */}
-            <LogoutConformationContainer>
-              <TestContainer>
-                {/* Warning Image */}
-                <WarningImageContainer>
-                  <WarningImage
-                    src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706080360/log-out-01_1_wtsz63.png"
-                    alt="logout"
+            <TextContainer>
+              <Link
+                className="sidbar-content"
+                to="/"
+                onClick={() => {
+                  onChangeSelectOption("DASHBOARD");
+                  onChangeTransactionOption("ALLTRANSACTION");
+                }}
+              >
+                <EachTextContainer>
+                  <SelectedContainer
+                    selectOption={selectOption === "DASHBOARD"}
+                  >
+                    {}
+                  </SelectedContainer>
+                  <IconsImage
+                    src={
+                      selectOption === "DASHBOARD"
+                        ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/home_2_1_xkaadl.png"
+                        : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705730106/home_2_m9drn7.png"
+                    }
+                    alt="dashboard"
                   />
-                </WarningImageContainer>
-                {/* Text Image Container */}
-                <TextImageContainer>
-                  {/* Header Text Image Container */}
-                  <HeaderTextImageContainer>
-                    <LogoutHeading>
-                      Are you sure you want to Logout?
-                    </LogoutHeading>
-                    <LogoutParagraph>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-                      sed
-                    </LogoutParagraph>
-                  </HeaderTextImageContainer>
-                </TextImageContainer>
-                {/* Logout Closing Image */}
-                <LogoutClosingImage
-                  onClick={() => showLogoutPopup(false)}
-                  src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
-                  alt="close"
-                />
-              </TestContainer>
-              {/* Logout Button Container */}
-              <LogoutButtonContainer>
-                <YesLogoutButton type="button" onClick={onClickLogout}>
-                  Yes, Logout
-                </YesLogoutButton>
-                <CancelLogoutButton
-                  type="button"
-                  className="trigger-button"
-                  data-testid="close"
-                  onClick={() => showLogoutPopup(false)}
-                >
-                  Cancel
-                </CancelLogoutButton>
-              </LogoutButtonContainer>
-            </LogoutConformationContainer>
-          </LogoutContainer>
-        </Popup>
-      </ProfileContainer>
-    </SideBarMainContainer>
+                  <TextParagraph selectOption={selectOption === "DASHBOARD"}>
+                    Dashboard
+                  </TextParagraph>
+                </EachTextContainer>
+              </Link>
+              <Link
+                className="sidbar-content"
+                to="/transaction"
+                onClick={() => onChangeSelectOption("TRANSACTIONS")}
+              >
+                <EachTextContainer>
+                  <SelectedContainer
+                    selectOption={selectOption === "TRANSACTIONS"}
+                  ></SelectedContainer>
+                  <TransactionIconsImage
+                    src={
+                      selectOption === "TRANSACTIONS"
+                        ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/transfer_1_1_hqx4fr.png"
+                        : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912310/transfer_1_e0it36.png"
+                    }
+                    alt="transactions"
+                  />
+
+                  <TextParagraph
+                    // className={selectOption === "TRANSACTIONS" ? "true" : "false"}
+                    selectOption={selectOption === "TRANSACTIONS"}
+                  >
+                    {jwtToken === "3" ? "All Transactions" : "Transactions"}
+                  </TextParagraph>
+                </EachTextContainer>
+              </Link>
+              <Link
+                className="sidbar-content"
+                to="/profile"
+                onClick={() => {
+                  onChangeSelectOption("PROFILE");
+                  onChangeTransactionOption("ALLTRANSACTION");
+                }}
+              >
+                <EachTextContainer>
+                  <SelectedContainer
+                    selectOption={selectOption === "PROFILE"}
+                  ></SelectedContainer>
+                  <IconsImage
+                    src={
+                      selectOption === "PROFILE"
+                        ? "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706070137/user_3_1_1_h8fxdm.png"
+                        : "https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705912309/user_3_1_ikruwf.png"
+                    }
+                    alt="profile"
+                  />
+                  <TextParagraph
+                    // color={"#FF0000"}
+                    // className={selectOption === "PROFILE" ? "true" : "false"}
+                    selectOption={selectOption === "PROFILE"}
+                  >
+                    Profile
+                  </TextParagraph>
+                </EachTextContainer>
+              </Link>
+            </TextContainer>
+            {/* Profile Section */}
+            <ProfileContainer>
+              <ProfileImageContainer>
+                {loginUser.email[0].toUpperCase()}
+              </ProfileImageContainer>
+              <ProfileTextContainer>
+                <ProfileName>{apiResponse.name}</ProfileName>
+                <ProfileEmail>{apiResponse.email}</ProfileEmail>
+              </ProfileTextContainer>
+
+              <Popup
+                modal
+                trigger={
+                  <LogoutButton type="button">
+                    <ProfileImageContainerMedium>
+                      {loginUser.email[0].toUpperCase()}
+                    </ProfileImageContainerMedium>
+                    <ProfileLogoutImage
+                      src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706074414/log-out-01_yllnww.png"
+                      alt="logout"
+                    />
+                  </LogoutButton>
+                }
+              >
+                {/* @ts-ignore */}
+                {(close) => (
+                  <LogoutContainer>
+                    <LogoutConformationContainer>
+                      <TestContainer>
+                        <WarningImageContainer>
+                          <WarningImage
+                            src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706080360/log-out-01_1_wtsz63.png"
+                            alt="logout"
+                          />
+                        </WarningImageContainer>
+                        <TextImageContainer>
+                          <HeaderTextImageContainer>
+                            <LogoutHeading>
+                              Are you sure you want to Logout?
+                            </LogoutHeading>
+                            <LogoutParagraph>
+                              Lorem ipsum dolor sit amet, consectetur adipiscing
+                              elit, sed
+                            </LogoutParagraph>
+                          </HeaderTextImageContainer>
+                        </TextImageContainer>
+                        <LogoutClosingImage
+                          onClick={() => close()}
+                          src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
+                          alt="close"
+                        />
+                      </TestContainer>
+                      <LogoutButtonContainer>
+                        <YesLogoutButton type="button" onClick={onClickLogout}>
+                          Yes, Logout
+                        </YesLogoutButton>
+                        <CancelLogoutButton
+                          type="button"
+                          className="trigger-button"
+                          data-testid="close"
+                          onClick={() => close()}
+                        >
+                          Cancel
+                        </CancelLogoutButton>
+                      </LogoutButtonContainer>
+                    </LogoutConformationContainer>
+                  </LogoutContainer>
+                )}
+              </Popup>
+            </ProfileContainer>
+          </SideBarMainContainer>
+        );
+      }}
+    </TransactionContext.Consumer>
   );
-  //     }}
-  //   </MyContext.Consumer>
-  // );
 };
 
 export default SideBar;

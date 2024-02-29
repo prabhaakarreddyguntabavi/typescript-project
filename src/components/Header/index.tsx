@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Cookies from "js-cookie";
-// import Popup from "reactjs-popup";
-// import { v4 as uuidv4 } from "uuid";
-// import ReactLoading from "react-loading";
+import Popup from "reactjs-popup";
+import { v4 as uuidv4 } from "uuid";
+import ReactLoading from "react-loading";
 
 // import MobileSideBar from "../MobileSideBar";
-// import { IoMdMenu } from "react-icons/io";
+import { IoMdMenu } from "react-icons/io";
 
-// import TransctionContext from "../../context/TransactionContext";
-// import { IoAddCircleOutline } from "react-icons/io5";
+import TransctionContext from "../../context/TransactionContext";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 // import ErrorPopup from "../ErrorMessage";
-import Popup from "../Popup";
+// import Popup from "../Popup";
 
 import {
   HeaderMainContainer,
@@ -43,8 +43,11 @@ import {
 import "./index.css";
 import MobileSideBar from "../MobileSideBar";
 
-const Header = (props: any) => {
-  console.log(React);
+interface PropsValue {
+  updateApi: (id: string) => void;
+}
+
+const Header = (props: PropsValue) => {
   const jwtToken = Cookies.get("jwt_token");
 
   const getCurrentDateTime = () => {
@@ -56,9 +59,6 @@ const Header = (props: any) => {
     const minutes = String(now.getMinutes()).padStart(2, "0");
     const seconds = String(now.getSeconds()).padStart(2, "0");
     const dateTimeString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    console.log("dateTimeString");
-    console.log(dateTimeString);
-
     return dateTimeString;
   };
 
@@ -124,9 +124,7 @@ const Header = (props: any) => {
     addDate("");
   };
 
-  const selectOption: any = localStorage.getItem("selectOption");
-
-  const getLeaderboardData = async () => {
+  const getLeaderboardData = async (close: () => void) => {
     updateTransction("inprogress");
     updateErrorMessage("");
 
@@ -166,11 +164,12 @@ const Header = (props: any) => {
       const response = await fetch(url, options);
 
       if (response.ok) {
-        // const { updateApi } = props;
-        // updateApi(uuidv4());
+        const { updateApi } = props;
+        updateApi(uuidv4());
         addTransctionPopup(false);
         updateTransction("");
         updateValues();
+        close();
       } else {
         updateTransction("");
         // handleShowError();
@@ -184,169 +183,165 @@ const Header = (props: any) => {
   const renderSuccessView = () => {
     return (
       <>
-        <div>
-          <AddTransactionButton
-            disabled={jwtToken === "3"}
-            type="button"
-            onClick={() => addTransctionPopup(true)}
-          >
-            <ButtonImage
-              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705727508/plus_ndqvby.png"
-              alt="plus"
-            />{" "}
-            Add Transaction
-          </AddTransactionButton>
-          <MobileAddTransactions
-            type="button"
-            disabled={jwtToken === "3"}
-            onClick={() => addTransctionPopup(true)}
-          >
-            {/* <IoAddCircleOutline className="add-icon" /> */} +Add
-          </MobileAddTransactions>
-        </div>
-        <Popup trigger={showTransction}>
-          <AddTransctionMainContainer>
-            <AddTransctionContainer
-            // onSubmit={() => {
-            //   getLeaderboardData(close);
-            // }}
-            >
-              <AddTransctionTextContainer>
-                <HeadingTextContainer>
-                  <AddTransctionHeading>Add Transaction</AddTransctionHeading>
-                  <AddTransctionParagraph>
-                    Lorem ipsum dolor sit amet, consectetur
-                  </AddTransctionParagraph>
-                </HeadingTextContainer>
-                <AddTransctionCloseImage
-                  onClick={() => {
-                    addTransctionPopup(false);
-                    updateValues();
-                  }}
-                  src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
-                  alt="close"
-                />
-              </AddTransctionTextContainer>
-
-              <AddTransctionInputContainer>
-                <AddTransctionLabel htmlFor="addtransctionname">
-                  Transaction Name*
-                  <NotificationMessage>
-                    (Max 30 Characters*)
-                  </NotificationMessage>
-                </AddTransctionLabel>
-                <AddTransctionNameInput
-                  required
-                  type="text"
-                  id="addtransctionname"
-                  value={name}
-                  onChange={AddNameFunction}
-                  placeholder="Enter Name"
-                  maxLength={30}
-                />
-              </AddTransctionInputContainer>
-
-              <AddTransctionInputContainer>
-                <AddTransctionLabel htmlFor="transctionType">
-                  Transaction Type*
-                </AddTransctionLabel>
-                <SelectTransctionType
-                  required
-                  // placeholder="Select Transaction Type"
-                  id="transctionType"
-                  value={type}
-                  onChange={addTypeFunction}
-                >
-                  <SelectTransctionOptions value="credit">
-                    Credit
-                  </SelectTransctionOptions>
-                  <SelectTransctionOptions value="debit">
-                    Debit
-                  </SelectTransctionOptions>
-                </SelectTransctionType>
-              </AddTransctionInputContainer>
-
-              <AddTransctionInputContainer>
-                <AddTransctionLabel htmlFor="transctionCategory">
-                  Category*
-                </AddTransctionLabel>
-                <SelectTransctionType
-                  required
-                  // placeholder="Select"
-                  id="transctionCategory"
-                  value={category}
-                  onChange={addCategoryFunction}
-                >
-                  <SelectTransctionOptions value="Shopping">
-                    Shopping
-                  </SelectTransctionOptions>
-                  <SelectTransctionOptions value="Service">
-                    Service
-                  </SelectTransctionOptions>
-                  <SelectTransctionOptions value="Transfer">
-                    Transfer
-                  </SelectTransctionOptions>
-                </SelectTransctionType>
-              </AddTransctionInputContainer>
-
-              <AddTransctionInputContainer>
-                <AddTransctionLabel htmlFor="addtransctionamount">
-                  Amount*
-                </AddTransctionLabel>
-                <AddTransctionNameInput
-                  required
-                  type="number"
-                  id="addtransctionamount"
-                  value={amount}
-                  onChange={AddAmountFunction}
-                  placeholder="Enter Your Amount"
-                />
-              </AddTransctionInputContainer>
-
-              <AddTransctionInputContainer>
-                <AddTransctionLabel htmlFor="addtransctionamount">
-                  Date*
-                </AddTransctionLabel>
-                <AddTransctionNameInput
-                  className="date-time-field"
-                  required
-                  type="datetime-local"
-                  readOnly
-                  id="addtransctionamount"
-                  value={date}
-                  onChange={addDateFunction}
-                  placeholder="Select Date"
-                />
-              </AddTransctionInputContainer>
-
-              <AddTransctionButton
-                type="submit"
-                onClick={() => {
-                  getLeaderboardData();
-                }}
-                disabled={addTransctionStatus === "inprogress"}
+        <Popup
+          modal
+          trigger={
+            <div>
+              <AddTransactionButton disabled={jwtToken === "3"} type="button">
+                <ButtonImage
+                  src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705727508/plus_ndqvby.png"
+                  alt="plus"
+                />{" "}
+                Add Transaction
+              </AddTransactionButton>
+              <MobileAddTransactions type="button" disabled={jwtToken === "3"}>
+                <IoAddCircleOutline className="add-icon" />
+              </MobileAddTransactions>
+            </div>
+          }
+        >
+          {/* @ts-ignore */}
+          {(close) => (
+            <AddTransctionMainContainer>
+              <AddTransctionContainer
+              // onSubmit={() => {
+              //   getLeaderboardData(close);
+              // }}
               >
-                {addTransctionStatus === "inprogress" ? (
-                  <p>Loading...</p>
-                ) : (
-                  // <ReactLoading
-                  //   type={"bars"}
-                  //   color={"#ffffff"}
-                  //   height={20}
-                  //   width={30}
-                  // />
-                  "Add Transaction "
-                )}
-              </AddTransctionButton>
-              <ErrorMessageParagraph>{errorMessage}</ErrorMessageParagraph>
-              {/* {showError && (
+                <AddTransctionTextContainer>
+                  <HeadingTextContainer>
+                    <AddTransctionHeading>Add Transaction</AddTransctionHeading>
+                    <AddTransctionParagraph>
+                      Lorem ipsum dolor sit amet, consectetur
+                    </AddTransctionParagraph>
+                  </HeadingTextContainer>
+                  <AddTransctionCloseImage
+                    onClick={() => {
+                      close();
+                      updateValues();
+                    }}
+                    src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
+                    alt="close"
+                  />
+                </AddTransctionTextContainer>
+
+                <AddTransctionInputContainer>
+                  <AddTransctionLabel htmlFor="addtransctionname">
+                    Transaction Name*
+                    <NotificationMessage>
+                      (Max 30 Charactors*)
+                    </NotificationMessage>
+                  </AddTransctionLabel>
+                  <AddTransctionNameInput
+                    required
+                    type="text"
+                    id="addtransctionname"
+                    value={name}
+                    onChange={AddNameFunction}
+                    placeholder="Enter Name"
+                    maxLength={30}
+                  />
+                </AddTransctionInputContainer>
+
+                <AddTransctionInputContainer>
+                  <AddTransctionLabel htmlFor="transctionType">
+                    Transaction Type*
+                  </AddTransctionLabel>
+                  <SelectTransctionType
+                    required
+                    id="transctionType"
+                    value={type}
+                    onChange={addTypeFunction}
+                  >
+                    <SelectTransctionOptions value="credit">
+                      Credit
+                    </SelectTransctionOptions>
+                    <SelectTransctionOptions value="debit">
+                      Debit
+                    </SelectTransctionOptions>
+                  </SelectTransctionType>
+                </AddTransctionInputContainer>
+
+                <AddTransctionInputContainer>
+                  <AddTransctionLabel htmlFor="transctionCategory">
+                    Category*
+                  </AddTransctionLabel>
+                  <SelectTransctionType
+                    required
+                    id="transctionCategory"
+                    value={category}
+                    onChange={addCategoryFunction}
+                  >
+                    <SelectTransctionOptions value="Shopping">
+                      Shopping
+                    </SelectTransctionOptions>
+                    <SelectTransctionOptions value="Service">
+                      Service
+                    </SelectTransctionOptions>
+                    <SelectTransctionOptions value="Transfer">
+                      Transfer
+                    </SelectTransctionOptions>
+                  </SelectTransctionType>
+                </AddTransctionInputContainer>
+
+                <AddTransctionInputContainer>
+                  <AddTransctionLabel htmlFor="addtransctionamount">
+                    Amount*
+                  </AddTransctionLabel>
+                  <AddTransctionNameInput
+                    required
+                    type="number"
+                    id="addtransctionamount"
+                    value={amount}
+                    onChange={AddAmountFunction}
+                    placeholder="Enter Your Amount"
+                  />
+                </AddTransctionInputContainer>
+
+                <AddTransctionInputContainer>
+                  <AddTransctionLabel htmlFor="addtransctionamount">
+                    Date*
+                  </AddTransctionLabel>
+                  <AddTransctionNameInput
+                    className="date-time-field"
+                    required
+                    type="datetime-local"
+                    readOnly
+                    id="addtransctionamount"
+                    value={date}
+                    onChange={addDateFunction}
+                    placeholder="Select Date"
+                  />
+                </AddTransctionInputContainer>
+
+                <AddTransctionButton
+                  type="submit"
+                  onClick={() => {
+                    getLeaderboardData(close);
+                  }}
+                  disabled={addTransctionStatus === "inprogress"}
+                >
+                  {addTransctionStatus === "inprogress" ? (
+                    <ReactLoading
+                      type={"bars"}
+                      color={"#ffffff"}
+                      height={20}
+                      width={30}
+                    />
+                  ) : (
+                    "Add Transaction "
+                  )}
+                </AddTransctionButton>
+                <ErrorMessageParagraph>{errorMessage}</ErrorMessageParagraph>
+                {/* {showError && (
                 <ErrorPopup
                   message="Please Fill All Fields"
                   onClose={handleCloseError}
                 />
               )} */}
-            </AddTransctionContainer>
-          </AddTransctionMainContainer>
+              </AddTransctionContainer>
+            </AddTransctionMainContainer>
+          )}
         </Popup>
       </>
     );
@@ -367,36 +362,42 @@ const Header = (props: any) => {
   // };
 
   return (
-    // <TransctionContext.Consumer>
-    //   {(value) => {
-    //     const { selectOption } = value;
-    // return (
-    <HeaderMainContainer>
-      <MobileHeaderProfile onClick={() => showLogoutPopup(true)}>
-        <MobileParagraph
-          src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1708756592/menu_q8hfyj.png"
-          alt="mene"
-        />
-      </MobileHeaderProfile>
-      <Popup trigger={logoutPopup}>
-        <MobilePopupContainer>
-          <MobileSideBar close={showLogoutPopup} />
-        </MobilePopupContainer>
-      </Popup>
-      <MobileLogoImage
-        src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
-        alt="logo"
-      />
-      <ButtonText>
-        {selectOption.charAt(0).toUpperCase() +
-          selectOption.slice(1).toLowerCase()}
-      </ButtonText>
-      {renderSuccessView()}
-    </HeaderMainContainer>
+    <TransctionContext.Consumer>
+      {(value) => {
+        const { selectOption } = value;
+        return (
+          <HeaderMainContainer>
+            <Popup
+              modal
+              trigger={
+                <MobileHeaderProfile>
+                  <MobileParagraph>
+                    <IoMdMenu />
+                  </MobileParagraph>
+                </MobileHeaderProfile>
+              }
+            >
+              {/* @ts-ignore */}
+              {(close) => (
+                <MobilePopupContainer>
+                  <MobileSideBar close={close} />
+                </MobilePopupContainer>
+              )}
+            </Popup>
+            <MobileLogoImage
+              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
+              alt="logo"
+            />
+            <ButtonText>
+              {selectOption.charAt(0).toUpperCase() +
+                selectOption.slice(1).toLowerCase()}
+            </ButtonText>
+            {renderSuccessView()}
+          </HeaderMainContainer>
+        );
+      }}
+    </TransctionContext.Consumer>
   );
-  //   }}
-  // </TransctionContext.Consumer>
-  // );
 };
 
 export default Header;

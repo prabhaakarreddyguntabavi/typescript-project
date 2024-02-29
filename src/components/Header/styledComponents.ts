@@ -257,7 +257,7 @@ export const MobilePopupContainer = styled.div`
 
 
 
-export const MobileParagraph = styled.img`
+export const MobileParagraph = styled.p`
   font-size: 25px;
   width: 22px;
 `;

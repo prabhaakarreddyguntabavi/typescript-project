@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 // import ErrorPopup from "../ErrorMessage";
-// import { v4 as uuidv4 } from "uuid";
-// import ReactLoading from "react-loading";
+import { v4 as uuidv4 } from "uuid";
+import ReactLoading from "react-loading";
 
 import {
   AddTransactionButton,
@@ -60,10 +60,10 @@ const UpdateTransaction = (props: any) => {
   };
 
   const [name, addName] = useState<string>(eachTransaction.transaction_name);
-  const [type, addType] = useState<any>(eachTransaction.type);
-  const [category, addCategory] = useState<any>(eachTransaction.category);
+  const [type, addType] = useState<string>(eachTransaction.type);
+  const [category, addCategory] = useState<string>(eachTransaction.category);
   const [amount, AddAmount] = useState<number>(eachTransaction.amount);
-  const [date, addDate] = useState<any>(eachTransaction.date);
+  const [date, addDate] = useState<string>(eachTransaction.date);
 
   const AddNameFunction = (event: any) => {
     if (event.target.value.length >= 30) {
@@ -129,7 +129,7 @@ const UpdateTransaction = (props: any) => {
     const responseData = await response.json();
 
     if (response.ok) {
-      // callTransactionsUpdate(uuidv4());
+      callTransactionsUpdate(uuidv4());
       close(false);
       setApiResponse({
         status: "",
@@ -242,14 +242,13 @@ const UpdateTransaction = (props: any) => {
         disabled={addTransactionStatus === "inprogress"}
       >
         {addTransactionStatus === "inprogress" ? (
-          <h1>Loading...</h1>
+          <ReactLoading
+            type={"bars"}
+            color={"#ffffff"}
+            height={20}
+            width={30}
+          />
         ) : (
-          // <ReactLoading
-          //   type={"bars"}
-          //   color={"#ffffff"}
-          //   height={20}
-          //   width={30}
-          // />
           "Update Transaction "
         )}
       </AddTransactionButton>
