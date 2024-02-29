@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const CreditContainer = styled.div`
   display: flex;
-  width: 34vw;
+  width: 38%;
   // height: 145px;
   padding: 9px 36px;
   flex-direction: row;
@@ -23,9 +23,9 @@ export const CreditContainer = styled.div`
   @media screen and (max-width: 768px) {
     margin-top: 10px;
     margin-left: 10px;
-    margin-/right: 10px;
+    margin-right: 10px;
     // margin-bottom: 10px;
-    width: 90%;
+    width: 78%;
     // height: 90px;
     padding: 25px 30px;
     // min-height: 100px;
@@ -86,7 +86,8 @@ export const ImageContainer = styled.div`
 
 export const AmountDetailsContainer = styled.div`
   display: flex;
-  width: 84vw;
+  // width: 84vw;
+  width: 100%;
   //   height: 210px;
   // padding: 12px 25px 8px 20px;
   flex-direction: row;
@@ -97,13 +98,13 @@ export const AmountDetailsContainer = styled.div`
   // margin-top: 32px;
 
   @media screen and (max-width: 1024px) {
-    width: 84vw;
+    // width: 84vw;
     padding: 5px;
   }
 
   @media screen and (max-width: 768px) {
     margin-top: 0px;
-    width: 96vw;
+    // width: 96vw;
     padding: 0px;
     flex-direction: column;
   }
@@ -111,7 +112,7 @@ export const AmountDetailsContainer = styled.div`
 
 export const DebitContainer = styled.div`
   display: flex;
-  width: 34vw;
+  width: 38%;
   // height: 145px;
   padding: 9px 40px;
   // flex-direction: column;
@@ -132,7 +133,7 @@ export const DebitContainer = styled.div`
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
-    width: 90%;
+    width: 78%;
     // height: 90px;
     padding: 25px 30px;
   }

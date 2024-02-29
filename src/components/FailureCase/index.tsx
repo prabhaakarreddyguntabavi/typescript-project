@@ -1,15 +1,15 @@
-import { v4 as uuidv4 } from "uuid";
+// import { v4 as uuidv4 } from "uuid";
 
 import {
   OnFailureConrainer,
   OnFailureImage,
   OnFailureHeading,
   OnFailureParagraph,
-  OnFailureRetryButton,
+  // OnFailureRetryButton,
 } from "./styledComponents";
 
-const FailureCase = (props) => {
-  const { updateApi } = props;
+const FailureCase = (props: any) => {
+  // const { updateApi } = props;
 
   return (
     <OnFailureConrainer>
@@ -24,9 +24,9 @@ const FailureCase = (props) => {
         We are having some trouble to complete your request.
         <br /> Please try again
       </OnFailureParagraph>
-      <OnFailureRetryButton type="button" onClick={() => updateApi(uuidv4())}>
+      {/* <OnFailureRetryButton type="button" onClick={() => updateApi(uuidv4())}>
         Retry
-      </OnFailureRetryButton>
+      </OnFailureRetryButton> */}
     </OnFailureConrainer>
   );
 };

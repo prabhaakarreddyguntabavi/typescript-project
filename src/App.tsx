@@ -9,7 +9,7 @@ import TransactionPage from "./components/TransactionPage";
 import ProfileDetails from "./components/ProfileDetails";
 // import Cookies from "js-cookie";
 
-const App = () => {
+const App = (): JSX.Element => {
   // const onChangeTransactionOption = (id: any) => {
   //   selectTransactionOption(id);
   // };

@@ -20,21 +20,20 @@ import {
 
 const UpdateTransaction = (props: any) => {
   const { id, close, callTransactionsUpdate } = props;
-  console.log("Prabhakar");
 
   const jwtToken = Cookies.get("jwt_token");
 
-  const [showError, setShowError] = useState(false);
+  // const [showError, setShowError] = useState(false);
 
   const [errorMessage, updateErrorMessage] = useState(false);
 
-  const handleShowError = () => {
-    setShowError(true);
-  };
+  // const handleShowError = () => {
+  //   setShowError(true);
+  // };
 
-  const handleCloseError = () => {
-    setShowError(false);
-  };
+  // const handleCloseError = () => {
+  //   setShowError(false);
+  // };
 
   const getLeaderboardData = async () => {
     let headers = {};
@@ -60,21 +59,20 @@ const UpdateTransaction = (props: any) => {
     };
     const response = await fetch(url, options);
     const responseData = await response.json();
-    console.log(id);
 
     if (response.ok) {
       callTransactionsUpdate(id);
       close(false);
     } else {
       updateErrorMessage(responseData.error);
-      handleShowError();
+      // handleShowError();
     }
   };
 
   return (
     <LogoutConformationContainer>
-      {showError && (
-        <p>Check is the id was proper one or not</p>
+      {errorMessage && (
+        <p>Something went wrong please try again later</p>
         // <ErrorPopup message={errorMessage} onClose={handleCloseError} />
       )}
       <TestContainer>

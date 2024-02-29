@@ -22,7 +22,7 @@ export const TransactionIconsImage = styled.img`
 
 export const TextParagraph = styled.p`
   color: ${(props: any) =>
-    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#505887"};
+    props.className === "true" ? "var(--Primary-3, #2d60ff)" : "#505887"};
   /* Heading three medium 18p */
   font-family: Inter;
   font-size: 18px;
@@ -62,7 +62,7 @@ export const SelectedContainer = styled.div`
   flex-shrink: 0;
   border-radius: 0px 10px 10px 0px;
   background-color: ${(props: any) =>
-    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
+    props.className === "true" ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
 `;
 
 export const ProfileContainer = styled.div`

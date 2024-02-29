@@ -114,6 +114,7 @@ const MobileSideBar = (props: any) => {
   const onClickLogout = () => {
     navigate("/login");
     Cookies.remove("jwt_token");
+    localStorage.setItem("selectOption", "DASHBOARD");
   };
 
   // return (
@@ -150,7 +151,7 @@ const MobileSideBar = (props: any) => {
         >
           <EachTextContainer>
             <SelectedContainer
-            // selectOption={selectOption === "DASHBOARD"}
+              className={selectOption === "DASHBOARD" ? "true" : "false"}
             >
               {}
             </SelectedContainer>
@@ -163,7 +164,8 @@ const MobileSideBar = (props: any) => {
               alt="dashboard"
             />
             <TextParagraph
-            //  selectOption={selectOption === "DASHBOARD"}
+              className={selectOption === "DASHBOARD" ? "true" : "false"}
+              //  selectOption={selectOption === "DASHBOARD"}
             >
               Dashboard
             </TextParagraph>
@@ -176,7 +178,8 @@ const MobileSideBar = (props: any) => {
         >
           <EachTextContainer>
             <SelectedContainer
-            // selectOption={selectOption === "TRANSACTIONS"}
+              className={selectOption === "TRANSACTIONS" ? "true" : "false"}
+              // selectOption={selectOption === "TRANSACTIONS"}
             ></SelectedContainer>
             <TransactionIconsImage
               src={
@@ -188,7 +191,8 @@ const MobileSideBar = (props: any) => {
             />
 
             <TextParagraph
-            //  selectOption={selectOption === "TRANSACTIONS"}
+              className={selectOption === "TRANSACTIONS" ? "true" : "false"}
+              //  selectOption={selectOption === "TRANSACTIONS"}
             >
               {jwtToken === "3" ? "All Transactions" : "Transactions"}
             </TextParagraph>
@@ -204,7 +208,8 @@ const MobileSideBar = (props: any) => {
         >
           <EachTextContainer>
             <SelectedContainer
-            // selectOption={selectOption === "PROFILE"}
+              className={selectOption === "PROFILE" ? "true" : "false"}
+              // selectOption={selectOption === "PROFILE"}
             ></SelectedContainer>
             <IconsImage
               src={
@@ -215,7 +220,8 @@ const MobileSideBar = (props: any) => {
               alt="profile"
             />
             <TextParagraph
-            //  selectOption={selectOption === "PROFILE"}
+              className={selectOption === "PROFILE" ? "true" : "false"}
+              //  selectOption={selectOption === "PROFILE"}
             >
               Profile
             </TextParagraph>

@@ -1,5 +1,17 @@
 import styled from "styled-components";
 
+interface TextParagraphProps {
+  isAdmin: boolean;
+}
+
+interface TextParagraphLengthProps {
+  length: boolean;
+}
+
+interface TextParagraphFilterProps {
+  transactionOption: boolean;
+}
+
 export const TransactionHomePage = styled.div`
   width: 99vw;
   height: 100vh;
@@ -20,7 +32,7 @@ export const TransactionBodyContainer = styled.div`
   }
 
   @media screen and (max-width: 768px) {
-    width: 100vw;
+    width: 98vw;
     height: 80vh;
   }
 `;
@@ -54,33 +66,29 @@ export const TransactionsContainer = styled.table`
     width: 98%;
   }
 `;
-export const Div = styled.div`
+export const Div = styled.div<TextParagraphProps>`
   display: flex;
   align-items: center;
-  width: 20vw; // ${(props: any) =>
-    props.className === "true" ? "15vw" : "15vw"};
+  width: 20vw; // ${(props: any) => (props.isAdmin ? "15vw" : "15vw")};
   @media screen and (max-width: 768px) {
-    width: 30vw; // ${(props: any) =>
-      props.className === "true" ? "35vw" : "30vw"};
+    width: 30vw; // ${(props: any) => (props.isAdmin ? "35vw" : "30vw")};
   }
 `;
 
-export const Div2 = styled.div`
+export const Div2 = styled.div<TextParagraphProps>`
   display: flex;
   align-items: center;
-  width: 20vw; // ${(props: any) =>
-    props.className === "true" ? "15vw" : "15vw"};
+  width: 20vw; // ${(props: any) => (props.isAdmin ? "15vw" : "15vw")};
   @media screen and (max-width: 768px) {
     width: 30vw;
   }
 `;
 
-export const DashTransactionContainer = styled.tr`
+export const DashTransactionContainer = styled.tr<TextParagraphLengthProps>`
   width: 100%;
   // height: 58px;
   flex-shrink: 0;
-  border-bottom: ${(props: any) =>
-    props.className === "true" ? "" : "1px solid #e2e2e2"};
+  border-bottom: ${(props: any) => (props.length ? "" : "1px solid #e2e2e2")};
   margin-left: 24px;
 
   display: flex;
@@ -119,14 +127,14 @@ export const HeadingDashTransactionContainer = styled.tr`
   }
 `;
 
-export const CreditDebitImage = styled.img`
+export const CreditDebitImage = styled.img<TextParagraphProps>`
   width: 30px;
   height: 30px;
   flex-shrink: 0;
   padding-right: 16px;
   @media screen and (max-width: 768px) {
     display: block;
-    ${(props: any) => (props.className === "true" ? "none" : "block")};
+    ${(props: any) => (props.isAdmin ? "none" : "block")};
   }
 `;
 
@@ -160,7 +168,7 @@ export const TitleParagraph = styled.p`
   }
 `;
 
-export const CategoryParagraph = styled.p`
+export const CategoryParagraph = styled.p<TextParagraphProps>`
   color: #505887;
   font-family: Inter;
   font-size: 16px;
@@ -168,12 +176,10 @@ export const CategoryParagraph = styled.p`
   font-weight: 400;
   line-height: normal;
   // margin-right: 96px;
-  width: 20vw; // ${(props: any) =>
-    props.className === "true" ? "22vw" : "20vw"};
+  width: 20vw; // ${(props: any) => (props.isAdmin ? "22vw" : "20vw")};
   overflow: hidden;
   @media screen and (max-width: 768px) {
-    width: 20vw; //${(props: any) =>
-      props.className === "true" ? "28vw" : "20vw"};
+    width: 20vw; //${(props: any) => (props.isAdmin ? "28vw" : "20vw")};
   }
 `;
 
@@ -220,9 +226,8 @@ export const TransactionSelectFilter = styled.button`
   background-color: transparent;
 `;
 
-export const SelectAllOption = styled.div`
-  color: ${(props: any) =>
-    props.className === "true" ? "#2d60ff" : "#718ebf"};
+export const SelectAllOption = styled.div<TextParagraphFilterProps>`
+  color: ${(props: any) => (props.transactionOption ? "#2d60ff" : "#718ebf")};
   font-family: Inter;
   font-size: 16px;
   font-style: normal;
@@ -230,18 +235,16 @@ export const SelectAllOption = styled.div`
   line-height: normal;
 `;
 
-export const SelectedContainer = styled.div`
+export const SelectedContainer = styled.div<TextParagraphFilterProps>`
   width: 139px;
   height: 3px;
   border-radius: 10px 10px 0px 0px;
-  background: ${(props: any) =>
-    props.className === "true" ? "#2d60ff" : "#fff"};
+  background: ${(props: any) => (props.transactionOption ? "#2d60ff" : "#fff")};
 `;
 
-export const SelectOption = styled.div`
+export const SelectOption = styled.div<TextParagraphFilterProps>`
   width: 57px;
-  color: ${(props: any) =>
-    props.className === "true" ? "#2d60ff" : "#718ebf"};
+  color: ${(props: any) => (props.transactionOption ? "#2d60ff" : "#718ebf")};
   text-align: center;
   font-family: Inter;
   font-size: 16px;
@@ -250,23 +253,22 @@ export const SelectOption = styled.div`
   line-height: normal;
 `;
 
-export const SelectedCreditContainer = styled.div`
+export const SelectedCreditContainer = styled.div<TextParagraphFilterProps>`
   width: 63px;
   height: 3px;
   flex-shrink: 0;
   border-radius: 10px 10px 0px 0px;
-  background: ${(props: any) =>
-    props.className === "true" ? "#2d60ff" : "#fff"};
+  background: ${(props: any) => (props.transactionOption ? "#2d60ff" : "#fff")};
 `;
 
-export const TransactionName = styled.p`
+export const TransactionName = styled.p<TextParagraphProps>`
   color: #343c6a;
   font-family: Inter;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: ${(props: any) => (props.className === "true" ? "15vw" : "20.5vw")};
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "20.5vw")};
   overflow: hidden;
 
   @media screen and (max-width: 1024px) {
@@ -274,11 +276,11 @@ export const TransactionName = styled.p`
   }
 
   @media screen and (max-width: 768px) {
-    width: ${(props: any) => (props.className === "true" ? "30.5vw" : "30vw")};
+    width: ${(props: any) => (props.isAdmin ? "30.5vw" : "30vw")};
   }
 `;
 
-export const TransactionCategory = styled.p`
+export const TransactionCategory = styled.p<TextParagraphProps>`
   color: #343c6a;
   font-family: Inter;
   font-size: 16px;
@@ -286,7 +288,7 @@ export const TransactionCategory = styled.p`
   font-weight: 500;
   line-height: normal;
   // margin-left: 114px;
-  width: ${(props: any) => (props.className === "true" ? "16vw" : "21vw")};
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "21vw")};
 
   @media screen and (max-width: 1024px) {
     width: 21vw;
@@ -298,7 +300,7 @@ export const TransactionCategory = styled.p`
   }
 `;
 
-export const TransactionDate = styled.p`
+export const TransactionDate = styled.p<TextParagraphProps>`
   color: #343c6a;
   font-family: Inter;
   font-size: 16px;
@@ -306,8 +308,7 @@ export const TransactionDate = styled.p`
   font-weight: 500;
   line-height: normal;
   // margin-left: 120px;
-  width: 20.5vw; // ${(props: any) =>
-    props.className === "true" ? "15vw" : "20.5vw"};
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "20.5vw")};
 
   @media screen and (max-width: 1024px) {
     width: 22vw;
@@ -318,7 +319,7 @@ export const TransactionDate = styled.p`
   }
 `;
 
-export const TransactionAmount = styled.div`
+export const TransactionAmount = styled.div<TextParagraphProps>`
   color: #343c6a;
   font-family: Inter;
   font-size: 16px;
@@ -326,7 +327,7 @@ export const TransactionAmount = styled.div`
   font-weight: 500;
   line-height: normal;
   // margin-left: 195px;
-  width: ${(props: any) => (props.className === "true" ? "10vw" : "15vw")};
+  width: ${(props: any) => (props.isAdmin ? "10vw" : "15vw")};
 
   @media screen and (max-width: 768px) {
     width: 20vw;
@@ -337,14 +338,14 @@ export const LoadingContainer = styled.div`
   margin: auto;
 `;
 
-export const DebitAmount = styled.p`
+export const DebitAmount = styled.p<TextParagraphProps>`
   color: #fe5c73;
   font-family: Inter;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: ${(props: any) => (props.className === "true" ? "15vw" : "10vw")};
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "10vw")};
   overflow: hidden;
 
   @media screen and (max-width: 1024px) {
@@ -356,7 +357,7 @@ export const DebitAmount = styled.p`
   }
 `;
 
-export const CreditAmount = styled.p`
+export const CreditAmount = styled.p<TextParagraphProps>`
   color: #16dbaa;
   font-family: Inter;
   font-size: 16px;
@@ -364,7 +365,7 @@ export const CreditAmount = styled.p`
   font-weight: 500;
   line-height: normal;
   text-align: start;
-  width: ${(props: any) => (props.className === "true" ? "15vw" : "10vw")};
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "10vw")};
   overflow: hidden;
 
   @media screen and (max-width: 1024px) {
@@ -510,15 +511,15 @@ export const TitleUserParagraph = styled.p`
   // margin-right: 89px;
 `;
 
-export const EditDeleteContainer = styled.div`
+export const EditDeleteContainer = styled.div<TextParagraphProps>`
   width: 61px;
   margin-right: 20px;
-  display: ${(props: any) => (props.className === "true" ? "none" : "block")};
+  display: ${(props: any) => (props.isAdmin ? "none" : "block")};
 
   @media screen and (max-width: 768px) {
-    display: ${(props: any) => (props.className === "true" ? "none" : "block")};
+    display: ${(props: any) => (props.isAdmin ? "none" : "block")};
 
-    width: ${(props: any) => (props.className === "true" ? "12vw" : "")};
+    width: ${(props: any) => (props.isAdmin ? "12vw" : "")};
     margin-right: 5px;
   }
 `;

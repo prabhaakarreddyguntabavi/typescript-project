@@ -166,7 +166,7 @@ const Header = (props: any) => {
       const response = await fetch(url, options);
 
       if (response.ok) {
-        const { updateApi } = props;
+        // const { updateApi } = props;
         // updateApi(uuidv4());
         addTransctionPopup(false);
         updateTransction("");
@@ -232,7 +232,7 @@ const Header = (props: any) => {
                 <AddTransctionLabel htmlFor="addtransctionname">
                   Transaction Name*
                   <NotificationMessage>
-                    (Max 30 Charactors*)
+                    (Max 30 Characters*)
                   </NotificationMessage>
                 </AddTransctionLabel>
                 <AddTransctionNameInput

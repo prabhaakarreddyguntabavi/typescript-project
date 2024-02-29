@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface TextParagraphProps {
+  selectOption: boolean;
+}
+
 export const SideBarMainContainer = styled.div`
   width: 15vw;
   min-width: 206px;
@@ -32,8 +36,10 @@ export const TransactionIconsImage = styled.img`
   // margin-left: 20px;
 `;
 
-export const TextParagraph = styled.p`
-  color: ${(props:any) =>  props.className === "true" ? "var(--Primary-3, #2d60ff)" : "#505887"};
+export const TextParagraph = styled.p<TextParagraphProps>`
+  color: ${(props) =>
+    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#505887"};
+
   /* Heading three medium 18p */
   font-family: Inter;
   font-size: 18px;
@@ -70,12 +76,13 @@ export const LogoImage = styled.img`
   }
 `;
 
-export const SelectedContainer = styled.div`
+export const SelectedContainer = styled.div<TextParagraphProps>`
   width: 6px;
   height: 60px;
   flex-shrink: 0;
   border-radius: 0px 10px 10px 0px;
-  background-color: ${(props:any) =>  props.className === "true" ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
+  background-color: ${(props: any) =>
+    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
 `;
 
 export const ProfileContainer = styled.div`
@@ -184,9 +191,9 @@ export const LogoutContainer = styled.div`
   flex-shrink: 0;
   background: rgba(52, 64, 84, 0.7);
   backdrop-filter: blur(8px);
-  position:fixed;
-  top:0px;
-  left:0px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
 `;
 
 export const LogoutConformationContainer = styled.div`
@@ -249,7 +256,7 @@ export const LogoutClosingImage = styled.img`
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  margin: 10px 0px 10px 55px;
+  margin: 10px 10px 10px auto;
 `;
 
 export const LogoutParagraph = styled.p`

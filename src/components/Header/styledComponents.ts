@@ -237,7 +237,7 @@ export const MobileHeaderProfile = styled.div`
     text-align: center;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
+    // margin-top: 10px;
   }
 `;
 export const MobilePopupContainer = styled.div`

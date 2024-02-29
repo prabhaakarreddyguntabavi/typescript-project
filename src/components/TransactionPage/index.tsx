@@ -9,7 +9,7 @@ import Header from "../Header";
 // import TransactionContext from "../../context/TransactionContext";
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
-// import FailureCase from "../FailureCase";
+import FailureCase from "../FailureCase";
 import Popup from "../Popup";
 
 import {
@@ -222,24 +222,14 @@ const TransactionPage = () => {
             ) : (
               ""
             )}
-            <TransactionName className={jwtToken === "3" ? "true" : "false"}>
+            <TransactionName isAdmin={jwtToken === "3"}>
               Transaction Name
             </TransactionName>
-            <TransactionCategory
-              className={jwtToken === "3" ? "true" : "false"}
-            >
+            <TransactionCategory isAdmin={jwtToken === "3"}>
               Category
             </TransactionCategory>
-            <TransactionDate
-              className={jwtToken === "3" ? "true" : "false"}
-              //  isAdmin={jwtToken === "3"}
-            >
-              Date
-            </TransactionDate>
-            <TransactionAmount
-              className={jwtToken === "3" ? "true" : "false"}
-              //  isAdmin={jwtToken === "3"}
-            >
+            <TransactionDate isAdmin={jwtToken === "3"}>Date</TransactionDate>
+            <TransactionAmount isAdmin={jwtToken === "3"}>
               Amount
             </TransactionAmount>
           </HeadingDashTransactionContainer>
@@ -251,27 +241,20 @@ const TransactionPage = () => {
 
             return (
               <DashTransactionContainer
-                className={
-                  transactionsData.length - 1 === index ? "true" : "false"
-                }
+                length={transactionsData.length - 1 === index}
                 key={eachTransaction.id}
               >
                 {jwtToken === "3" ? (
-                  <Div2
-                    className={jwtToken === "3" ? "true" : "false"}
-                    //  isAdmin={jwtToken === "3"}
-                  >
+                  <Div2 isAdmin={jwtToken === "3"}>
                     {eachTransaction.type === "credit" ? (
                       <CreditDebitImage
-                        className={jwtToken === "3" ? "true" : "false"}
-                        //  isAdmin={jwtToken === "3"}
+                        isAdmin={jwtToken === "3"}
                         src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_1_idrnjp.png"
                         alt="image"
                       />
                     ) : (
                       <CreditDebitImage
-                        className={jwtToken === "3" ? "true" : "false"}
-                        //  isAdmin={jwtToken === "3"}
+                        isAdmin={jwtToken === "3"}
                         src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_oztkbu.png"
                         alt="image"
                       />
@@ -288,24 +271,19 @@ const TransactionPage = () => {
                   ""
                 )}
 
-                <Div
-                  className={jwtToken === "3" ? "true" : "false"}
-                  //  isAdmin={jwtToken === "3"}
-                >
+                <Div isAdmin={jwtToken === "3"}>
                   {jwtToken !== "3" ? (
                     <>
                       {" "}
                       {eachTransaction.type === "credit" ? (
                         <CreditDebitImage
-                          className={jwtToken === "3" ? "true" : "false"}
-                          //   isAdmin={jwtToken === "3"}
+                          isAdmin={jwtToken === "3"}
                           src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_1_idrnjp.png"
                           alt="image"
                         />
                       ) : (
                         <CreditDebitImage
-                          className={jwtToken === "3" ? "true" : "false"}
-                          // isAdmin={jwtToken === "3"}
+                          isAdmin={jwtToken === "3"}
                           src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706182841/Group_73_oztkbu.png"
                           alt="image"
                         />
@@ -324,10 +302,7 @@ const TransactionPage = () => {
                     </TransactionParagraphMobile>
                   </TextContainer>
                 </Div>
-                <CategoryParagraph
-                  className={jwtToken === "3" ? "true" : "false"}
-                  // isAdmin={jwtToken === "3"}
-                >
+                <CategoryParagraph isAdmin={jwtToken === "3"}>
                   {eachTransaction.category}
                 </CategoryParagraph>
                 <DateOfTransactionParagraph>
@@ -335,24 +310,15 @@ const TransactionPage = () => {
                 </DateOfTransactionParagraph>
 
                 {eachTransaction.type === "credit" ? (
-                  <CreditAmount
-                    className={jwtToken === "3" ? "true" : "false"}
-                    //  isAdmin={jwtToken === "3"}
-                  >
+                  <CreditAmount isAdmin={jwtToken === "3"}>
                     +${eachTransaction.amount}
                   </CreditAmount>
                 ) : (
-                  <DebitAmount
-                    className={jwtToken === "3" ? "true" : "false"}
-                    // isAdmin={jwtToken === "3"}
-                  >
+                  <DebitAmount isAdmin={jwtToken === "3"}>
                     -${eachTransaction.amount}
                   </DebitAmount>
                 )}
-                <EditDeleteContainer
-                  className={jwtToken === "3" ? "true" : "false"}
-                  //  isAdmin={jwtToken === "3"}
-                >
+                <EditDeleteContainer isAdmin={jwtToken === "3"}>
                   {jwtToken === "3" ? (
                     ""
                   ) : (
@@ -435,8 +401,8 @@ const TransactionPage = () => {
   );
 
   const renderFailureView = () => (
-    <h1>Failed View</h1>
-    // <FailureCase updateApi={updateApi} />
+    // <h1>Failed View</h1>
+    <FailureCase updateApi={updateApi} />
   );
 
   const renderLeaderboard = () => {
@@ -480,17 +446,13 @@ const TransactionPage = () => {
               }}
             >
               <SelectAllOption
-                className={
-                  filterOption === "alltransactions" ? "true" : "false"
-                }
+                transactionOption={filterOption === "alltransactions"}
                 //  transactionOption={transactionOption === "ALLTRANSACTION"}
               >
                 All Transaction
               </SelectAllOption>
               <SelectedContainer
-                className={
-                  filterOption === "alltransactions" ? "true" : "false"
-                }
+                transactionOption={filterOption === "alltransactions"}
                 //   transactionOption={transactionOption === "ALLTRANSACTION"}
               ></SelectedContainer>
             </TransactionSelectFilter>
@@ -502,13 +464,13 @@ const TransactionPage = () => {
               }}
             >
               <SelectOption
-                className={filterOption === "credit" ? "true" : "false"}
+                transactionOption={filterOption === "credit"}
                 //   transactionOption={transactionOption === "CREDIT"}
               >
                 Credit
               </SelectOption>
               <SelectedCreditContainer
-                className={filterOption === "credit" ? "true" : "false"}
+                transactionOption={filterOption === "credit"}
                 //  transactionOption={transactionOption === "CREDIT"}
               ></SelectedCreditContainer>
             </TransactionSelectFilter>
@@ -520,13 +482,13 @@ const TransactionPage = () => {
               }}
             >
               <SelectOption
-                className={filterOption === "debit" ? "true" : "false"}
+                transactionOption={filterOption === "debit"}
                 // transactionOption={transactionOption === "DEBIT"}
               >
                 Debit
               </SelectOption>
               <SelectedCreditContainer
-                className={filterOption === "debit" ? "true" : "false"}
+                transactionOption={filterOption === "debit"}
                 //  transactionOption={transactionOption === "DEBIT"}
               ></SelectedCreditContainer>
             </TransactionSelectFilter>

@@ -19,9 +19,6 @@ export const TransactionIconsImage = styled.img`
 `;
 
 export const TextParagraph = styled.p`
-  // color: ${(props: any) =>
-    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#505887"};
-
   font-family: Inter;
   font-size: 18px;
   font-style: normal;
@@ -59,8 +56,6 @@ export const SelectedContainer = styled.div`
   height: 60px;
   flex-shrink: 0;
   border-radius: 0px 10px 10px 0px;
-  // background-color: ${(props: any) =>
-    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
 `;
 
 export const ProfileContainer = styled.div`
@@ -202,7 +197,7 @@ export const LogoutClosingImage = styled.img`
   width: 24px;
   height: 24px;
   flex-shrink: 0;
-  margin: 10px 0px 10px 55px;
+  margin: 10px 10px 10px auto;
 `;
 
 export const LogoutParagraph = styled.p`
