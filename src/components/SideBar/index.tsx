@@ -59,8 +59,6 @@ const userDetails = [
 ];
 
 const SideBar = () => {
-  // const selectOption: string = "DASHBOARD";
-  const color: string = "";
   const jwtToken: any = Cookies.get("jwt_token");
   const navigate = useNavigate();
   const [apiResponse, setApiResponse] = useState<any>({});
