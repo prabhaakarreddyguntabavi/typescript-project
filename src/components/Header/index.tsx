@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
 import Popup from "reactjs-popup";
 import { v4 as uuidv4 } from "uuid";
@@ -11,7 +11,6 @@ import TransctionContext from "../../context/TransactionContext";
 import { IoAddCircleOutline } from "react-icons/io5";
 
 // import ErrorPopup from "../ErrorMessage";
-// import Popup from "../Popup";
 
 import {
   HeaderMainContainer,
@@ -64,29 +63,12 @@ const Header = (props: PropsValue) => {
 
   const [addTransctionStatus, updateTransction] = useState<string>("");
 
-  // const loginUser = userDetails.find(
-  //   (eachUser) => eachUser.userId === parseInt(jwtToken)
-  // );
-
-  // const [showError, setShowError] = useState("");
-
-  // const handleShowError = () => {
-  //   setShowError(true);
-  // };
-
-  // const handleCloseError = () => {
-  //   setShowError(false);
-  // };
-
   const [name, addName] = useState();
   const [type, addType] = useState("credit");
   const [category, addCategory] = useState("Shopping");
   const [amount, AddAmount] = useState();
   const [date, addDate] = useState(getCurrentDateTime());
   const [errorMessage, updateErrorMessage] = useState("");
-  const [showTransction, addTransctionPopup] = useState<boolean>();
-
-  const [logoutPopup, showLogoutPopup] = useState<boolean>(false);
 
   const AddNameFunction = (event: any) => {
     if (event.target.value.length >= 30) {
@@ -166,13 +148,11 @@ const Header = (props: PropsValue) => {
       if (response.ok) {
         const { updateApi } = props;
         updateApi(uuidv4());
-        addTransctionPopup(false);
         updateTransction("");
         updateValues();
         close();
       } else {
         updateTransction("");
-        // handleShowError();
       }
     } else {
       updateErrorMessage("Please Fill All Fields");
@@ -203,11 +183,7 @@ const Header = (props: PropsValue) => {
           {/* @ts-ignore */}
           {(close) => (
             <AddTransctionMainContainer>
-              <AddTransctionContainer
-              // onSubmit={() => {
-              //   getLeaderboardData(close);
-              // }}
-              >
+              <AddTransctionContainer>
                 <AddTransctionTextContainer>
                   <HeadingTextContainer>
                     <AddTransctionHeading>Add Transaction</AddTransctionHeading>
@@ -333,12 +309,6 @@ const Header = (props: PropsValue) => {
                   )}
                 </AddTransctionButton>
                 <ErrorMessageParagraph>{errorMessage}</ErrorMessageParagraph>
-                {/* {showError && (
-                <ErrorPopup
-                  message="Please Fill All Fields"
-                  onClose={handleCloseError}
-                />
-              )} */}
               </AddTransctionContainer>
             </AddTransctionMainContainer>
           )}
@@ -346,20 +316,6 @@ const Header = (props: PropsValue) => {
       </>
     );
   };
-
-  // const renderLeaderboard = () => {
-  //   const { status } = apiResponse;
-  //   switch (status) {
-  //     case apiStatusConstants.inProgress:
-  //       return renderLoadingView();
-  //     case apiStatusConstants.success:
-  //       return renderSuccessView();
-  //     case apiStatusConstants.failure:
-  //       return renderFailureView();
-  //     default:
-  //       return null;
-  //   }
-  // };
 
   return (
     <TransctionContext.Consumer>

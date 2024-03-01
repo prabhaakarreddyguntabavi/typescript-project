@@ -29,17 +29,7 @@ const UpdateTransaction = (props: propsValue) => {
 
   const jwtToken = Cookies.get("jwt_token");
 
-  // const [showError, setShowError] = useState(false);
-
   const [errorMessage, updateErrorMessage] = useState(false);
-
-  // const handleShowError = () => {
-  //   setShowError(true);
-  // };
-
-  // const handleCloseError = () => {
-  //   setShowError(false);
-  // };
 
   const getLeaderboardData = async () => {
     let headers = {};
@@ -71,7 +61,6 @@ const UpdateTransaction = (props: propsValue) => {
       close();
     } else {
       updateErrorMessage(responseData.error);
-      // handleShowError();
     }
   };
 

@@ -134,7 +134,7 @@ const MobileSideBar = (props: PropsValue) => {
               >
                 <EachTextContainer>
                   <SelectedContainer
-                    className={selectOption === "DASHBOARD" ? "true" : "false"}
+                    selectOption={selectOption === "DASHBOARD"}
                   >
                     {}
                   </SelectedContainer>
@@ -146,10 +146,7 @@ const MobileSideBar = (props: PropsValue) => {
                     }
                     alt="dashboard"
                   />
-                  <TextParagraph
-                    className={selectOption === "DASHBOARD" ? "true" : "false"}
-                    //  selectOption={selectOption === "DASHBOARD"}
-                  >
+                  <TextParagraph selectOption={selectOption === "DASHBOARD"}>
                     Dashboard
                   </TextParagraph>
                 </EachTextContainer>
@@ -161,10 +158,7 @@ const MobileSideBar = (props: PropsValue) => {
               >
                 <EachTextContainer>
                   <SelectedContainer
-                    className={
-                      selectOption === "TRANSACTIONS" ? "true" : "false"
-                    }
-                    // selectOption={selectOption === "TRANSACTIONS"}
+                    selectOption={selectOption === "TRANSACTIONS"}
                   ></SelectedContainer>
                   <TransactionIconsImage
                     src={
@@ -175,12 +169,7 @@ const MobileSideBar = (props: PropsValue) => {
                     alt="transactions"
                   />
 
-                  <TextParagraph
-                    className={
-                      selectOption === "TRANSACTIONS" ? "true" : "false"
-                    }
-                    //  selectOption={selectOption === "TRANSACTIONS"}
-                  >
+                  <TextParagraph selectOption={selectOption === "TRANSACTIONS"}>
                     {jwtToken === "3" ? "All Transactions" : "Transactions"}
                   </TextParagraph>
                 </EachTextContainer>
@@ -195,8 +184,7 @@ const MobileSideBar = (props: PropsValue) => {
               >
                 <EachTextContainer>
                   <SelectedContainer
-                    className={selectOption === "PROFILE" ? "true" : "false"}
-                    // selectOption={selectOption === "PROFILE"}
+                    selectOption={selectOption === "PROFILE"}
                   ></SelectedContainer>
                   <IconsImage
                     src={
@@ -206,10 +194,7 @@ const MobileSideBar = (props: PropsValue) => {
                     }
                     alt="profile"
                   />
-                  <TextParagraph
-                    className={selectOption === "PROFILE" ? "true" : "false"}
-                    //  selectOption={selectOption === "PROFILE"}
-                  >
+                  <TextParagraph selectOption={selectOption === "PROFILE"}>
                     Profile
                   </TextParagraph>
                 </EachTextContainer>

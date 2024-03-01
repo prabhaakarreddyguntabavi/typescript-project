@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+interface TextParagraphProps {
+  selectOption: boolean;
+}
+
 export const SideBarMainContainer = styled.div`
   width: 100vw;
   height: 100vh;
@@ -20,9 +24,9 @@ export const TransactionIconsImage = styled.img`
   // margin-left: 20px;
 `;
 
-export const TextParagraph = styled.p`
+export const TextParagraph = styled.p<TextParagraphProps>`
   color: ${(props: any) =>
-    props.className === "true" ? "var(--Primary-3, #2d60ff)" : "#505887"};
+    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#505887"};
   /* Heading three medium 18p */
   font-family: Inter;
   font-size: 18px;
@@ -56,13 +60,13 @@ export const LogoImage = styled.img`
   margin: 20px;
 `;
 
-export const SelectedContainer = styled.div`
+export const SelectedContainer = styled.div<TextParagraphProps>`
   width: 6px;
   height: 60px;
   flex-shrink: 0;
   border-radius: 0px 10px 10px 0px;
   background-color: ${(props: any) =>
-    props.className === "true" ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
+    props.selectOption ? "var(--Primary-3, #2d60ff)" : "#ffffff"};
 `;
 
 export const ProfileContainer = styled.div`

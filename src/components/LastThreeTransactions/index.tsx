@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
-// import Popup from "../Popup";
 
 import {
   TransactionsContainer,
@@ -63,18 +62,6 @@ interface Short {
 interface FindUser {
   id: string;
 }
-
-// interface userName {
-//   name: string;
-//   id?: string;
-//   email?: string;
-//   country?: string;
-//   date_of_birth?: string;
-//   city?: string;
-//   permanent_address?: string;
-//   postal_code?: string;
-//   present_address?: string;
-// }
 
 interface TransctionProps {
   id: string;
@@ -242,10 +229,7 @@ const TransactionPage = (props: PropsValue) => {
                   key={eachTransaction.id}
                 >
                   {jwtToken === "3" ? (
-                    <AdminContainer
-                      // className={jwtToken === "3" ? "true" : "false"}
-                      isAdmin={jwtToken === "3"}
-                    >
+                    <AdminContainer isAdmin={jwtToken === "3"}>
                       {eachTransaction.type === "credit" ? (
                         <CrediteDebitImage
                           isAdmin={jwtToken === "3"}

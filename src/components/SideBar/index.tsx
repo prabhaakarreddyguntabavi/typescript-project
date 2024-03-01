@@ -198,10 +198,7 @@ const SideBar = () => {
                     alt="transactions"
                   />
 
-                  <TextParagraph
-                    // className={selectOption === "TRANSACTIONS" ? "true" : "false"}
-                    selectOption={selectOption === "TRANSACTIONS"}
-                  >
+                  <TextParagraph selectOption={selectOption === "TRANSACTIONS"}>
                     {jwtToken === "3" ? "All Transactions" : "Transactions"}
                   </TextParagraph>
                 </EachTextContainer>
@@ -226,11 +223,7 @@ const SideBar = () => {
                     }
                     alt="profile"
                   />
-                  <TextParagraph
-                    // color={"#FF0000"}
-                    // className={selectOption === "PROFILE" ? "true" : "false"}
-                    selectOption={selectOption === "PROFILE"}
-                  >
+                  <TextParagraph selectOption={selectOption === "PROFILE"}>
                     Profile
                   </TextParagraph>
                 </EachTextContainer>

@@ -6,15 +6,7 @@ import Cookies from "js-cookie";
 
 // import FailureCase from "../FailureCase";
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  // Legend,
-} from "recharts";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
 import {
   LoadingContainer,
@@ -153,11 +145,7 @@ const GenderChart = (props: PropsValue) => {
       }
 
       const { totalDailySums } = calculateDailySums(data);
-      // const latestTransactions = transactions;
 
-      // totalDailySums.sort((a:any, b:any) => new Date(b.date) - new Date(a.date));
-
-      // Get the last 7 transactions
       const last7Transactions = totalDailySums.slice(0, 7);
 
       function separateTransactions(last7Transactions: any) {
@@ -187,9 +175,6 @@ const GenderChart = (props: PropsValue) => {
         0
       );
 
-      // Now you have separate arrays for credit and debit transactions
-      //
-
       return (
         <>
           <GraphHeaderContainer>
@@ -212,7 +197,6 @@ const GenderChart = (props: PropsValue) => {
             </GraphValuesSetting>
           </GraphHeaderContainer>
           <BarChart
-            // className="chart-container"
             width={window.innerWidth * 0.8}
             height={window.innerWidth * 0.3}
             data={last7Transactions}
@@ -243,10 +227,7 @@ const GenderChart = (props: PropsValue) => {
   };
 
   const renderLoadingView = () => (
-    <LoadingContainer
-      // className="products-loader-container"
-      data-testid="loader"
-    >
+    <LoadingContainer data-testid="loader">
       <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
@@ -260,7 +241,7 @@ const GenderChart = (props: PropsValue) => {
         width={width}
         height={height}
         fill={props.fill}
-        rx={10} // Set border radius for the bars
+        rx={10}
       />
     );
   };
