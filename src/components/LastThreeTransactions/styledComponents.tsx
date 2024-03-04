@@ -203,7 +203,7 @@ export const AddTransactionMainContainer = styled.div`
 
 export const AddTransactionContainer = styled.div`
   width: 466px;
-  height: 700px;
+  min-height: 700px;
   flex-shrink: 0;
   border-radius: 16px;
   background: #fff;

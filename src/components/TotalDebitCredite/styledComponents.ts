@@ -25,7 +25,7 @@ export const CreditContainer = styled.div`
     margin-left: 10px;
     margin-right: 10px;
     // margin-bottom: 10px;
-    width: 90%;
+    width: 79%;
     // height: 90px;
     padding: 25px 30px;
     // min-height: 100px;
@@ -133,7 +133,7 @@ export const DebitContainer = styled.div`
     margin-left: 10px;
     margin-right: 10px;
     margin-bottom: 10px;
-    width: 90%;
+    width: 79%;
     // height: 90px;
     padding: 25px 30px;
   }

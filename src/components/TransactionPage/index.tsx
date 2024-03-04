@@ -244,31 +244,6 @@ const TransactionPage = () => {
     }
     console.log(transactionsData.length);
 
-    const renderAbcd = (eachTransaction: DataValues, close: () => void) => (
-      <AddTransactionMainContainer>
-        <AddTransactionContainer>
-          <AddTransactionTextContainer>
-            <HeadingTextContainer>
-              <AddTransactionHeading>Update Transaction</AddTransactionHeading>
-              <AddTransactionParagraph>
-                You can update your transaction here
-              </AddTransactionParagraph>
-            </HeadingTextContainer>
-            <AddTransactionCloseImage
-              onClick={() => close()}
-              src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
-              alt="close"
-            />
-          </AddTransactionTextContainer>
-          <UpdateTransaction
-            eachTransaction={eachTransaction}
-            close={close}
-            callTransactionsUpdate={callTransactionsUpdate}
-          />
-        </AddTransactionContainer>
-      </AddTransactionMainContainer>
-    );
-
     if (transactionsData.length !== 0) {
       return (
         <>
@@ -390,7 +365,34 @@ const TransactionPage = () => {
                           }
                         >
                           {/* @ts-ignore */}
-                          {(close) => renderAbcd(eachTransaction, close)}
+                          {(close) => (
+                            <AddTransactionMainContainer>
+                              <AddTransactionContainer>
+                                <AddTransactionTextContainer>
+                                  <HeadingTextContainer>
+                                    <AddTransactionHeading>
+                                      Update Transaction
+                                    </AddTransactionHeading>
+                                    <AddTransactionParagraph>
+                                      You can update your transaction here
+                                    </AddTransactionParagraph>
+                                  </HeadingTextContainer>
+                                  <AddTransactionCloseImage
+                                    onClick={() => close()}
+                                    src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706078678/Close_gxeytv.png"
+                                    alt="close"
+                                  />
+                                </AddTransactionTextContainer>
+                                <UpdateTransaction
+                                  eachTransaction={eachTransaction}
+                                  close={close}
+                                  callTransactionsUpdate={
+                                    callTransactionsUpdate
+                                  }
+                                />
+                              </AddTransactionContainer>
+                            </AddTransactionMainContainer>
+                          )}
                         </Popup>
 
                         <Popup
