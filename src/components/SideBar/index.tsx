@@ -88,8 +88,8 @@ const SideBar = (): JSX.Element => {
     ...userDetails.find((eachUser) => eachUser.userId === parseInt(jwtToken)),
     name: "",
   };
-  if (loginUser !== undefined) {
-    loginUser = { email: "Admin", password: "", userId: 0, name: "Admin" };
+  if (loginUser === undefined) {
+    loginUser = { email: undefined, password: "", userId: 0, name: "" };
   }
 
   useEffect((): void => {

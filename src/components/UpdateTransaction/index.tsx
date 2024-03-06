@@ -11,6 +11,7 @@ import {
   AddTransactionNameInput,
   SelectTransactionType,
   SelectTransactionOptions,
+  ErrorMessage,
 } from "./styledComponents";
 
 // const apiStatusConstants = {
@@ -73,6 +74,7 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
   const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: "",
     data: [],
+    errorMsg: undefined,
   });
 
   const [addTransactionStatus, updateTransaction] = useState<string>("");
@@ -160,6 +162,8 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
       });
     }
   };
+
+  console.log(apiResponse.errorMsg);
 
   return (
     <>
@@ -267,6 +271,9 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
           "Update Transaction "
         )}
       </AddTransactionButton>
+      {apiResponse.errorMsg !== undefined && (
+        <ErrorMessage>Invalid Field Responses*</ErrorMessage>
+      )}
     </>
   );
 };

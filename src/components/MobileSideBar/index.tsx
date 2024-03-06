@@ -67,7 +67,7 @@ const MobileSideBar = (props: PropsValue): JSX.Element => {
     ...userDetails.find((eachUser) => eachUser.userId === parseInt(jwtToken)),
     name: "",
   };
-  if (loginUser !== undefined) {
+  if (loginUser === undefined) {
     loginUser = { email: "Admin", password: "", userId: 0, name: "Admin" };
   }
 

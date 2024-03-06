@@ -10,7 +10,6 @@ import TransactionContext from "../../context/TransactionContext";
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
 import FailureCase from "../FailureCase";
-// import Popup from "../Popup";
 
 import {
   TransactionHomePage,
@@ -459,7 +458,6 @@ const TransactionPage = (): JSX.Element => {
   );
 
   const renderFailureView = (): JSX.Element => (
-    // <h1>Failed View</h1>
     <FailureCase updateApi={updateApi} />
   );
 
@@ -480,12 +478,7 @@ const TransactionPage = (): JSX.Element => {
   return (
     <TransactionContext.Consumer>
       {(value: ConsumerValues) => {
-        const {
-          // transactionOption,
-          // onChangeTransactionOption,
-          selectOption,
-          onChangeSelectOption,
-        } = value;
+        const { selectOption, onChangeSelectOption } = value;
 
         if (selectOption !== "TRANSACTIONS") {
           onChangeSelectOption("TRANSACTIONS");

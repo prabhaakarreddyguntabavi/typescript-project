@@ -53,7 +53,7 @@ export const AddTransactionMainContainer = styled.div`
 
 export const AddTransactionContainer = styled.div`
   width: 466px;
-  height: 700px;
+  height: 705px;
   flex-shrink: 0;
   border-radius: 16px;
   background: #fff;
@@ -187,7 +187,18 @@ export const LoadingContainer = styled.div`
   margin: auto;
 `;
 
-// export const AddTransactionContainer = styled.div``;
+export const ErrorMessage = styled.p`
+  align-self: start;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  font-family: "Roboto";
+  font-size: 12px;
+  line-height: 16px;
+  color: #ff0b37;
+  margin-left: 24px;
+`;
+
 // export const AddTransactionContainer = styled.div``;
 // export const AddTransactionContainer = styled.div``;
 // export const AddTransactionContainer = styled.div``;

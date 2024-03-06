@@ -29,7 +29,7 @@ interface apiStatusValues {
   failure: string;
 }
 
-interface ProfileDetails {
+interface ProfileDetailsValues {
   name?: string;
   email?: string;
   date_of_birth?: string;
@@ -42,7 +42,7 @@ interface ProfileDetails {
 
 interface ApiOutputStatus {
   status: string;
-  data: ProfileDetails;
+  data: ProfileDetailsValues;
   errorMsg?: string;
 }
 
