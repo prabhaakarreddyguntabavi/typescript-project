@@ -26,6 +26,7 @@ export interface DataValues {
     amount: number;
     date: string;
     user_id: number;
+    sum:number
   }
 
 export interface ApiStatusAndData {

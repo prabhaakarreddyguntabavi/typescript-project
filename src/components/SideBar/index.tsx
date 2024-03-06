@@ -80,7 +80,6 @@ interface ConsumerValues {
 const SideBar = (): JSX.Element => {
   const jwtToken: string = Cookies.get("jwt_token")!;
 
-  console.log(typeof jwtToken);
   const navigate = useNavigate();
   const [apiResponse, setApiResponse] = useState<ProfileDetails>({});
 

@@ -170,9 +170,9 @@ const GenderChart = (props: PropsValue): JSX.Element => {
 
         data.forEach((transaction: DataValues) => {
           if (transaction.type === "credit") {
-            creditTransactions.push(transaction.amount);
+            creditTransactions.push(transaction.sum);
           } else if (transaction.type === "debit") {
-            debitTransactions.push(transaction.amount);
+            debitTransactions.push(transaction.sum);
           }
         });
 

@@ -215,7 +215,6 @@ const TransactionPage = (): JSX.Element => {
         };
         const response = await fetch(finalUrl, options);
         const responseData = await response.json();
-        console.log(responseData);
 
         if (response.ok) {
           setApiResponse({
@@ -252,7 +251,6 @@ const TransactionPage = (): JSX.Element => {
           eachTransactionData.type.toUpperCase() === filterOption.toUpperCase()
       );
     }
-    console.log(transactionsData.length);
 
     if (transactionsData.length !== 0) {
       return (
@@ -278,7 +276,7 @@ const TransactionPage = (): JSX.Element => {
           {transactionsData.map(
             (eachTransaction: DataValues, index: number) => {
               let user: UserDetail | undefined;
-              console.log(allProfileDetails);
+
               if (allProfileDetails === undefined) {
                 user = { name: "Admin" };
               } else {

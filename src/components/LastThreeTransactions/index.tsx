@@ -166,7 +166,7 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
             options
           );
           const outPut = await allProfileDetails.json();
-          console.log(outPut.users);
+
           setProfileDetailsApiResponse(outPut.users);
         }
 

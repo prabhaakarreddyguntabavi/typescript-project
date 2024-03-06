@@ -163,8 +163,6 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
     }
   };
 
-  console.log(apiResponse.errorMsg);
-
   return (
     <>
       <AddTransactionInputContainer>

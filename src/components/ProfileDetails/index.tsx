@@ -94,9 +94,6 @@ const ProfileDetails = (): JSX.Element => {
         const response = await fetch(url, options);
         const responseData = await response.json();
 
-        console.log("Profile");
-        console.log(responseData.users[0]);
-
         if (response.ok) {
           setApiResponse({
             status: apiStatusConstants.success,
