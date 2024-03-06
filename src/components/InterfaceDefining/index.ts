@@ -4,6 +4,7 @@ export interface HeaderValues {
     "x-hasura-admin-secret"?:string
     "x-hasura-user-id"?: string,
 }
+
   
 export interface OptionalValues {
     method: string,

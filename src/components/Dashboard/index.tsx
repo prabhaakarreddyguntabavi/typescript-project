@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import Cookies from "js-cookie";
 import TransactionContext from "../../context/TransactionContext";
 
@@ -20,8 +20,8 @@ import {
 
 import "./index.css";
 
-export const Dashboard = () => {
-  const navigate = useNavigate();
+const Dashboard = (): JSX.Element | null => {
+  const navigate: NavigateFunction = useNavigate();
 
   const [callApi, updateApi] = useState<string>("");
 
@@ -31,7 +31,7 @@ export const Dashboard = () => {
     updateApi(id);
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!jwtToken) {
       navigate("/login");
     }
@@ -75,6 +75,7 @@ export const Dashboard = () => {
       </TransactionContext.Consumer>
     );
   }
+  return null;
 };
 
 export default Dashboard;

@@ -7,6 +7,7 @@ import {
   ApiStatusAndData,
   CrediteAndDebitList,
   DataValues,
+  HeaderValues,
 } from "../InterfaceDefining";
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
@@ -62,7 +63,7 @@ const GenderChart = (props: PropsValue): JSX.Element => {
     data: [],
   });
 
-  useEffect(() => {
+  useEffect((): void => {
     const jwtToken = Cookies.get("jwt_token");
 
     const getLeaderboardData = async (): Promise<void> => {
@@ -71,8 +72,8 @@ const GenderChart = (props: PropsValue): JSX.Element => {
         data: [],
       });
 
-      let headers = {};
-      let url = "";
+      let headers: HeadersInit = {};
+      let url: string = "";
 
       if (jwtToken === "3") {
         headers = {
@@ -90,13 +91,13 @@ const GenderChart = (props: PropsValue): JSX.Element => {
           "x-hasura-role": "user",
           "x-hasura-admin-secret":
             "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-          "x-hasura-user-id": jwtToken,
+          "x-hasura-user-id": jwtToken || "",
         };
         url =
           "https://bursting-gelding-24.hasura.app/api/rest/daywise-totals-7-days";
       }
 
-      const options = {
+      const options: RequestInit = {
         method: "GET",
         headers: headers,
       };
