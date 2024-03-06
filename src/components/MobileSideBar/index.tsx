@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TransactionContext from "../../context/TransactionContext";
 
+import { ProfileDetails } from "../InterfaceDefining";
+
 import {
   SideBarMainContainer,
   LogoImage,
@@ -25,7 +27,13 @@ import {
 
 import "./index.css";
 
-const userDetails = [
+interface UserListProps {
+  email: string;
+  password: string;
+  userId: number;
+}
+
+const userDetails: UserListProps[] = [
   { email: "jane.doe@gmail.com", password: "janedoe@123", userId: 1 },
   { email: "samsmith@gmail.com", password: "samsmith@123", userId: 2 },
   { email: "rahul@gmail.com", password: "rahul@123", userId: 4 },
@@ -47,22 +55,27 @@ interface PropsValue {
   close: () => void;
 }
 
-const MobileSideBar = (props: PropsValue) => {
+const MobileSideBar = (props: PropsValue): JSX.Element => {
   const { close } = props;
-  const jwtToken: any = Cookies.get("jwt_token");
-  const navigate = useNavigate();
-  const [apiResponse, setApiResponse] = useState<any>({});
 
-  const loginUser: any = {
+  const jwtToken: string = Cookies.get("jwt_token")!;
+
+  const navigate = useNavigate();
+  const [apiResponse, setApiResponse] = useState<ProfileDetails>({});
+
+  let loginUser: ProfileDetails = {
     ...userDetails.find((eachUser) => eachUser.userId === parseInt(jwtToken)),
     name: "",
   };
+  if (loginUser !== undefined) {
+    loginUser = { email: "Admin", password: "", userId: 0, name: "Admin" };
+  }
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!jwtToken) {
       navigate("/login");
     } else {
-      const getLeaderboardData = async () => {
+      const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({});
 
         let headers = {};
@@ -95,7 +108,7 @@ const MobileSideBar = (props: PropsValue) => {
     }
   }, [jwtToken, navigate]);
 
-  const onClickLogout = () => {
+  const onClickLogout = (): void => {
     navigate("/login");
     Cookies.remove("jwt_token");
   };
@@ -202,7 +215,9 @@ const MobileSideBar = (props: PropsValue) => {
             </TextContainer>
             <ProfileContainer>
               <ProfileImageContainer>
-                {loginUser.email[0].toUpperCase()}
+                {loginUser.email !== undefined
+                  ? loginUser.email[0].toUpperCase()
+                  : ""}
               </ProfileImageContainer>
               <ProfileTextContainer>
                 <ProfileName>{apiResponse.name}</ProfileName>

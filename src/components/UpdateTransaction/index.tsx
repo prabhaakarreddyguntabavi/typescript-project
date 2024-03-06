@@ -20,7 +20,7 @@ import {
 //   failure: "FAILURE",
 // };
 
-const setTimeFormate = (date: string) => {
+const setTimeFormate = (date: string): string => {
   const inputDateString = date;
   const inputDate = new Date(inputDateString);
 
@@ -67,7 +67,7 @@ interface ApiOutputStatus {
   errorMsg?: string;
 }
 
-const UpdateTransaction = (props: PropsValues) => {
+const UpdateTransaction = (props: PropsValues): JSX.Element => {
   const { eachTransaction, close, callTransactionsUpdate } = props;
 
   const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
@@ -77,25 +77,15 @@ const UpdateTransaction = (props: PropsValues) => {
 
   const [addTransactionStatus, updateTransaction] = useState<string>("");
 
-  // const [errorMessage, updateErrorMessage] = useState(false);
-
-  const [showError, setShowError] = useState<boolean>(false);
-
-  const handleShowError = () => {
-    setShowError(true);
-  };
-
-  const handleCloseError = () => {
-    setShowError(false);
-  };
-
   const [name, addName] = useState<string>(eachTransaction.transaction_name);
   const [type, addType] = useState<string>(eachTransaction.type);
   const [category, addCategory] = useState<string>(eachTransaction.category);
   const [amount, AddAmount] = useState<number>(eachTransaction.amount);
   const [date, addDate] = useState<string>(eachTransaction.date);
 
-  const AddNameFunction = (event: any) => {
+  const AddNameFunction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     if (event.target.value.length >= 30) {
       window.alert("Username shouldn't exceed 30 characters");
     } else {
@@ -103,25 +93,21 @@ const UpdateTransaction = (props: PropsValues) => {
     }
   };
 
-  const addTypeFunction = (event: any) => {
-    addType(event.target.value);
+  const AddAmountFunction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    AddAmount(parseInt(event.target.value));
   };
 
-  const addCategoryFunction = (event: any) => {
-    addCategory(event.target.value);
-  };
-
-  const AddAmountFunction = (event: any) => {
-    AddAmount(event.target.value);
-  };
-
-  const addDateFunction = (event: any) => {
+  const addDateFunction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     addDate(event.target.value);
   };
 
   const jwtToken = Cookies.get("jwt_token");
 
-  const getLeaderboardData = async () => {
+  const getLeaderboardData = async (): Promise<void> => {
     updateTransaction("inprogress");
 
     setApiResponse({
@@ -167,7 +153,6 @@ const UpdateTransaction = (props: PropsValues) => {
         errorMsg: "",
       });
     } else {
-      handleShowError();
       setApiResponse({
         status: "",
         data: [],
@@ -201,7 +186,7 @@ const UpdateTransaction = (props: PropsValues) => {
           required
           id="transactionType"
           value={type}
-          onChange={addTypeFunction}
+          onChange={(event) => addType(event.target.value)}
         >
           <SelectTransactionOptions value="credit">
             Credit
@@ -221,7 +206,7 @@ const UpdateTransaction = (props: PropsValues) => {
           // placeholder="Select"
           id="transactionCategory"
           value={category}
-          onChange={addCategoryFunction}
+          onChange={(event) => addCategory(event.target.value)}
         >
           <SelectTransactionOptions value="Shopping">
             Shopping
@@ -282,10 +267,6 @@ const UpdateTransaction = (props: PropsValues) => {
           "Update Transaction "
         )}
       </AddTransactionButton>
-      {showError && (
-        <p>Please Check All Fields Values</p>
-        // <ErrorPopup message={apiResponse.errorMsg} onClose={handleCloseError} />
-      )}
     </>
   );
 };

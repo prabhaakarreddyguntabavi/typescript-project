@@ -10,11 +10,11 @@ import ProfileDetails from "./components/ProfileDetails";
 import Cookies from "js-cookie";
 
 const App = (): JSX.Element => {
-  const [selectOption, onChangeSelect] = useState("DASHBOARD");
+  const [selectOption, onChangeSelect] = useState<string>("DASHBOARD");
 
-  const [isUserAdmin, onChangeAdmin] = useState(false);
+  const [isUserAdmin, onChangeAdmin] = useState<boolean>(false);
 
-  useEffect(() => {
+  useEffect((): void => {
     const jwtToken = Cookies.get("jwt_token");
 
     if (jwtToken === "3") {
@@ -25,13 +25,13 @@ const App = (): JSX.Element => {
   }, []);
 
   const [transactionOption, selectTransactionOption] =
-    useState("ALLTRANSACTION");
+    useState<string>("ALLTRANSACTION");
 
-  const onChangeSelectOption = (id: string) => {
+  const onChangeSelectOption = (id: string): void => {
     onChangeSelect(id);
   };
 
-  const onChangeTransactionOption = (id: string) => {
+  const onChangeTransactionOption = (id: string): void => {
     selectTransactionOption(id);
   };
 
@@ -54,7 +54,6 @@ const App = (): JSX.Element => {
           <Route path="/profile" element={<ProfileDetails />} />
         </Routes>
       </BrowserRouter>
-      //{" "}
     </TransactionContext.Provider>
   );
 };

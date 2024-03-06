@@ -171,7 +171,7 @@ export const ProfileLogoutImage = styled.img`
   right: 16px;
   bottom: 20px;
   margin-left: auto;
-
+  cursor: pointer;
   @media screen and (max-width: 1024px) {
     display: none;
   }
@@ -182,6 +182,7 @@ export const LogoutButton = styled.button`
   border-width: 0px;
   background-color: transparent;
   margin-bottom: 20px;
+  cursor: pointer;
 `;
 
 export const LogoutContainer = styled.div`
@@ -292,6 +293,7 @@ export const CancelLogoutButton = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+  cursor: pointer;
 `;
 
 export const YesLogoutButton = styled.button`
@@ -315,4 +317,5 @@ export const YesLogoutButton = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+  cursor: pointer;
 `;

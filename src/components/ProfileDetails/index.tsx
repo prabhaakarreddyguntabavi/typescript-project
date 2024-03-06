@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import SideBar from "../SideBar";
 import Header from "../Header";
 import TransactionContext from "../../context/TransactionContext";
+import FailureCase from "../FailureCase";
 
 import {
   ProfileHomePage,
@@ -52,7 +53,7 @@ const apiStatusConstants: apiStatusValues = {
   failure: "FAILURE",
 };
 
-const ProfileDetails = () => {
+const ProfileDetails = (): JSX.Element => {
   const navigate = useNavigate();
   const jwtToken = Cookies.get("jwt_token");
 
@@ -61,11 +62,14 @@ const ProfileDetails = () => {
     data: {},
   });
 
-  useEffect(() => {
+  const [failedCaseCallApi, failedCaseLastThreeTransactions] =
+    useState<string>("");
+
+  useEffect((): void => {
     if (!jwtToken) {
       navigate("/login");
     } else {
-      const getLeaderboardData = async () => {
+      const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({
           status: apiStatusConstants.inProgress,
           data: {},
@@ -109,9 +113,9 @@ const ProfileDetails = () => {
 
       getLeaderboardData();
     }
-  }, [jwtToken, navigate]);
+  }, [jwtToken, navigate, failedCaseCallApi]);
 
-  const renderSuccessView = () => {
+  const renderSuccessView = (): JSX.Element => {
     const { data } = apiResponse;
 
     return (
@@ -266,7 +270,7 @@ const ProfileDetails = () => {
     );
   };
 
-  const renderLoadingView = () => (
+  const renderLoadingView = (): JSX.Element => (
     <LoadingContainer
       className="products-loader-container"
       data-testid="loader"
@@ -275,13 +279,13 @@ const ProfileDetails = () => {
     </LoadingContainer>
   );
 
-  const renderFailureView = () => (
+  const renderFailureView = (): JSX.Element => (
     <div className="no-search-result">
-      <h1>Failure Page</h1>
+      <FailureCase updateApi={failedCaseLastThreeTransactions} />
     </div>
   );
 
-  const renderLeaderboard = () => {
+  const renderLeaderboard = (): JSX.Element | null => {
     const { status } = apiResponse;
     switch (status) {
       case apiStatusConstants.inProgress:
@@ -294,33 +298,30 @@ const ProfileDetails = () => {
         return null;
     }
   };
-  if (jwtToken !== undefined) {
-    return (
-      <TransactionContext.Consumer>
-        {(value) => {
-          const { selectOption, onChangeSelectOption } = value;
 
-          if (selectOption !== "PROFILE") {
-            onChangeSelectOption("PROFILE");
-          }
+  return (
+    <TransactionContext.Consumer>
+      {(value) => {
+        const { selectOption, onChangeSelectOption } = value;
 
-          return (
-            <ProfileHomePage>
-              <SideBar />
-              <ProfileTotalBodyContainer>
-                <Header updateApi={() => {}} />
-                <ProfileDetailsContainer>
-                  <ProfileContainer>{renderLeaderboard()}</ProfileContainer>
-                </ProfileDetailsContainer>
-              </ProfileTotalBodyContainer>
-            </ProfileHomePage>
-          );
-        }}
-      </TransactionContext.Consumer>
-    );
-  } else {
-    return null;
-  }
+        if (selectOption !== "PROFILE") {
+          onChangeSelectOption("PROFILE");
+        }
+
+        return (
+          <ProfileHomePage>
+            <SideBar />
+            <ProfileTotalBodyContainer>
+              <Header updateApi={() => {}} />
+              <ProfileDetailsContainer>
+                <ProfileContainer>{renderLeaderboard()}</ProfileContainer>
+              </ProfileDetailsContainer>
+            </ProfileTotalBodyContainer>
+          </ProfileHomePage>
+        );
+      }}
+    </TransactionContext.Consumer>
+  );
 };
 
 export default ProfileDetails;

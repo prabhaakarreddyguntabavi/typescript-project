@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
+import FailureCase from "../FailureCase";
+
+import { ApiStatus, ApiStatusAndData, DataValues } from "../InterfaceDefining";
 
 import {
   TransactionsContainer,
@@ -35,69 +38,60 @@ import {
   UserContainer,
   EditDeleteContainer,
   TransactionParagraphMobile,
+  FailureContainer,
+  TextContainer,
 } from "./styledComponents";
-
-interface ApiStatusValues {
-  initial: string;
-  inProgress: string;
-  success: string;
-  failure: string;
-}
 
 interface PropsValue {
   callApi: string;
   lastThreeTransactions: (id: string) => void;
 }
 
-interface ApiOutputStatus {
-  status: string;
-  data: [];
-  errorMsg?: string;
-}
-
 interface Short {
   id: number;
 }
 
-interface FindUser {
-  id: string;
+interface UserDetail {
+  id?: number;
+  name: string;
+  email?: string;
+  country?: string | null;
+  date_of_birth?: string | null;
+  city?: string | null;
+  permanent_address?: string | null;
+  postal_code?: string | null;
+  present_address?: string | null;
 }
 
-interface TransctionProps {
-  id: string;
-  type: string;
-  transaction_name: string;
-  date: string;
-  category: string;
-  amount: number;
-  user_id: number;
-}
-
-const apiStatusConstants: ApiStatusValues = {
+const apiStatusConstants: ApiStatus = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
   failure: "FAILURE",
 };
 
-const TransactionPage = (props: PropsValue) => {
+const TransactionPage = (props: PropsValue): JSX.Element => {
   const { callApi, lastThreeTransactions } = props;
+  const [failedCaseCallApi, failedCaseLastThreeTransactions] =
+    useState<string>("");
 
-  const jwtToken = Cookies.get("jwt_token");
+  const jwtToken: string = Cookies.get("jwt_token")!;
   const navigate = useNavigate();
 
-  const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
+  const [apiResponse, setApiResponse] = useState<ApiStatusAndData>({
     status: apiStatusConstants.initial,
     data: [],
   });
 
-  const callTransactionsUpdate = (id: string) => {
+  const callTransactionsUpdate = (id: string): void => {
     lastThreeTransactions(id);
   };
 
-  const [allProfileDetails, setProfileDetailsApiResponse] = useState([]);
+  const [allProfileDetails, setProfileDetailsApiResponse] = useState<
+    UserDetail[]
+  >([]);
 
-  const DateFormate = (date: string) => {
+  const DateFormate = (date: string): string => {
     const inputDateString = date;
     const inputDate = new Date(inputDateString);
 
@@ -121,16 +115,16 @@ const TransactionPage = (props: PropsValue) => {
     const minutes = inputDate.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
 
-    const formattedDate = `${day} ${month}, ${hours % 12}.${minutes} ${ampm}`;
+    const formattedDate = `${day} ${month}, ${hours % 12}:${minutes} ${ampm}`;
 
     return formattedDate;
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!jwtToken) {
       navigate("/login");
     } else {
-      const getLeaderboardData = async () => {
+      const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({
           status: apiStatusConstants.inProgress,
           data: [],
@@ -172,7 +166,7 @@ const TransactionPage = (props: PropsValue) => {
             options
           );
           const outPut = await allProfileDetails.json();
-
+          console.log(outPut.users);
           setProfileDetailsApiResponse(outPut.users);
         }
 
@@ -209,20 +203,28 @@ const TransactionPage = (props: PropsValue) => {
 
       getLeaderboardData();
     }
-  }, [navigate, jwtToken, callApi]);
+  }, [navigate, jwtToken, callApi, failedCaseCallApi]);
 
-  const renderSuccessView = () => {
+  const renderSuccessView = (): JSX.Element => {
     const { data } = apiResponse;
-    let transactionsData = data;
+    let transactionsData: DataValues[] = data;
 
     if (transactionsData.length !== 0) {
       return (
         <>
           {transactionsData.map(
-            (eachTransaction: TransctionProps, index: number) => {
-              const user: any = allProfileDetails.find(
-                (findUser: Short) => findUser.id === eachTransaction.user_id
-              );
+            (eachTransaction: DataValues, index: number) => {
+              let user: UserDetail | undefined;
+
+              if (allProfileDetails === undefined) {
+                user = { name: "" };
+              } else {
+                user = allProfileDetails.find(
+                  (findUser: UserDetail) =>
+                    findUser.id === eachTransaction.user_id
+                );
+              }
+
               return (
                 <DachTransactionContainer
                   isAdmin={transactionsData.length - 1 === index}
@@ -244,10 +246,12 @@ const TransactionPage = (props: PropsValue) => {
                         />
                       )}
                       <UserProfileDetails>
-                        <AdminProfileContainer>
-                          {user.name[0].toUpperCase()}
+                        <AdminProfileContainer isAdmin={jwtToken === "3"}>
+                          {user !== undefined ? user.name[0].toUpperCase() : ""}
                         </AdminProfileContainer>
-                        <TitleUserParagraph>{user.name}</TitleUserParagraph>
+                        <TitleUserParagraph>
+                          {user !== undefined ? user.name : ""}
+                        </TitleUserParagraph>
                       </UserProfileDetails>
                     </AdminContainer>
                   ) : (
@@ -275,17 +279,16 @@ const TransactionPage = (props: PropsValue) => {
                     ) : (
                       ""
                     )}
-
-                    <div>
+                    <TextContainer>
                       <TitleParagraph>
                         {eachTransaction.transaction_name}
                       </TitleParagraph>
                       <TransactionParagraphMobile>
                         {DateFormate(eachTransaction.date)}
                       </TransactionParagraphMobile>
-                    </div>
+                    </TextContainer>
                   </UserContainer>
-                  <CategaryParagraph>
+                  <CategaryParagraph isAdmin={jwtToken === "3"}>
                     {eachTransaction.category}
                   </CategaryParagraph>
                   <DateOfTransactionParagraph>
@@ -383,7 +386,7 @@ const TransactionPage = (props: PropsValue) => {
     );
   };
 
-  const renderLoadingView = () => (
+  const renderLoadingView = (): JSX.Element => (
     <LoadingContainer
       className="products-loader-container"
       data-testid="loader"
@@ -392,13 +395,13 @@ const TransactionPage = (props: PropsValue) => {
     </LoadingContainer>
   );
 
-  const renderFailureView = () => (
-    <div className="no-search-result">
-      <h1>Failed View</h1>
-    </div>
+  const renderFailureView = (): JSX.Element => (
+    <FailureContainer>
+      <FailureCase updateApi={failedCaseLastThreeTransactions} />
+    </FailureContainer>
   );
 
-  const renderLeaderboard = () => {
+  const renderLeaderboard = (): JSX.Element | null => {
     const { status } = apiResponse;
     switch (status) {
       case apiStatusConstants.inProgress:
@@ -411,9 +414,8 @@ const TransactionPage = (props: PropsValue) => {
         return null;
     }
   };
-  if (jwtToken !== undefined) {
-    return <TransactionsContainer>{renderLeaderboard()}</TransactionsContainer>;
-  }
+
+  return <TransactionsContainer>{renderLeaderboard()}</TransactionsContainer>;
 };
 
 export default TransactionPage;

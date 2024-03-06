@@ -10,10 +10,10 @@ import {
 
 const text = "we're sorry, the page you requested could not be found";
 
-const NotFound = () => {
+const NotFound = (): JSX.Element => {
   const navigate = useNavigate();
 
-  const onBackToHomePage = () => {
+  const onBackToHomePage = (): void => {
     navigate("/");
   };
 

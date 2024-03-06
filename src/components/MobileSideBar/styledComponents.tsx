@@ -131,6 +131,7 @@ export const YesLogoutButton = styled.button`
   height: 40px;
   margin-left: auto;
   margin-right: -20px;
+  cursor: pointer;
 `;
 
 export const MobileSideBarClosing = styled.img`

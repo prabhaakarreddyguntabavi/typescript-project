@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const ProfileHomePage = styled.div`
   width: 100vw;
-  height: 100vh;
+  height: 98vh;
   background: #f5f7fa;
   display: flex;
 `;

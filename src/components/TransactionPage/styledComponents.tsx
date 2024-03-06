@@ -14,7 +14,7 @@ interface TextParagraphFilterProps {
 
 export const TransactionHomePage = styled.div`
   width: 99vw;
-  height: 100vh;
+  height: 98vh;
   background: #f5f7fa;
   display: flex;
 `;
@@ -131,10 +131,10 @@ export const CreditDebitImage = styled.img<TextParagraphProps>`
   width: 30px;
   height: 30px;
   flex-shrink: 0;
-  padding-right: 16px;
+  padding-right: ${(props: any) => (props.isAdmin ? "10px" : "16px")};
   @media screen and (max-width: 768px) {
     display: block;
-    ${(props: any) => (props.isAdmin ? "none" : "block")};
+    // ${(props: any) => (props.isAdmin ? "none" : "block")};
   }
 `;
 
@@ -143,6 +143,7 @@ export const EditImage = styled.img`
   height: 20px;
   flex-shrink: 0;
   margin-right: 15px;
+  cursor: pointer;
   @media screen and (max-width: 768px) {
     margin-right: 10px;
   }
@@ -152,6 +153,7 @@ export const DeleteImage = styled.img`
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 export const TitleParagraph = styled.p`
@@ -176,10 +178,10 @@ export const CategoryParagraph = styled.p<TextParagraphProps>`
   font-weight: 400;
   line-height: normal;
   // margin-right: 96px;
-  width: 20vw; // ${(props: any) => (props.isAdmin ? "22vw" : "20vw")};
+  width: ${(props: any) => (props.isAdmin ? "22vw" : "20vw")};
   overflow: hidden;
   @media screen and (max-width: 768px) {
-    width: 20vw; //${(props: any) => (props.isAdmin ? "28vw" : "20vw")};
+    width: ${(props: any) => (props.isAdmin ? "28vw" : "20vw")};
   }
 `;
 
@@ -224,6 +226,7 @@ export const TransactionSelectFilter = styled.button`
   gap: 8px;
   border: 0px;
   background-color: transparent;
+  cursor: pointer;
 `;
 
 export const SelectAllOption = styled.div<TextParagraphFilterProps>`
@@ -453,9 +456,10 @@ export const AddTransactionCloseImage = styled.img`
   margin-left: auto;
   margin-top: 24px;
   margin-right: 24px;
+  cursor: pointer;
 `;
 
-export const AdminProfileContainer = styled.p`
+export const AdminProfileContainer = styled.p<TextParagraphProps>`
   color: #505887;
   font-family: Inter;
   font-size: 16px;
@@ -470,6 +474,7 @@ export const AdminProfileContainer = styled.p`
   border-radius: 30px;
   background: url(<path-to-image>), lightgray 50% / cover no-repeat;
   // margin-right: 10px;
+  display: ${(props) => (props.isAdmin ? "none" : "block")};
 `;
 
 export const TransactionUserName = styled.p`

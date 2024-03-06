@@ -78,14 +78,10 @@ export const CrediteDebitImage = styled.img<ParagraphProps>`
   width: 30px;
   height: 30px;
   flex-shrink: 0;
-  padding-right: 16px;
+  padding-right: ${(props: any) => (props.isAdmin ? "10px" : "16px")};
   @media screen and (max-width: 768px) {
-    padding-right: 8px;
-    // display: none;
-    width: 25px;
-    height: 25px;
-    padding-left: 8px;
-    display: block; // ${(props) => (props.isAdmin ? "none" : "block")};
+    display: block;
+    // ${(props: any) => (props.isAdmin ? "none" : "block")};
   }
 `;
 
@@ -94,6 +90,7 @@ export const EditImage = styled.img`
   height: 20px;
   flex-shrink: 0;
   margin-right: 20px;
+  cursor: pointer;
   @media screen and (max-width: 768px) {
     margin-right: 8px;
   }
@@ -103,10 +100,11 @@ export const DeleteImage = styled.img`
   width: 20px;
   height: 20px;
   flex-shrink: 0;
+  cursor: pointer;
 `;
 
 export const TitleParagraph = styled.p`
-  width: 174px;
+  width: 15vw;
   color: #505887;
   font-family: Inter;
   font-size: 16px;
@@ -114,9 +112,12 @@ export const TitleParagraph = styled.p`
   font-weight: 400;
   line-height: normal;
   // margin-right: 80px;
+  @media screen and (max-width: 768px) {
+    margin-bottom: 8px;
+  }
 `;
 
-export const CategaryParagraph = styled.p`
+export const CategaryParagraph = styled.p<ParagraphProps>`
   color: #505887;
   font-family: Inter;
   font-size: 16px;
@@ -124,8 +125,11 @@ export const CategaryParagraph = styled.p`
   font-weight: 400;
   line-height: normal;
   // margin-right: 96px;
-  width: 20vw;
+  width: ${(props: any) => (props.isAdmin ? "22vw" : "20vw")};
   overflow: hidden;
+  @media screen and (max-width: 768px) {
+    width: ${(props: any) => (props.isAdmin ? "28vw" : "20vw")};
+  }
 `;
 
 export const DateOfTransactionParagraph = styled.p`
@@ -154,10 +158,15 @@ export const DebitAmount = styled.p<ParagraphProps>`
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  width: 10vw;
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "10vw")};
   overflow: hidden;
+
+  @media screen and (max-width: 1024px) {
+    width: 15vw;
+  }
+
   @media screen and (max-width: 768px) {
-    width: 25vw; // ${(props) => (props.isAdmin ? "18vw" : "25vw")};
+    width: 20vw;
   }
 `;
 
@@ -169,10 +178,15 @@ export const CrediteAmount = styled.p<ParagraphProps>`
   font-weight: 500;
   line-height: normal;
   text-align: start;
-  width: 10vw;
+  width: ${(props: any) => (props.isAdmin ? "15vw" : "10vw")};
   overflow: hidden;
+
+  @media screen and (max-width: 1024px) {
+    width: 15vw;
+  }
+
   @media screen and (max-width: 768px) {
-    width: ${(props) => (props.isAdmin ? "18vw" : "25vw")};
+    width: 20vw;
   }
 `;
 
@@ -251,9 +265,10 @@ export const AddTransactionCloseImage = styled.img`
   margin-left: auto;
   margin-top: 24px;
   margin-right: 24px;
+  cursor: pointer;
 `;
 
-export const AdminProfileContainer = styled.p`
+export const AdminProfileContainer = styled.p<ParagraphProps>`
   color: #505887;
   font-family: Inter;
   font-size: 16px;
@@ -268,6 +283,7 @@ export const AdminProfileContainer = styled.p`
   border-radius: 30px;
   background: url(<path-to-image>), lightgray 50% / cover no-repeat;
   // margin-right: 10px;
+  display: ${(props) => (props.isAdmin ? "none" : "block")};
 `;
 
 export const UserProfileDetails = styled.div`
@@ -299,7 +315,7 @@ export const EditDeleteContainer = styled.div<ParagraphProps>`
   width: 61px;
   @media screen and (max-width: 1350px) {
     width: 61px;
-    display: block// ${(props) => (props.isAdmin ? "none" : "block")};
+    display: ${(props) => (props.isAdmin ? "none" : "block")};
   }
 `;
 
@@ -314,3 +330,6 @@ export const TransactionParagraphMobile = styled.p`
     font-weight: bold;
   }
 `;
+export const FailureContainer = styled.div``;
+
+export const TextContainer = styled.div``;

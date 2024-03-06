@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { JSXElementConstructor, useEffect, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -23,11 +23,11 @@ import "./index.css";
 export const Dashboard = () => {
   const navigate = useNavigate();
 
-  const [callApi, updateApi] = useState("");
+  const [callApi, updateApi] = useState<string>("");
 
-  const jwtToken = Cookies.get("jwt_token");
+  const jwtToken: string | undefined = Cookies.get("jwt_token");
 
-  const callTransactionsUpdate = (id: string) => {
+  const callTransactionsUpdate = (id: string): void => {
     updateApi(id);
   };
 
@@ -75,7 +75,6 @@ export const Dashboard = () => {
       </TransactionContext.Consumer>
     );
   }
-  return null;
 };
 
 export default Dashboard;

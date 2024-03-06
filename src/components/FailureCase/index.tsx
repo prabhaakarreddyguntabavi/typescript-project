@@ -8,11 +8,11 @@ import {
   OnFailureRetryButton,
 } from "./styledComponents";
 
-interface propsValue {
+interface PropsValue {
   updateApi: (id: string) => void;
 }
 
-const FailureCase = (props: propsValue) => {
+const FailureCase = (props: PropsValue): JSX.Element => {
   const { updateApi } = props;
 
   return (

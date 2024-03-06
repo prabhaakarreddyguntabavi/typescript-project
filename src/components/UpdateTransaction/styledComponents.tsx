@@ -85,6 +85,7 @@ export const AddTransactionButton = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+  cursor: pointer;
 `;
 
 export const AddTransactionTextContainer = styled.div`

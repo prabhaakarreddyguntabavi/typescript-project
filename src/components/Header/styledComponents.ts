@@ -38,7 +38,7 @@ export const AddTransactionButton = styled.button`
   font-weight: 500;
   line-height: normal;
   border-width: 0px;
-
+  cursor: pointer;
   @media screen and (max-width: 768px) {
     display: none;
   }
@@ -56,7 +56,6 @@ export const ButtonText = styled.p`
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-
   @media screen and (max-width: 768px) {
     display: none;
   }
@@ -112,7 +111,7 @@ export const AddTransctionButton = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
-
+  cursor: pointer;
   @media screen and (max-width: 768px) {
     width: 90vw;
   }
@@ -155,6 +154,7 @@ export const AddTransctionCloseImage = styled.img`
   margin-left: auto;
   // margin-top: 15px;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 export const AddTransctionInputContainer = styled.div`
@@ -282,6 +282,7 @@ export const MobileAddTransactions = styled.button`
     font-weight: 500;
     line-height: normal;
     border-width: 0px;
+    cursor: pointer;
   }
 `;
 

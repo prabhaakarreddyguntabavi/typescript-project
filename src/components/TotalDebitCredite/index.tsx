@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 
 // import TransactionContext from "../../context/TransactionContext";
 
+import { ApiStatus } from "../InterfaceDefining";
+
 import {
   CreditContainer,
   HeadingAmount,
@@ -21,8 +23,9 @@ import {
   DebitImage,
   LoadingContainer,
 } from "./styledComponents";
+import FailureCase from "../FailureCase";
 
-const apiStatusConstants = {
+const apiStatusConstants: ApiStatus = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
@@ -44,8 +47,10 @@ interface ApiOutputStatus {
   errorMsg?: string;
 }
 
-const TotalDebitCredit = (props: PropsValue) => {
+const TotalDebitCredit = (props: PropsValue): JSX.Element => {
   const { isUserAdmin, callApi } = props;
+
+  // const [failedCaseCallApi, failedCaseLastThreeTransactions] = useState<string>("");
 
   const [callBack, updateApi] = useState<string>("");
 
@@ -54,9 +59,9 @@ const TotalDebitCredit = (props: PropsValue) => {
     data: [],
   });
 
-  useEffect(() => {
+  useEffect((): void => {
     const jwtToken = Cookies.get("jwt_token");
-    const getLeaderboardData = async () => {
+    const getLeaderboardData = async (): Promise<void> => {
       setApiResponse({
         status: apiStatusConstants.inProgress,
         data: [],
@@ -134,7 +139,7 @@ const TotalDebitCredit = (props: PropsValue) => {
     getLeaderboardData();
   }, [callApi, callBack]);
 
-  const renderSuccessView = () => {
+  const renderSuccessView = (): JSX.Element => {
     return (
       <>
         <CreditContainer>
@@ -170,7 +175,7 @@ const TotalDebitCredit = (props: PropsValue) => {
     );
   };
 
-  const renderLoadingView = () => (
+  const renderLoadingView = (): JSX.Element => (
     <LoadingContainer
       className="products-loader-container"
       data-testid="loader"
@@ -179,9 +184,11 @@ const TotalDebitCredit = (props: PropsValue) => {
     </LoadingContainer>
   );
 
-  const renderFailureView = () => <h1>Failed</h1>; // <FailureCase updateApi={updateApi} />;
+  const renderFailureView = (): JSX.Element => (
+    <FailureCase updateApi={updateApi} />
+  ); // <FailureCase updateApi={updateApi} />;
 
-  const renderLeaderboard = () => {
+  const renderLeaderboard = (): JSX.Element | null => {
     const { status } = apiResponse;
     switch (status) {
       case apiStatusConstants.inProgress:

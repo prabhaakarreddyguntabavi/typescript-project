@@ -1,8 +1,6 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 
-// import ErrorPopup from "../ErrorMessage";
-
 import {
   LogoutConformationContainer,
   WarningImageContainer,
@@ -18,22 +16,22 @@ import {
   YesLogoutButton,
 } from "./styledComponents";
 
-interface propsValue {
+interface PropsValue {
   id: string;
   close: () => void;
   callTransactionsUpdate: (id: string) => void;
 }
 
-const UpdateTransaction = (props: propsValue) => {
+const UpdateTransaction = (props: PropsValue): JSX.Element => {
   const { id, close, callTransactionsUpdate } = props;
 
   const jwtToken = Cookies.get("jwt_token");
 
-  const [errorMessage, updateErrorMessage] = useState(false);
+  const [errorMessage, updateErrorMessage] = useState<boolean>(false);
 
-  const getLeaderboardData = async () => {
+  const getLeaderboardData = async (): Promise<void> => {
     let headers = {};
-    let url = "";
+    let url: string = "";
 
     const body = JSON.stringify({
       id: id,

@@ -6,6 +6,8 @@ import { useState, useEffect } from "react";
 import TransactionContext from "../../context/TransactionContext";
 // import Popup from "../Popup";
 
+import { ProfileDetails } from "../InterfaceDefining";
+
 import {
   SideBarMainContainer,
   LogoImage,
@@ -58,16 +60,16 @@ const userDetails = [
   { email: "admin@gmail.com", password: "Admin@123", userId: 3 },
 ];
 
-interface ProfileDetails {
-  name?: string;
-  email?: string;
-  date_of_birth?: string;
-  present_address?: string;
-  permanent_address?: string;
-  city?: string;
-  postal_code?: string;
-  country?: string;
-}
+// interface ProfileDetails {
+//   name?: string;
+//   email?: string;
+//   date_of_birth?: string;
+//   present_address?: string;
+//   permanent_address?: string;
+//   city?: string;
+//   postal_code?: string;
+//   country?: string;
+// }
 
 interface ConsumerValues {
   selectOption: string;
@@ -75,21 +77,26 @@ interface ConsumerValues {
   onChangeTransactionOption: (id: string) => void;
 }
 
-const SideBar = () => {
-  const jwtToken: any = Cookies.get("jwt_token");
+const SideBar = (): JSX.Element => {
+  const jwtToken: string = Cookies.get("jwt_token")!;
+
+  console.log(typeof jwtToken);
   const navigate = useNavigate();
   const [apiResponse, setApiResponse] = useState<ProfileDetails>({});
 
-  const loginUser: any = {
+  let loginUser: ProfileDetails = {
     ...userDetails.find((eachUser) => eachUser.userId === parseInt(jwtToken)),
     name: "",
   };
+  if (loginUser !== undefined) {
+    loginUser = { email: "Admin", password: "", userId: 0, name: "Admin" };
+  }
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!jwtToken) {
       navigate("/login");
     } else {
-      const getLeaderboardData = async () => {
+      const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({});
 
         let headers = {};
@@ -122,19 +129,10 @@ const SideBar = () => {
     }
   }, [jwtToken]);
 
-  const onClickLogout = () => {
+  const onClickLogout = (): void => {
     navigate("/login");
     Cookies.remove("jwt_token");
   };
-
-  // function onChangeSelectOption(id: string) {
-  //   localStorage.setItem("selectOption", id);
-  //   setSelectionOption("DASHBOARD");
-  // }
-
-  // function onChangeTransactionOption(arg0: string) {
-  //   throw new Error("Function not implemented.");
-  // }
 
   return (
     <TransactionContext.Consumer>
@@ -232,7 +230,9 @@ const SideBar = () => {
             {/* Profile Section */}
             <ProfileContainer>
               <ProfileImageContainer>
-                {loginUser.email[0].toUpperCase()}
+                {loginUser.email !== undefined
+                  ? loginUser.email[0].toUpperCase()
+                  : ""}
               </ProfileImageContainer>
               <ProfileTextContainer>
                 <ProfileName>{apiResponse.name}</ProfileName>
@@ -244,7 +244,9 @@ const SideBar = () => {
                 trigger={
                   <LogoutButton type="button">
                     <ProfileImageContainerMedium>
-                      {loginUser.email[0].toUpperCase()}
+                      {loginUser.email !== undefined
+                        ? loginUser.email[0].toUpperCase()
+                        : ""}
                     </ProfileImageContainerMedium>
                     <ProfileLogoutImage
                       src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1706074414/log-out-01_yllnww.png"

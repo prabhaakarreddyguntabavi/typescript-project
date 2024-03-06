@@ -45,4 +45,5 @@ export const OnFailureRetryButton = styled.button`
   font-weight: 500;
   line-height: normal;
   border-width: 0px;
+  cursor: pointer;
 `;

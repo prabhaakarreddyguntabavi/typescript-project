@@ -4,13 +4,10 @@ import Popup from "reactjs-popup";
 import { v4 as uuidv4 } from "uuid";
 import ReactLoading from "react-loading";
 
-// import MobileSideBar from "../MobileSideBar";
 import { IoMdMenu } from "react-icons/io";
 
 import TransctionContext from "../../context/TransactionContext";
 import { IoAddCircleOutline } from "react-icons/io5";
-
-// import ErrorPopup from "../ErrorMessage";
 
 import {
   HeaderMainContainer,
@@ -46,10 +43,10 @@ interface PropsValue {
   updateApi: (id: string) => void;
 }
 
-const Header = (props: PropsValue) => {
+const Header = (props: PropsValue): JSX.Element => {
   const jwtToken = Cookies.get("jwt_token");
 
-  const getCurrentDateTime = () => {
+  const getCurrentDateTime = (): string => {
     const now = new Date();
     const year = now.getFullYear();
     const month = String(now.getMonth() + 1).padStart(2, "0");
@@ -63,14 +60,16 @@ const Header = (props: PropsValue) => {
 
   const [addTransctionStatus, updateTransction] = useState<string>("");
 
-  const [name, addName] = useState();
-  const [type, addType] = useState("credit");
-  const [category, addCategory] = useState("Shopping");
-  const [amount, AddAmount] = useState();
-  const [date, addDate] = useState(getCurrentDateTime());
-  const [errorMessage, updateErrorMessage] = useState("");
+  const [name, addName] = useState<string>("");
+  const [type, addType] = useState<string>("credit");
+  const [category, addCategory] = useState<string>("Shopping");
+  const [amount, addAmount] = useState<number>();
+  const [date, addDate] = useState<string>(getCurrentDateTime());
+  const [errorMessage, updateErrorMessage] = useState<string>("");
 
-  const AddNameFunction = (event: any) => {
+  const AddNameFunction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     if (event.target.value.length >= 30) {
       window.alert("Username shouldn't exceed 30 characters");
     } else {
@@ -78,35 +77,31 @@ const Header = (props: PropsValue) => {
     }
   };
 
-  const addTypeFunction = (event: any) => {
-    addType(event.target.value);
+  const addAmountFunction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    addAmount(parseInt(event.target.value));
   };
 
-  const addCategoryFunction = (event: any) => {
-    addCategory(event.target.value);
-  };
-
-  const AddAmountFunction = (event: any) => {
-    AddAmount(event.target.value);
-  };
-
-  const addDateFunction = (event: any) => {
+  const addDateFunction = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
     addDate(event.target.value);
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     addDate(getCurrentDateTime());
   }, [date]);
 
-  const updateValues = () => {
-    addName(undefined);
+  const updateValues = (): void => {
+    addName("");
     addType("credit");
     addCategory("Shopping");
-    AddAmount(undefined);
+    addAmount(undefined);
     addDate("");
   };
 
-  const getLeaderboardData = async (close: () => void) => {
+  const getLeaderboardData = async (close: () => void): Promise<void> => {
     updateTransction("inprogress");
     updateErrorMessage("");
 
@@ -160,7 +155,7 @@ const Header = (props: PropsValue) => {
     }
   };
 
-  const renderSuccessView = () => {
+  const renderSuccessView = (): JSX.Element => {
     return (
       <>
         <Popup
@@ -227,7 +222,7 @@ const Header = (props: PropsValue) => {
                     required
                     id="transctionType"
                     value={type}
-                    onChange={addTypeFunction}
+                    onChange={(event) => addType(event.target.value)}
                   >
                     <SelectTransctionOptions value="credit">
                       Credit
@@ -246,7 +241,7 @@ const Header = (props: PropsValue) => {
                     required
                     id="transctionCategory"
                     value={category}
-                    onChange={addCategoryFunction}
+                    onChange={(event) => addCategory(event.target.value)}
                   >
                     <SelectTransctionOptions value="Shopping">
                       Shopping
@@ -269,7 +264,7 @@ const Header = (props: PropsValue) => {
                     type="number"
                     id="addtransctionamount"
                     value={amount}
-                    onChange={AddAmountFunction}
+                    onChange={addAmountFunction}
                     placeholder="Enter Your Amount"
                   />
                 </AddTransctionInputContainer>

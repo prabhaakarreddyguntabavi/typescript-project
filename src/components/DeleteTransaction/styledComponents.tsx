@@ -121,6 +121,7 @@ export const LogoutButton = styled.button`
   border-width: 0px;
   background-color: transparent;
   margin-bottom: 20px;
+  cursor: pointer;
 `;
 
 export const LogoutContainer = styled.div`
@@ -198,6 +199,7 @@ export const LogoutClosingImage = styled.img`
   height: 24px;
   flex-shrink: 0;
   margin: 10px 10px 10px auto;
+  cursor: pointer;
 `;
 
 export const LogoutParagraph = styled.p`
@@ -233,6 +235,7 @@ export const CancelLogoutButton = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+  cursor: pointer;
 `;
 
 export const YesLogoutButton = styled.button`
@@ -256,4 +259,5 @@ export const YesLogoutButton = styled.button`
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
+  cursor: pointer;
 `;

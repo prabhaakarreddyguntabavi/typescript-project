@@ -65,7 +65,7 @@ interface DataValues {
   category: string;
   amount: number;
   date: string;
-  user_id: string;
+  user_id: number;
 }
 interface ApiOutputStatus {
   status: string;
@@ -84,12 +84,21 @@ interface Date {
   date: string;
 }
 
-interface Id {
-  id: string;
-}
 interface ConsumerValues {
   selectOption: string;
   onChangeSelectOption: (id: string) => void;
+}
+
+interface UserDetail {
+  id?: number;
+  name: string;
+  email?: string;
+  country?: string | null;
+  date_of_birth?: string | null;
+  city?: string | null;
+  permanent_address?: string | null;
+  postal_code?: string | null;
+  present_address?: string | null;
 }
 
 const apiStatusConstants: apiStatusValues = {
@@ -99,7 +108,7 @@ const apiStatusConstants: apiStatusValues = {
   failure: "FAILURE",
 };
 
-const TransactionPage = () => {
+const TransactionPage = (): JSX.Element => {
   const jwtToken = Cookies.get("jwt_token");
   const navigate = useNavigate();
 
@@ -108,13 +117,15 @@ const TransactionPage = () => {
     data: [],
   });
 
-  const [allProfileDetails, setProfileDetailsApiResponse] = useState([]);
+  const [allProfileDetails, setProfileDetailsApiResponse] = useState<
+    UserDetail[]
+  >([]);
 
-  const [filterOption, onChangeFilter] = useState("alltransactions");
+  const [filterOption, onChangeFilter] = useState<string>("alltransactions");
 
-  const [callApi, updateApi] = useState("");
+  const [callApi, updateApi] = useState<string>("");
 
-  const DateFormate = (date: string) => {
+  const DateFormate = (date: string): string => {
     const inputDateString = date;
     const inputDate = new Date(inputDateString);
 
@@ -138,16 +149,16 @@ const TransactionPage = () => {
     const minutes = inputDate.getMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
 
-    const formattedDate = `${day} ${month}, ${hours % 12}.${minutes} ${ampm}`;
+    const formattedDate = `${day} ${month}, ${hours % 12}:${minutes} ${ampm}`;
 
     return formattedDate;
   };
 
-  useEffect(() => {
+  useEffect((): void => {
     if (!jwtToken) {
       navigate("/login");
     } else {
-      const getLeaderboardData = async () => {
+      const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({
           status: apiStatusConstants.inProgress,
           data: [],
@@ -228,11 +239,11 @@ const TransactionPage = () => {
     }
   }, [navigate, jwtToken, callApi]);
 
-  const callTransactionsUpdate = (id: string) => {
+  const callTransactionsUpdate = (id: string): void => {
     updateApi(id);
   };
 
-  const renderSuccessView = () => {
+  const renderSuccessView = (): JSX.Element => {
     const { data } = apiResponse;
 
     let transactionsData = data;
@@ -267,9 +278,16 @@ const TransactionPage = () => {
 
           {transactionsData.map(
             (eachTransaction: DataValues, index: number) => {
-              const user: any = allProfileDetails.find(
-                (findUser: Id) => findUser.id === eachTransaction.user_id
-              );
+              let user: UserDetail | undefined;
+              console.log(allProfileDetails);
+              if (allProfileDetails === undefined) {
+                user = { name: "Admin" };
+              } else {
+                user = allProfileDetails.find(
+                  (findUser: UserDetail) =>
+                    findUser.id === eachTransaction.user_id
+                );
+              }
 
               return (
                 <DashTransactionContainer
@@ -293,10 +311,12 @@ const TransactionPage = () => {
                       )}
 
                       <UserProfileDetails>
-                        <AdminProfileContainer>
-                          {user.name[0].toUpperCase()}
+                        <AdminProfileContainer isAdmin={jwtToken === "3"}>
+                          {user !== undefined ? user.name[0].toUpperCase() : ""}
                         </AdminProfileContainer>
-                        <TitleUserParagraph>{user.name}</TitleUserParagraph>
+                        <TitleUserParagraph>
+                          {user !== undefined ? user.name : ""}
+                        </TitleUserParagraph>
                       </UserProfileDetails>
                     </AdminContainer>
                   ) : (
@@ -432,18 +452,18 @@ const TransactionPage = () => {
     );
   };
 
-  const renderLoadingView = () => (
+  const renderLoadingView = (): JSX.Element => (
     <LoadingContainer data-testid="loader">
       <ReactLoading type={"bars"} color={"#000000"} height={50} width={50} />
     </LoadingContainer>
   );
 
-  const renderFailureView = () => (
+  const renderFailureView = (): JSX.Element => (
     // <h1>Failed View</h1>
     <FailureCase updateApi={updateApi} />
   );
 
-  const renderLeaderboard = () => {
+  const renderLeaderboard = (): JSX.Element | null => {
     const { status } = apiResponse;
     switch (status) {
       case apiStatusConstants.inProgress:
@@ -456,94 +476,92 @@ const TransactionPage = () => {
         return null;
     }
   };
-  if (jwtToken !== undefined) {
-    return (
-      <TransactionContext.Consumer>
-        {(value: ConsumerValues) => {
-          const {
-            // transactionOption,
-            // onChangeTransactionOption,
-            selectOption,
-            onChangeSelectOption,
-          } = value;
 
-          if (selectOption !== "TRANSACTIONS") {
-            onChangeSelectOption("TRANSACTIONS");
-          }
+  return (
+    <TransactionContext.Consumer>
+      {(value: ConsumerValues) => {
+        const {
+          // transactionOption,
+          // onChangeTransactionOption,
+          selectOption,
+          onChangeSelectOption,
+        } = value;
 
-          return (
-            <TransactionHomePage>
-              <SideBar />
-              <TransactionTotalBodyContainer>
-                <Header updateApi={updateApi} />
-                <SelectFilterConditions>
-                  <TransactionSelectFilter
-                    onClick={() => {
-                      // onChangeTransactionOption("ALLTRANSACTION");
-                      onChangeFilter("alltransactions");
-                    }}
+        if (selectOption !== "TRANSACTIONS") {
+          onChangeSelectOption("TRANSACTIONS");
+        }
+
+        return (
+          <TransactionHomePage>
+            <SideBar />
+            <TransactionTotalBodyContainer>
+              <Header updateApi={updateApi} />
+              <SelectFilterConditions>
+                <TransactionSelectFilter
+                  onClick={() => {
+                    // onChangeTransactionOption("ALLTRANSACTION");
+                    onChangeFilter("alltransactions");
+                  }}
+                >
+                  <SelectAllOption
+                    transactionOption={filterOption === "alltransactions"}
+                    //  transactionOption={transactionOption === "ALLTRANSACTION"}
                   >
-                    <SelectAllOption
-                      transactionOption={filterOption === "alltransactions"}
-                      //  transactionOption={transactionOption === "ALLTRANSACTION"}
-                    >
-                      All Transaction
-                    </SelectAllOption>
-                    <SelectedContainer
-                      transactionOption={filterOption === "alltransactions"}
-                      //   transactionOption={transactionOption === "ALLTRANSACTION"}
-                    ></SelectedContainer>
-                  </TransactionSelectFilter>
+                    All Transaction
+                  </SelectAllOption>
+                  <SelectedContainer
+                    transactionOption={filterOption === "alltransactions"}
+                    //   transactionOption={transactionOption === "ALLTRANSACTION"}
+                  ></SelectedContainer>
+                </TransactionSelectFilter>
 
-                  <TransactionSelectFilter
-                    onClick={() => {
-                      // onChangeTransactionOption("CREDIT");
-                      onChangeFilter("credit");
-                    }}
+                <TransactionSelectFilter
+                  onClick={() => {
+                    // onChangeTransactionOption("CREDIT");
+                    onChangeFilter("credit");
+                  }}
+                >
+                  <SelectOption
+                    transactionOption={filterOption === "credit"}
+                    //   transactionOption={transactionOption === "CREDIT"}
                   >
-                    <SelectOption
-                      transactionOption={filterOption === "credit"}
-                      //   transactionOption={transactionOption === "CREDIT"}
-                    >
-                      Credit
-                    </SelectOption>
-                    <SelectedCreditContainer
-                      transactionOption={filterOption === "credit"}
-                      //  transactionOption={transactionOption === "CREDIT"}
-                    ></SelectedCreditContainer>
-                  </TransactionSelectFilter>
+                    Credit
+                  </SelectOption>
+                  <SelectedCreditContainer
+                    transactionOption={filterOption === "credit"}
+                    //  transactionOption={transactionOption === "CREDIT"}
+                  ></SelectedCreditContainer>
+                </TransactionSelectFilter>
 
-                  <TransactionSelectFilter
-                    onClick={() => {
-                      // onChangeTransactionOption("DEBIT");
-                      onChangeFilter("debit");
-                    }}
+                <TransactionSelectFilter
+                  onClick={() => {
+                    // onChangeTransactionOption("DEBIT");
+                    onChangeFilter("debit");
+                  }}
+                >
+                  <SelectOption
+                    transactionOption={filterOption === "debit"}
+                    // transactionOption={transactionOption === "DEBIT"}
                   >
-                    <SelectOption
-                      transactionOption={filterOption === "debit"}
-                      // transactionOption={transactionOption === "DEBIT"}
-                    >
-                      Debit
-                    </SelectOption>
-                    <SelectedCreditContainer
-                      transactionOption={filterOption === "debit"}
-                      //  transactionOption={transactionOption === "DEBIT"}
-                    ></SelectedCreditContainer>
-                  </TransactionSelectFilter>
-                </SelectFilterConditions>
-                <TransactionBodyContainer>
-                  <TransactionsContainer>
-                    {renderLeaderboard()}
-                  </TransactionsContainer>
-                </TransactionBodyContainer>
-              </TransactionTotalBodyContainer>
-            </TransactionHomePage>
-          );
-        }}
-      </TransactionContext.Consumer>
-    );
-  }
-  return null;
+                    Debit
+                  </SelectOption>
+                  <SelectedCreditContainer
+                    transactionOption={filterOption === "debit"}
+                    //  transactionOption={transactionOption === "DEBIT"}
+                  ></SelectedCreditContainer>
+                </TransactionSelectFilter>
+              </SelectFilterConditions>
+              <TransactionBodyContainer>
+                <TransactionsContainer>
+                  {renderLeaderboard()}
+                </TransactionsContainer>
+              </TransactionBodyContainer>
+            </TransactionTotalBodyContainer>
+          </TransactionHomePage>
+        );
+      }}
+    </TransactionContext.Consumer>
+  );
 };
 
 export default TransactionPage;
