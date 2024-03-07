@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 import Popup from "reactjs-popup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
@@ -90,7 +90,7 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
     useState<string>("");
 
   const jwtToken: string = Cookies.get("jwt_token")!;
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   const [apiResponse, setApiResponse] = useState<ApiStatusAndData>({
     status: apiStatusConstants.initial,

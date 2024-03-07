@@ -15,7 +15,7 @@ const App = (): JSX.Element => {
   const [isUserAdmin, onChangeAdmin] = useState<boolean>(false);
 
   useEffect((): void => {
-    const jwtToken = Cookies.get("jwt_token");
+    const jwtToken: string = Cookies.get("jwt_token")!;
 
     if (jwtToken === "3") {
       onChangeAdmin(true);
