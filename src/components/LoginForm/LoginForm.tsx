@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 import {
   LoginLabel,
@@ -48,7 +48,7 @@ export const LoginForm = (): JSX.Element => {
     password: "",
     userId: 0,
   });
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   const onEnterEmailId = (): void => {
     if (emailId !== "") {
@@ -84,7 +84,7 @@ export const LoginForm = (): JSX.Element => {
     }
   };
 
-  const jwtToken = Cookies.get("jwt_token");
+  const jwtToken: string = Cookies.get("jwt_token")!;
 
   if (jwtToken !== undefined) {
     navigate("/");

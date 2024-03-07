@@ -17,20 +17,20 @@ import {
 } from "./styledComponents";
 
 interface PropsValue {
-  id: string;
+  id: number | string;
   close: () => void;
   callTransactionsUpdate: (id: string) => void;
 }
 
 const UpdateTransaction = (props: PropsValue): JSX.Element => {
-  const { id, close, callTransactionsUpdate } = props;
+  const { id, close, callTransactionsUpdate }: PropsValue = props;
 
-  const jwtToken = Cookies.get("jwt_token");
+  const jwtToken: string = Cookies.get("jwt_token")!;
 
   const [errorMessage, updateErrorMessage] = useState<boolean>(false);
 
   const getLeaderboardData = async (): Promise<void> => {
-    let headers = {};
+    let headers: HeadersInit = {};
     let url: string = "";
 
     const body = JSON.stringify({
@@ -46,7 +46,7 @@ const UpdateTransaction = (props: PropsValue): JSX.Element => {
     };
     url = "https://bursting-gelding-24.hasura.app/api/rest/delete-transaction";
 
-    const options = {
+    const options: RequestInit = {
       method: "DELETE",
       headers: headers,
       body: body,
@@ -55,7 +55,7 @@ const UpdateTransaction = (props: PropsValue): JSX.Element => {
     const responseData = await response.json();
 
     if (response.ok) {
-      callTransactionsUpdate(id);
+      callTransactionsUpdate(id.toString());
       close();
     } else {
       updateErrorMessage(responseData.error);

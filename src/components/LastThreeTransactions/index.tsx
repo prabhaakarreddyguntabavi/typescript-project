@@ -8,7 +8,7 @@ import UpdateTransaction from "../UpdateTransaction";
 import DeleteTransaction from "../DeleteTransaction";
 import FailureCase from "../FailureCase";
 
-import { ApiStatus, ApiStatusAndData, DataValues } from "../InterfaceDefining";
+import { ApiStatus, TransctionProps } from "../InterfaceDefining";
 
 import {
   TransactionsContainer,
@@ -51,6 +51,16 @@ interface Short {
   id: number;
 }
 
+interface FetchedData {
+  transactions: TransctionProps[];
+}
+
+export interface ApiStatusAndData {
+  status: string;
+  data: TransctionProps[];
+  errorMsg?: string;
+}
+
 interface UserDetail {
   id?: number;
   name: string;
@@ -63,6 +73,10 @@ interface UserDetail {
   present_address?: string | null;
 }
 
+interface FetchOutPut {
+  users: UserDetail[];
+}
+
 const apiStatusConstants: ApiStatus = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
@@ -71,7 +85,7 @@ const apiStatusConstants: ApiStatus = {
 };
 
 const TransactionPage = (props: PropsValue): JSX.Element => {
-  const { callApi, lastThreeTransactions } = props;
+  const { callApi, lastThreeTransactions }: PropsValue = props;
   const [failedCaseCallApi, failedCaseLastThreeTransactions] =
     useState<string>("");
 
@@ -83,20 +97,20 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
     data: [],
   });
 
-  const callTransactionsUpdate = (id: string): void => {
-    lastThreeTransactions(id);
-  };
-
   const [allProfileDetails, setProfileDetailsApiResponse] = useState<
     UserDetail[]
   >([]);
 
-  const DateFormate = (date: string): string => {
-    const inputDateString = date;
-    const inputDate = new Date(inputDateString);
+  const callTransactionsUpdate = (id: string): void => {
+    lastThreeTransactions(id);
+  };
 
-    const day = inputDate.getDate();
-    const monthNames = [
+  const DateFormate = (date: string): string => {
+    const inputDateString: string = date;
+    const inputDate: Date = new Date(inputDateString);
+
+    const day: number = inputDate.getDate();
+    const monthNames: string[] = [
       "Jan",
       "Feb",
       "Mar",
@@ -110,12 +124,14 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
       "Nov",
       "Dec",
     ];
-    const month = monthNames[inputDate.getMonth()];
-    const hours = inputDate.getHours();
-    const minutes = inputDate.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
+    const month: string = monthNames[inputDate.getMonth()];
+    const hours: number = inputDate.getHours();
+    const minutes: number = inputDate.getMinutes();
+    const ampm: string = hours >= 12 ? "PM" : "AM";
 
-    const formattedDate = `${day} ${month}, ${hours % 12}:${minutes} ${ampm}`;
+    const formattedDate: string = `${day} ${month}, ${
+      hours % 12
+    }:${minutes} ${ampm}`;
 
     return formattedDate;
   };
@@ -130,8 +146,8 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
           data: [],
         });
 
-        let headers = {};
-        let url = "";
+        let headers: HeadersInit = {};
+        let url: string = "";
 
         if (jwtToken === "3") {
           headers = {
@@ -157,7 +173,7 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
         }
 
         if (jwtToken === "3") {
-          const options = {
+          const options: RequestInit = {
             method: "GET",
             headers: headers,
           };
@@ -165,28 +181,27 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
             "https://bursting-gelding-24.hasura.app/api/rest/profile",
             options
           );
-          const outPut = await allProfileDetails.json();
+          const outPut: FetchOutPut = await allProfileDetails.json();
 
           setProfileDetailsApiResponse(outPut.users);
         }
 
-        const limit = 10000;
-        const offset = 0;
+        const limit: number = 10000;
+        const offset: number = 0;
 
-        const queryParams = `?limit=${limit}&offset=${offset}`;
-        const finalUrl = `${url}${queryParams}`;
+        const queryParams: string = `?limit=${limit}&offset=${offset}`;
+        const finalUrl: string = `${url}${queryParams}`;
 
-        const options = {
+        const options: RequestInit = {
           method: "GET",
           headers: headers,
         };
-        const response = await fetch(finalUrl, options);
-        const responseData = await response.json();
+        const response: Response = await fetch(finalUrl, options);
+        const responseData: FetchedData = await response.json();
 
         if (response.ok) {
-          const ListOfTransactions = responseData.transactions.sort(
-            (a: Short, b: Short) => b.id - a.id
-          );
+          const ListOfTransactions: TransctionProps[] =
+            responseData.transactions.sort((a: Short, b: Short) => b.id - a.id);
 
           setApiResponse({
             status: apiStatusConstants.success,
@@ -207,13 +222,13 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
 
   const renderSuccessView = (): JSX.Element => {
     const { data } = apiResponse;
-    let transactionsData: DataValues[] = data;
+    let transactionsData: TransctionProps[] = data;
 
     if (transactionsData.length !== 0) {
       return (
         <>
           {transactionsData.map(
-            (eachTransaction: DataValues, index: number) => {
+            (eachTransaction: TransctionProps, index: number) => {
               let user: UserDetail | undefined;
 
               if (allProfileDetails === undefined) {
@@ -362,7 +377,7 @@ const TransactionPage = (props: PropsValue): JSX.Element => {
                           {(close) => (
                             <LogoutContainer>
                               <DeleteTransaction
-                                id={eachTransaction.id}
+                                id={eachTransaction.id.toString()}
                                 close={close}
                                 callTransactionsUpdate={callTransactionsUpdate}
                               />

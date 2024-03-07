@@ -299,3 +299,5 @@ export const NotificationMessage = styled.p`
   font-size: 10px;
   margin: 0px;
 `;
+
+export const PopupContainer = styled.div``

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TransactionContext from "../../context/TransactionContext";
 
@@ -33,6 +33,10 @@ interface UserListProps {
   userId: number;
 }
 
+interface FetchOutPut {
+  users: ProfileDetails[];
+}
+
 const userDetails: UserListProps[] = [
   { email: "jane.doe@gmail.com", password: "janedoe@123", userId: 1 },
   { email: "samsmith@gmail.com", password: "samsmith@123", userId: 2 },
@@ -60,7 +64,7 @@ const MobileSideBar = (props: PropsValue): JSX.Element => {
 
   const jwtToken: string = Cookies.get("jwt_token")!;
 
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
   const [apiResponse, setApiResponse] = useState<ProfileDetails>({});
 
   let loginUser: ProfileDetails = {
@@ -78,8 +82,8 @@ const MobileSideBar = (props: PropsValue): JSX.Element => {
       const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({});
 
-        let headers = {};
-        let url = "";
+        let headers: HeadersInit = {};
+        let url: string = "";
 
         headers = {
           "Content-Type": "application/json",
@@ -90,15 +94,17 @@ const MobileSideBar = (props: PropsValue): JSX.Element => {
         };
         url = "https://bursting-gelding-24.hasura.app/api/rest/profile";
 
-        const options = {
+        const options: RequestInit = {
           method: "GET",
           headers: headers,
         };
-        const response = await fetch(url, options);
-        const responseData = await response.json();
+        const response: Response = await fetch(url, options);
+        const responseData: FetchOutPut[] = await response.json();
 
         if (response.ok) {
-          setApiResponse(responseData.users[0]);
+          if (Array.isArray(responseData) && responseData.length > 0) {
+            setApiResponse(responseData[0].users[0]);
+          }
         } else {
           setApiResponse(loginUser);
         }

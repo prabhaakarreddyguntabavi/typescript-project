@@ -2,10 +2,6 @@ import { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 
-// import FailureCase from "../FailureCase";
-
-// import TransactionContext from "../../context/TransactionContext";
-
 import { ApiStatus } from "../InterfaceDefining";
 
 import {
@@ -32,15 +28,20 @@ const apiStatusConstants: ApiStatus = {
   failure: "FAILURE",
 };
 
+interface DataOutPut {
+  sum: number;
+  type: string;
+}
+interface FetchedOutput {
+  totals_credit_debit_transactions?: DataOutPut[];
+  transaction_totals_admin?: DataOutPut[];
+}
+
 interface PropsValue {
   isUserAdmin: boolean;
   callApi: string;
 }
 
-interface DataOutPut {
-  sum?: number;
-  type?: string;
-}
 interface ApiOutputStatus {
   status: string;
   data: DataOutPut[];
@@ -60,15 +61,15 @@ const TotalDebitCredit = (props: PropsValue): JSX.Element => {
   });
 
   useEffect((): void => {
-    const jwtToken = Cookies.get("jwt_token");
+    const jwtToken: string = Cookies.get("jwt_token")!;
     const getLeaderboardData = async (): Promise<void> => {
       setApiResponse({
         status: apiStatusConstants.inProgress,
         data: [],
       });
 
-      let headers = {};
-      let url = "";
+      let headers: HeadersInit = {};
+      let url: string = "";
 
       if (isUserAdmin) {
         headers = {
@@ -76,7 +77,7 @@ const TotalDebitCredit = (props: PropsValue): JSX.Element => {
           "x-hasura-role": "admin",
           "x-hasura-admin-secret":
             "g08A3qQy00y8yFDq3y6N1ZQnhOPOa4msdie5EtKS1hFStar01JzPKrtKEzYY2BtF",
-          "x-hasura-user-id": 3,
+          "x-hasura-user-id": jwtToken,
         };
 
         url =
@@ -93,24 +94,24 @@ const TotalDebitCredit = (props: PropsValue): JSX.Element => {
           "https://bursting-gelding-24.hasura.app/api/rest/credit-debit-totals";
       }
 
-      const options = {
+      const options: RequestInit = {
         method: "GET",
         headers: headers,
       };
-      const response = await fetch(url, options);
-      const responseData = await response.json();
+      const response: Response = await fetch(url, options);
+      const responseData: FetchedOutput = await response.json();
 
       if (response.ok) {
         if (
-          !isUserAdmin
-            ? responseData.totals_credit_debit_transactions.length !== 0
-            : responseData.transaction_totals_admin.length !== 0
+          responseData &&
+          responseData.totals_credit_debit_transactions &&
+          responseData.totals_credit_debit_transactions.length > 0
         ) {
           setApiResponse({
             status: apiStatusConstants.success,
-            data: !isUserAdmin
+            data: (!isUserAdmin
               ? responseData.totals_credit_debit_transactions
-              : responseData.transaction_totals_admin,
+              : responseData.transaction_totals_admin)!,
           });
         } else {
           setApiResponse({
@@ -186,7 +187,7 @@ const TotalDebitCredit = (props: PropsValue): JSX.Element => {
 
   const renderFailureView = (): JSX.Element => (
     <FailureCase updateApi={updateApi} />
-  ); // <FailureCase updateApi={updateApi} />;
+  );
 
   const renderLeaderboard = (): JSX.Element | null => {
     const { status } = apiResponse;

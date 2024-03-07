@@ -34,6 +34,7 @@ import {
   MobileAddTransactions,
   ErrorMessageParagraph,
   NotificationMessage,
+  PopupContainer,
 } from "./styledComponents";
 
 import "./index.css";
@@ -44,17 +45,17 @@ interface PropsValue {
 }
 
 const Header = (props: PropsValue): JSX.Element => {
-  const jwtToken = Cookies.get("jwt_token");
+  const jwtToken: string = Cookies.get("jwt_token")!;
 
   const getCurrentDateTime = (): string => {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, "0");
-    const minutes = String(now.getMinutes()).padStart(2, "0");
-    const seconds = String(now.getSeconds()).padStart(2, "0");
-    const dateTimeString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    const now: Date = new Date();
+    const year: number = now.getFullYear();
+    const month: string = String(now.getMonth() + 1).padStart(2, "0");
+    const day: string = String(now.getDate()).padStart(2, "0");
+    const hours: string = String(now.getHours()).padStart(2, "0");
+    const minutes: string = String(now.getMinutes()).padStart(2, "0");
+    const seconds: string = String(now.getSeconds()).padStart(2, "0");
+    const dateTimeString: string = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     return dateTimeString;
   };
 
@@ -105,8 +106,8 @@ const Header = (props: PropsValue): JSX.Element => {
     updateTransction("inprogress");
     updateErrorMessage("");
 
-    let headers = {};
-    let url = "";
+    let headers: HeadersInit = {};
+    let url: string = "";
 
     if (
       name !== undefined &&
@@ -115,7 +116,7 @@ const Header = (props: PropsValue): JSX.Element => {
       amount !== undefined &&
       date !== undefined
     ) {
-      const body = JSON.stringify({
+      const body: string = JSON.stringify({
         name,
         type: type.toLowerCase(),
         category,
@@ -133,12 +134,12 @@ const Header = (props: PropsValue): JSX.Element => {
       };
       url = "https://bursting-gelding-24.hasura.app/api/rest/add-transaction";
 
-      const options = {
+      const options: RequestInit = {
         method: "POST",
         headers: headers,
         body: body,
       };
-      const response = await fetch(url, options);
+      const response: Response = await fetch(url, options);
 
       if (response.ok) {
         const { updateApi } = props;
@@ -161,7 +162,7 @@ const Header = (props: PropsValue): JSX.Element => {
         <Popup
           modal
           trigger={
-            <div>
+            <PopupContainer>
               <AddTransactionButton disabled={jwtToken === "3"} type="button">
                 <ButtonImage
                   src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705727508/plus_ndqvby.png"
@@ -172,7 +173,7 @@ const Header = (props: PropsValue): JSX.Element => {
               <MobileAddTransactions type="button" disabled={jwtToken === "3"}>
                 <IoAddCircleOutline className="add-icon" />
               </MobileAddTransactions>
-            </div>
+            </PopupContainer>
           }
         >
           {/* @ts-ignore */}
@@ -200,7 +201,7 @@ const Header = (props: PropsValue): JSX.Element => {
                   <AddTransctionLabel htmlFor="addtransctionname">
                     Transaction Name*
                     <NotificationMessage>
-                      (Max 30 Charactors*)
+                      (Max 30 Characters*)
                     </NotificationMessage>
                   </AddTransctionLabel>
                   <AddTransctionNameInput

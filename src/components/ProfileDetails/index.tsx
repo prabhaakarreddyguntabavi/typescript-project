@@ -20,6 +20,7 @@ import {
   AddTransactionLabel,
   AddTransactionInputContainer,
   DetailsContainer,
+  FailureContainer,
 } from "./styledComponents";
 
 interface apiStatusValues {
@@ -44,6 +45,10 @@ interface ApiOutputStatus {
   status: string;
   data: ProfileDetailsValues;
   errorMsg?: string;
+}
+
+interface FetchOutPut {
+  users: ProfileDetailsValues[];
 }
 
 const apiStatusConstants: apiStatusValues = {
@@ -75,8 +80,8 @@ const ProfileDetails = (): JSX.Element => {
           data: {},
         });
 
-        let headers = {};
-        let url = "";
+        let headers: HeadersInit = {};
+        let url: string = "";
 
         headers = {
           "Content-Type": "application/json",
@@ -87,18 +92,20 @@ const ProfileDetails = (): JSX.Element => {
         };
         url = "https://bursting-gelding-24.hasura.app/api/rest/profile";
 
-        const options = {
+        const options: RequestInit = {
           method: "GET",
           headers: headers,
         };
-        const response = await fetch(url, options);
-        const responseData = await response.json();
+        const response: Response = await fetch(url, options);
+        const responseData: FetchOutPut = await response.json();
 
         if (response.ok) {
-          setApiResponse({
-            status: apiStatusConstants.success,
-            data: responseData.users[0],
-          });
+          if (responseData) {
+            setApiResponse({
+              status: apiStatusConstants.success,
+              data: responseData.users[0],
+            });
+          }
         } else {
           setApiResponse({
             status: apiStatusConstants.failure,
@@ -277,9 +284,9 @@ const ProfileDetails = (): JSX.Element => {
   );
 
   const renderFailureView = (): JSX.Element => (
-    <div className="no-search-result">
+    <FailureContainer>
       <FailureCase updateApi={failedCaseLastThreeTransactions} />
-    </div>
+    </FailureContainer>
   );
 
   const renderLeaderboard = (): JSX.Element | null => {

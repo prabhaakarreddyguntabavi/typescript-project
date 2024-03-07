@@ -45,7 +45,7 @@ export interface CrediteAndDebitList {
 }
 
 export interface TransctionProps {
-    id: string;
+    id: number;
     type: string;
     transaction_name: string;
     date: string;

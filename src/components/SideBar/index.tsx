@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Popup from "reactjs-popup";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TransactionContext from "../../context/TransactionContext";
 // import Popup from "../Popup";
@@ -60,17 +60,9 @@ const userDetails = [
   { email: "admin@gmail.com", password: "Admin@123", userId: 3 },
 ];
 
-// interface ProfileDetails {
-//   name?: string;
-//   email?: string;
-//   date_of_birth?: string;
-//   present_address?: string;
-//   permanent_address?: string;
-//   city?: string;
-//   postal_code?: string;
-//   country?: string;
-// }
-
+interface FetchOutPut {
+  users: ProfileDetails[];
+}
 interface ConsumerValues {
   selectOption: string;
   onChangeSelectOption: (id: string) => void;
@@ -80,7 +72,7 @@ interface ConsumerValues {
 const SideBar = (): JSX.Element => {
   const jwtToken: string = Cookies.get("jwt_token")!;
 
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
   const [apiResponse, setApiResponse] = useState<ProfileDetails>({});
 
   let loginUser: ProfileDetails = {
@@ -98,8 +90,8 @@ const SideBar = (): JSX.Element => {
       const getLeaderboardData = async (): Promise<void> => {
         setApiResponse({});
 
-        let headers = {};
-        let url = "";
+        let headers: HeadersInit = {};
+        let url: string = "";
 
         headers = {
           "Content-Type": "application/json",
@@ -110,15 +102,18 @@ const SideBar = (): JSX.Element => {
         };
         url = "https://bursting-gelding-24.hasura.app/api/rest/profile";
 
-        const options = {
+        const options: RequestInit = {
           method: "GET",
           headers: headers,
         };
-        const response = await fetch(url, options);
-        const responseData = await response.json();
+
+        const response: Response = await fetch(url, options);
+        const responseData: FetchOutPut = await response.json();
 
         if (response.ok) {
-          setApiResponse(responseData.users[0]);
+          if (responseData) {
+            setApiResponse(responseData.users[0]);
+          }
         } else {
           setApiResponse(loginUser);
         }

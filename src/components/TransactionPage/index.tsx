@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 import Popup from "reactjs-popup";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 
 import SideBar from "../SideBar";
 import Header from "../Header";
@@ -58,13 +58,17 @@ import {
 } from "./styledComponents";
 
 interface DataValues {
-  id: string;
+  id: number;
   transaction_name: string;
   type: string;
   category: string;
   amount: number;
   date: string;
-  user_id: number;
+  user_id?: number;
+}
+
+interface FetchedData {
+  transactions: DataValues[];
 }
 interface ApiOutputStatus {
   status: string;
@@ -72,7 +76,7 @@ interface ApiOutputStatus {
   errorMsg?: string;
 }
 
-interface apiStatusValues {
+interface ApiStatusValues {
   initial: string;
   inProgress: string;
   success: string;
@@ -100,7 +104,11 @@ interface UserDetail {
   present_address?: string | null;
 }
 
-const apiStatusConstants: apiStatusValues = {
+interface FetchOutPut {
+  users: UserDetail[];
+}
+
+const apiStatusConstants: ApiStatusValues = {
   initial: "INITIAL",
   inProgress: "IN_PROGRESS",
   success: "SUCCESS",
@@ -109,7 +117,7 @@ const apiStatusConstants: apiStatusValues = {
 
 const TransactionPage = (): JSX.Element => {
   const jwtToken = Cookies.get("jwt_token");
-  const navigate = useNavigate();
+  const navigate: NavigateFunction = useNavigate();
 
   const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: apiStatusConstants.initial,
@@ -125,11 +133,11 @@ const TransactionPage = (): JSX.Element => {
   const [callApi, updateApi] = useState<string>("");
 
   const DateFormate = (date: string): string => {
-    const inputDateString = date;
+    const inputDateString: string = date;
     const inputDate = new Date(inputDateString);
 
-    const day = inputDate.getDate();
-    const monthNames = [
+    const day: number = inputDate.getDate();
+    const monthNames: string[] = [
       "Jan",
       "Feb",
       "Mar",
@@ -143,12 +151,14 @@ const TransactionPage = (): JSX.Element => {
       "Nov",
       "Dec",
     ];
-    const month = monthNames[inputDate.getMonth()];
-    const hours = inputDate.getHours();
-    const minutes = inputDate.getMinutes();
-    const ampm = hours >= 12 ? "PM" : "AM";
+    const month: string = monthNames[inputDate.getMonth()];
+    const hours: number = inputDate.getHours();
+    const minutes: number = inputDate.getMinutes();
+    const ampm: string = hours >= 12 ? "PM" : "AM";
 
-    const formattedDate = `${day} ${month}, ${hours % 12}:${minutes} ${ampm}`;
+    const formattedDate: string = `${day} ${month}, ${
+      hours % 12
+    }:${minutes} ${ampm}`;
 
     return formattedDate;
   };
@@ -163,8 +173,8 @@ const TransactionPage = (): JSX.Element => {
           data: [],
         });
 
-        let headers = {};
-        let url = "";
+        let headers: HeadersInit = {};
+        let url: string = "";
 
         if (jwtToken === "3") {
           headers = {
@@ -194,27 +204,27 @@ const TransactionPage = (): JSX.Element => {
             method: "GET",
             headers: headers,
           };
-          const allProfileDetails = await fetch(
+          const allProfileDetails: Response = await fetch(
             "https://bursting-gelding-24.hasura.app/api/rest/profile",
             options
           );
-          const outPut = await allProfileDetails.json();
+          const outPut: FetchOutPut = await allProfileDetails.json();
 
           setProfileDetailsApiResponse(outPut.users);
         }
 
-        const limit = 1000;
-        const offset = 0;
+        const limit: number = 1000;
+        const offset: number = 0;
 
-        const queryParams = `?limit=${limit}&offset=${offset}`;
-        const finalUrl = `${url}${queryParams}`;
+        const queryParams: string = `?limit=${limit}&offset=${offset}`;
+        const finalUrl: string = `${url}${queryParams}`;
 
-        const options = {
+        const options: RequestInit = {
           method: "GET",
           headers: headers,
         };
-        const response = await fetch(finalUrl, options);
-        const responseData = await response.json();
+        const response: Response = await fetch(finalUrl, options);
+        const responseData: FetchedData = await response.json();
 
         if (response.ok) {
           setApiResponse({
@@ -490,19 +500,16 @@ const TransactionPage = (): JSX.Element => {
               <SelectFilterConditions>
                 <TransactionSelectFilter
                   onClick={() => {
-                    // onChangeTransactionOption("ALLTRANSACTION");
                     onChangeFilter("alltransactions");
                   }}
                 >
                   <SelectAllOption
                     transactionOption={filterOption === "alltransactions"}
-                    //  transactionOption={transactionOption === "ALLTRANSACTION"}
                   >
                     All Transaction
                   </SelectAllOption>
                   <SelectedContainer
                     transactionOption={filterOption === "alltransactions"}
-                    //   transactionOption={transactionOption === "ALLTRANSACTION"}
                   ></SelectedContainer>
                 </TransactionSelectFilter>
 
@@ -512,33 +519,24 @@ const TransactionPage = (): JSX.Element => {
                     onChangeFilter("credit");
                   }}
                 >
-                  <SelectOption
-                    transactionOption={filterOption === "credit"}
-                    //   transactionOption={transactionOption === "CREDIT"}
-                  >
+                  <SelectOption transactionOption={filterOption === "credit"}>
                     Credit
                   </SelectOption>
                   <SelectedCreditContainer
                     transactionOption={filterOption === "credit"}
-                    //  transactionOption={transactionOption === "CREDIT"}
                   ></SelectedCreditContainer>
                 </TransactionSelectFilter>
 
                 <TransactionSelectFilter
                   onClick={() => {
-                    // onChangeTransactionOption("DEBIT");
                     onChangeFilter("debit");
                   }}
                 >
-                  <SelectOption
-                    transactionOption={filterOption === "debit"}
-                    // transactionOption={transactionOption === "DEBIT"}
-                  >
+                  <SelectOption transactionOption={filterOption === "debit"}>
                     Debit
                   </SelectOption>
                   <SelectedCreditContainer
                     transactionOption={filterOption === "debit"}
-                    //  transactionOption={transactionOption === "DEBIT"}
                   ></SelectedCreditContainer>
                 </TransactionSelectFilter>
               </SelectFilterConditions>

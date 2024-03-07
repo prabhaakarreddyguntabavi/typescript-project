@@ -131,4 +131,4 @@ export const DetailsContainer = styled.div`
   overflow: auto;
 `;
 
-// export const TransactionBodyContainer = styled.div``;
+export const FailureContainer = styled.div``;

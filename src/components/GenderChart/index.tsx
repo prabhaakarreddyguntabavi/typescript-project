@@ -2,13 +2,7 @@ import { useState, useEffect } from "react";
 import ReactLoading from "react-loading";
 import Cookies from "js-cookie";
 
-import {
-  ApiStatus,
-  ApiStatusAndData,
-  CrediteAndDebitList,
-  DataValues,
-  HeaderValues,
-} from "../InterfaceDefining";
+import { ApiStatus, CrediteAndDebitList } from "../InterfaceDefining";
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 
@@ -30,6 +24,17 @@ const apiStatusConstants: ApiStatus = {
   success: "SUCCESS",
   failure: "FAILURE",
 };
+
+interface FetchedData {
+  date: string;
+  sum: number;
+  type: string;
+}
+
+interface OutPutObject {
+  last_7_days_transactions_credit_debit_totals?: FetchedData[];
+  last_7_days_transactions_totals_admin?: FetchedData[];
+}
 
 interface DailySum {
   debit?: number;
@@ -55,8 +60,14 @@ interface PropsValue {
   callApi: string;
 }
 
+export interface ApiStatusAndData {
+  status: string;
+  data: FetchedData[];
+  errorMsg?: string;
+}
+
 const GenderChart = (props: PropsValue): JSX.Element => {
-  const { callApi } = props;
+  const { callApi }: PropsValue = props;
 
   const [apiResponse, setApiResponse] = useState<ApiStatusAndData>({
     status: apiStatusConstants.initial,
@@ -64,7 +75,7 @@ const GenderChart = (props: PropsValue): JSX.Element => {
   });
 
   useEffect((): void => {
-    const jwtToken = Cookies.get("jwt_token");
+    const jwtToken: string = Cookies.get("jwt_token")!;
 
     const getLeaderboardData = async (): Promise<void> => {
       setApiResponse({
@@ -101,16 +112,15 @@ const GenderChart = (props: PropsValue): JSX.Element => {
         method: "GET",
         headers: headers,
       };
-      const response = await fetch(url, options);
-      const responseData = await response.json();
+      const response: Response = await fetch(url, options);
+      const responseData: OutPutObject = await response.json();
 
       if (response.ok) {
         setApiResponse({
           status: apiStatusConstants.success,
-          data:
-            jwtToken === "3"
-              ? responseData.last_7_days_transactions_totals_admin
-              : responseData.last_7_days_transactions_credit_debit_totals,
+          data: (jwtToken === "3"
+            ? responseData.last_7_days_transactions_totals_admin
+            : responseData.last_7_days_transactions_credit_debit_totals)!,
         });
       } else {
         setApiResponse({
@@ -132,9 +142,9 @@ const GenderChart = (props: PropsValue): JSX.Element => {
         const dailySums: DailySums = {};
         let totalDailySums: DailySum[] = [];
 
-        transactions.forEach((transaction: CrediteAndDebitList) => {
+        transactions.forEach((transaction: CrediteAndDebitList): void => {
           if (transaction.date) {
-            const date = transaction.date.split("T")[0];
+            const date: string = transaction.date.split("T")[0];
 
             if (!dailySums[date]) {
               dailySums[date] = {
@@ -163,13 +173,13 @@ const GenderChart = (props: PropsValue): JSX.Element => {
 
       const { totalDailySums } = calculateDailySums(data);
 
-      const last7Transactions = totalDailySums.slice(0, 7);
+      const last7Transactions: DailySum[] = totalDailySums.slice(0, 7);
 
       function separateTransactions() {
         const creditTransactions: number[] = [];
         const debitTransactions: number[] = [];
 
-        data.forEach((transaction: DataValues) => {
+        data.forEach((transaction: FetchedData) => {
           if (transaction.type === "credit") {
             creditTransactions.push(transaction.sum);
           } else if (transaction.type === "debit") {
@@ -182,12 +192,12 @@ const GenderChart = (props: PropsValue): JSX.Element => {
 
       const { creditTransactions, debitTransactions } = separateTransactions();
 
-      const creditTransactionsSum = creditTransactions.reduce(
+      const creditTransactionsSum: number = creditTransactions.reduce(
         (accumulator: number, currentValue: number) =>
           accumulator + currentValue,
         0
       );
-      const debitTransactionsSum = debitTransactions.reduce(
+      const debitTransactionsSum: number = debitTransactions.reduce(
         (accumulator: number, currentValue: number) =>
           accumulator + currentValue,
         0

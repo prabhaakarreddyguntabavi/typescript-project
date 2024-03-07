@@ -8,7 +8,7 @@ import {
   BackToHomePage,
 } from "./styledComponents";
 
-const text = "we're sorry, the page you requested could not be found";
+const text: string = "we're sorry, the page you requested could not be found";
 
 const NotFound = (): JSX.Element => {
   const navigate = useNavigate();

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
-// import ErrorPopup from "../ErrorMessage";
 import { v4 as uuidv4 } from "uuid";
 import ReactLoading from "react-loading";
 
@@ -14,26 +13,19 @@ import {
   ErrorMessage,
 } from "./styledComponents";
 
-// const apiStatusConstants = {
-//   initial: "INITIAL",
-//   inProgress: "IN_PROGRESS",
-//   success: "SUCCESS",
-//   failure: "FAILURE",
-// };
-
 const setTimeFormate = (date: string): string => {
-  const inputDateString = date;
-  const inputDate = new Date(inputDateString);
+  const inputDateString: string = date;
+  const inputDate: Date = new Date(inputDateString);
 
-  const year = inputDate.getFullYear();
-  const month = String(inputDate.getMonth() + 1).padStart(2, "0");
-  const day = String(inputDate.getDate()).padStart(2, "0");
+  const year: number = inputDate.getFullYear();
+  const month: string = String(inputDate.getMonth() + 1).padStart(2, "0");
+  const day: string = String(inputDate.getDate()).padStart(2, "0");
 
-  const hours = String(inputDate.getHours()).padStart(2, "0");
-  const minutes = String(inputDate.getMinutes()).padStart(2, "0");
-  const seconds = String(inputDate.getSeconds()).padStart(2, "0");
+  const hours: string = String(inputDate.getHours()).padStart(2, "0");
+  const minutes: string = String(inputDate.getMinutes()).padStart(2, "0");
+  const seconds: string = String(inputDate.getSeconds()).padStart(2, "0");
 
-  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  const formattedDateTime: string = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
   return formattedDateTime;
 };
@@ -44,7 +36,8 @@ interface EachTransction {
   category: string;
   amount: number;
   date: string;
-  id: string;
+  id: number;
+  user_id?: number;
 }
 
 interface PropsValues {
@@ -69,7 +62,7 @@ interface ApiOutputStatus {
 }
 
 const UpdateTransaction = (props: PropsValues): JSX.Element => {
-  const { eachTransaction, close, callTransactionsUpdate } = props;
+  const { eachTransaction, close, callTransactionsUpdate }: PropsValues = props;
 
   const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({
     status: "",
@@ -107,7 +100,7 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
     addDate(event.target.value);
   };
 
-  const jwtToken = Cookies.get("jwt_token");
+  const jwtToken: string = Cookies.get("jwt_token")!;
 
   const getLeaderboardData = async (): Promise<void> => {
     updateTransaction("inprogress");
@@ -117,10 +110,10 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
       data: [],
     });
 
-    let headers = {};
-    let url = "";
+    let headers: HeadersInit = {};
+    let url: string = "";
 
-    const body = JSON.stringify({
+    const body: string = JSON.stringify({
       id: eachTransaction.id,
       name,
       type,
@@ -138,27 +131,26 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
     };
     url = "https://bursting-gelding-24.hasura.app/api/rest/update-transaction";
 
-    const options = {
+    const options: RequestInit = {
       method: "POST",
       headers: headers,
       body: body,
     };
-    const response = await fetch(url, options);
-    const responseData = await response.json();
+    const response: Response = await fetch(url, options);
 
     if (response.ok) {
       callTransactionsUpdate(uuidv4());
       close();
       setApiResponse({
         status: "",
-        data: responseData.transactions,
+        data: [],
         errorMsg: "",
       });
     } else {
       setApiResponse({
         status: "",
         data: [],
-        errorMsg: responseData.error,
+        errorMsg: "Details are in correct",
       });
     }
   };
