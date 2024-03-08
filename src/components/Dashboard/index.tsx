@@ -20,7 +20,7 @@ import {
 
 import "./index.css";
 
-const Dashboard = (): JSX.Element | null => {
+const Dashboard = (): JSX.Element => {
   const navigate: NavigateFunction = useNavigate();
 
   const [callApi, updateApi] = useState<string>("");
@@ -37,45 +37,41 @@ const Dashboard = (): JSX.Element | null => {
     }
   }, [jwtToken, navigate]);
 
-  if (jwtToken !== undefined) {
-    return (
-      <TransactionContext.Consumer>
-        {(value) => {
-          const { selectOption, onChangeSelectOption } = value;
-          if (selectOption !== "DASHBOARD") {
-            onChangeSelectOption("DASHBOARD");
-          }
+  return (
+    <TransactionContext.Consumer>
+      {(value) => {
+        const { selectOption, onChangeSelectOption } = value;
+        if (selectOption !== "DASHBOARD") {
+          onChangeSelectOption("DASHBOARD");
+        }
 
-          return (
-            <DashboardMainContainer>
-              <SideBar />
-              <BodyMainContainer>
-                <Header updateApi={callTransactionsUpdate} />
-                <BodyContainer>
-                  <TotalDebitCredite
-                    isUserAdmin={jwtToken === "3"}
-                    callApi={callApi}
-                  />
+        return (
+          <DashboardMainContainer>
+            <SideBar />
+            <BodyMainContainer>
+              <Header updateApi={callTransactionsUpdate} />
+              <BodyContainer>
+                <TotalDebitCredite
+                  isUserAdmin={jwtToken === "3"}
+                  callApi={callApi}
+                />
 
-                  <LastTransaction>Last Transaction</LastTransaction>
-                  <LastThreeTransactionsFunction
-                    // isUserAdmin={jwtToken === "3"}
-                    callApi={callApi}
-                    lastThreeTransactions={callTransactionsUpdate}
-                  />
-                  <LastTransaction>Debit & Credit Overview</LastTransaction>
-                  <BarChartContainer>
-                    <GenderChart callApi={callApi} />
-                  </BarChartContainer>
-                </BodyContainer>
-              </BodyMainContainer>
-            </DashboardMainContainer>
-          );
-        }}
-      </TransactionContext.Consumer>
-    );
-  }
-  return null;
+                <LastTransaction>Last Transaction</LastTransaction>
+                <LastThreeTransactionsFunction
+                  callApi={callApi}
+                  lastThreeTransactions={callTransactionsUpdate}
+                />
+                <LastTransaction>Debit & Credit Overview</LastTransaction>
+                <BarChartContainer>
+                  <GenderChart callApi={callApi} />
+                </BarChartContainer>
+              </BodyContainer>
+            </BodyMainContainer>
+          </DashboardMainContainer>
+        );
+      }}
+    </TransactionContext.Consumer>
+  );
 };
 
 export default Dashboard;

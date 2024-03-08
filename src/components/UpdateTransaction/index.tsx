@@ -197,7 +197,6 @@ const UpdateTransaction = (props: PropsValues): JSX.Element => {
         </AddTransactionLabel>
         <SelectTransactionType
           required
-          // placeholder="Select"
           id="transactionCategory"
           value={category}
           onChange={(event) => addCategory(event.target.value)}

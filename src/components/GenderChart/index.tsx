@@ -228,7 +228,6 @@ const GenderChart = (props: PropsValue): JSX.Element => {
             width={window.innerWidth * 0.8}
             height={window.innerWidth * 0.3}
             data={last7Transactions}
-            // borderRadius={200}
             margin={{
               top: 5,
               right: 30,
@@ -268,7 +267,7 @@ const GenderChart = (props: PropsValue): JSX.Element => {
     );
   };
 
-  const renderFailureView = (): JSX.Element => <h1>Failure View</h1>; // <FailureCase updateApi={updateApi} />;
+  const renderFailureView = (): JSX.Element => <h1>Failure View</h1>;
 
   const renderLeaderboard = (): JSX.Element | null => {
     const { status } = apiResponse;

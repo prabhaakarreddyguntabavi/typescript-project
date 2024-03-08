@@ -515,7 +515,6 @@ const TransactionPage = (): JSX.Element => {
 
                 <TransactionSelectFilter
                   onClick={() => {
-                    // onChangeTransactionOption("CREDIT");
                     onChangeFilter("credit");
                   }}
                 >

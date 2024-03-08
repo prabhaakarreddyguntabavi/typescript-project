@@ -4,7 +4,6 @@ import Cookies from "js-cookie";
 import { useNavigate, NavigateFunction } from "react-router-dom";
 import { useState, useEffect } from "react";
 import TransactionContext from "../../context/TransactionContext";
-// import Popup from "../Popup";
 
 import { ProfileDetails } from "../InterfaceDefining";
 

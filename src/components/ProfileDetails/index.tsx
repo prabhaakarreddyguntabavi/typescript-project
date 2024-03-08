@@ -138,7 +138,6 @@ const ProfileDetails = (): JSX.Element => {
               type="text"
               id="addtransactionname"
               value={data.name}
-              // onChange={onChangePas}
               placeholder="Your Name"
               readOnly={true}
             />
@@ -152,7 +151,6 @@ const ProfileDetails = (): JSX.Element => {
               type="text"
               id="addtransactionname"
               value={data.name}
-              // onChange={onChangePas}
               placeholder="User Name"
               readOnly={true}
             />
@@ -166,7 +164,6 @@ const ProfileDetails = (): JSX.Element => {
               type="email"
               id="addtransactionname"
               value={data.email}
-              // onChange={onChangePas}
               placeholder="Email"
               readOnly={true}
             />
@@ -180,7 +177,6 @@ const ProfileDetails = (): JSX.Element => {
               type="password"
               id="addtransactionname"
               value={data.email}
-              // onChange={onChangePas}
               placeholder="Password"
               readOnly={true}
             />
@@ -194,7 +190,6 @@ const ProfileDetails = (): JSX.Element => {
               type="date"
               id="addtransactionamount"
               value={data.date_of_birth}
-              // onChange={onChangePas}
               placeholder="Date of Birth"
               readOnly={true}
             />
@@ -208,7 +203,6 @@ const ProfileDetails = (): JSX.Element => {
               type="text"
               id="addtransactionname"
               value={data.present_address}
-              // onChange={onChangePas}
               placeholder="Present Address"
               readOnly={true}
             />
@@ -222,7 +216,6 @@ const ProfileDetails = (): JSX.Element => {
               type="text"
               id="addtransactionname"
               value={data.permanent_address}
-              // onChange={onChangePas}
               placeholder="Permanent Address"
               readOnly={true}
             />
@@ -236,7 +229,6 @@ const ProfileDetails = (): JSX.Element => {
               type="text"
               id="addtransactionamount"
               value={data.city}
-              // onChange={onChangePas}
               placeholder="City"
               readOnly={true}
             />
@@ -250,7 +242,6 @@ const ProfileDetails = (): JSX.Element => {
               type="number"
               id="addtransactionamount"
               value={data.postal_code}
-              // onChange={onChangePas}
               placeholder="Postal Code"
               readOnly={true}
             />
@@ -265,7 +256,6 @@ const ProfileDetails = (): JSX.Element => {
               id="addtransactionamount"
               value={data.country}
               readOnly={true}
-              // onChange={onChangePas}
               placeholder="Country"
             />
           </AddTransactionInputContainer>

@@ -51,8 +51,6 @@ interface ApiOutputStatus {
 const TotalDebitCredit = (props: PropsValue): JSX.Element => {
   const { isUserAdmin, callApi } = props;
 
-  // const [failedCaseCallApi, failedCaseLastThreeTransactions] = useState<string>("");
-
   const [callBack, updateApi] = useState<string>("");
 
   const [apiResponse, setApiResponse] = useState<ApiOutputStatus>({

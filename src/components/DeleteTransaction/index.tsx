@@ -64,10 +64,7 @@ const UpdateTransaction = (props: PropsValue): JSX.Element => {
 
   return (
     <LogoutConformationContainer>
-      {errorMessage && (
-        <p>Something went wrong please try again later</p>
-        // <ErrorPopup message={errorMessage} onClose={handleCloseError} />
-      )}
+      {errorMessage && <p>Something went wrong please try again later</p>}
       <TestContainer>
         <WarningImageContainer>
           <WarningImage
