@@ -60,6 +60,10 @@ interface PropsValue {
   callApi: string;
 }
 
+interface TodaySunOfTheValue {
+  totalDailySums: DailySum[];
+}
+
 export interface ApiStatusAndData {
   status: string;
   data: FetchedData[];
@@ -171,7 +175,7 @@ const GenderChart = (props: PropsValue): JSX.Element => {
         return { dailySums, totalDailySums };
       }
 
-      const { totalDailySums } = calculateDailySums(data);
+      const { totalDailySums }: TodaySunOfTheValue = calculateDailySums(data);
 
       const last7Transactions: DailySum[] = totalDailySums.slice(0, 7);
 

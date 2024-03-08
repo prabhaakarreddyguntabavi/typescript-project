@@ -92,7 +92,12 @@ export const LoginForm = (): JSX.Element => {
 
   return (
     <LoginContainer>
-      <LoginFormContainer>
+      <LoginFormContainer
+        onSubmit={(e) => {
+          onLoginField();
+          e.preventDefault();
+        }}
+      >
         <LogoImage
           src="https://res.cloudinary.com/dwdq2ofjm/image/upload/v1705580146/Frame_507_ba197a.png"
           alt="website logo"
@@ -118,9 +123,7 @@ export const LoginForm = (): JSX.Element => {
             placeholder="Password"
           />
         </InputContainer>
-        <LoginButton type="button" onClick={onLoginField}>
-          Login
-        </LoginButton>
+        <LoginButton>Login</LoginButton>
         {errorMessage && (
           <ErrorMessageParagraph>*{errorMessage}</ErrorMessageParagraph>
         )}

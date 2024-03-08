@@ -83,7 +83,7 @@ interface ApiStatusValues {
   failure: string;
 }
 
-interface Date {
+interface DateValue {
   date: string;
 }
 
@@ -134,7 +134,7 @@ const TransactionPage = (): JSX.Element => {
 
   const DateFormate = (date: string): string => {
     const inputDateString: string = date;
-    const inputDate = new Date(inputDateString);
+    const inputDate: Date = new Date(inputDateString);
 
     const day: number = inputDate.getDate();
     const monthNames: string[] = [
@@ -230,7 +230,7 @@ const TransactionPage = (): JSX.Element => {
           setApiResponse({
             status: apiStatusConstants.success,
             data: [...responseData.transactions].sort(
-              (a: Date, b: Date) =>
+              (a: DateValue, b: DateValue) =>
                 new Date(b.date).getTime() - new Date(a.date).getTime()
             ),
           });
